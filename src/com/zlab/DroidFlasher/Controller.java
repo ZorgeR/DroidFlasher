@@ -38,11 +38,11 @@ public class Controller implements Initializable {
     @FXML private MenuItem tab_adb_btn_reboot_recovery;
     @FXML private MenuItem tab_adb_btn_reboot_bootloader;
 
-    @FXML private MenuItem tab_adb_btn_kill_server;
-    @FXML private MenuItem tab_adb_btn_start_server;
+    @FXML private MenuItem tab_adb_btn_server_kill;
+    @FXML private MenuItem tab_adb_btn_server_start;
 
-    @FXML private Button tab_adb_btn_push_file;
-    @FXML private Button tab_adb_btn_pull_file;
+    @FXML private Button tab_adb_btn_file_push;
+    @FXML private Button tab_adb_btn_file_pull;
 
     @FXML private ProgressBar tab_adb_progressbar;
 
@@ -95,6 +95,8 @@ public class Controller implements Initializable {
                 });
     }
     public void initBtn(){
+
+        /** Check device **/
         tab_adb_btn_check_device.setOnAction((event) -> {
             try {
                 String adb_devices_output=runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "devices", "-l");
@@ -113,7 +115,9 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
         });
-        tab_adb_btn_kill_server.setOnAction((event) -> {
+
+        /** Server kill start **/
+        tab_adb_btn_server_kill.setOnAction((event) -> {
             try {
                 runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "kill-server");
                 showDialogInformation("adb", "Operation complete", "Command kill-server sended to adb.");
@@ -121,7 +125,7 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
         });
-        tab_adb_btn_start_server.setOnAction((event) -> {
+        tab_adb_btn_server_start.setOnAction((event) -> {
             try {
                 runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "start-server");
                 showDialogInformation("adb", "Operation complete", "Command start-server sended to adb.");
@@ -129,6 +133,8 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
         });
+
+        /** Reboot device **/
         tab_adb_btn_reboot_device.setOnAction((event) -> {
             try {
                 runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "reboot");
@@ -153,43 +159,47 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
         });
-        tab_adb_btn_push_file.setOnAction((event) -> {
+
+        /** File control **/
+        tab_adb_btn_file_push.setOnAction((event) -> {
             try {
                 File localfile = fileChooser();
                 String remotefile = remotePushSetPath(localfile.getName());
 
-                if (!remotefile.equals("")){
+                if (!remotefile.equals("")) {
                     new Thread(() -> {
                         try {
                             runCmdAdbPushPull(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "push", "-p", localfile.getPath(), remotefile);
-                            Platform.runLater(() ->  showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " pushed to remote path " + remotefile));
+                            Platform.runLater(() -> showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " pushed to remote path " + remotefile));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }).start();
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 showDialogErrorNoDirectorySelected();
             }
         });
-        tab_adb_btn_pull_file.setOnAction((event) -> {
+        tab_adb_btn_file_pull.setOnAction((event) -> {
             try {
                 String remotefile = remotePullSetPath("test.zip");
-                if (!remotefile.equals("")){
+                if (!remotefile.equals("")) {
                     File localfile = fileSaver();
                     new Thread(() -> {
                         try {
                             runCmdAdbPushPull(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "pull", "-p", remotefile, localfile.getPath());
-                            Platform.runLater(() ->  showDialogInformation("adb", "Operation complete", "File "+localfile.getName()+" pulled from remote path "+remotefile));
+                            Platform.runLater(() -> showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " pulled from remote path " + remotefile));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }).start();
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 showDialogErrorNoDirectorySelected();
             }
         });
+
+        /** Tools directory select **/
         tab_settings_tool_set_btn_tool_directory_browse.setOnAction((event) -> {
             try {
                 File dir = directoryChooser();
@@ -210,6 +220,8 @@ public class Controller implements Initializable {
                 showDialogErrorNoDirectorySelected();
             }
         });
+
+        /** Tools bin override **/
         tab_settings_override_btn_fastboot_browse.setOnAction((event) -> {
             try {
                 File dir = directoryChooser();
@@ -234,18 +246,8 @@ public class Controller implements Initializable {
                 showDialogErrorNoDirectorySelected();
             }
         });
-        tab_settings_override_btn_fastboot_browse.setOnAction((event) -> {
-            try {
-                File dir = directoryChooser();
-                if(checkFastbootBin(dir)){
-                    tab_settings_override_txt_fastboot_path.setText(dir.getPath()+"/fastboot");
-                } else {
-                    showDialogErrorIsNotValidToolsDirectorySelected("fastboot");
-                }
-            } catch (Exception e){
-                showDialogErrorNoDirectorySelected();
-            }
-        });
+
+        /** Reinitialize **/
         tab_settings_others_btn_reinitialize.setOnAction((event) -> {
             tab_main_txt_area_log.appendText("Reinitialize inventory...\n");
             /** РЕИНИЦИАЛИЗАЦИЯ **/
