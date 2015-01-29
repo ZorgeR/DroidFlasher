@@ -1,20 +1,13 @@
 package com.zlab.DroidFlasher;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.application.Platform;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-
-
 import java.io.*;
 import java.net.URL;
 import java.util.Arrays;
@@ -25,90 +18,128 @@ public class Controller implements Initializable {
 
     //<editor-fold desc="Init UI">
     /** Init UI **/
-    /** Console Tab **/
-    @FXML private Accordion tab_settings_accord;
-    @FXML private TextArea tab_main_txt_area_log;
+    /**
+     * Console Tab *
+     */
+    @FXML
+    private Accordion tab_settings_accord;
+    @FXML
+    private TextArea tab_main_txt_area_log;
 
-    /** Adb Tab **/
-    @FXML private Button tab_adb_btn_check_device;
-    @FXML private Circle tab_adb_device_status_orb;
-    @FXML private Label tab_adb_device_status_txt;
+    /**
+     * Adb Tab *
+     */
+    @FXML
+    private Button tab_adb_btn_check_device;
+    @FXML
+    private Circle tab_adb_device_status_orb;
+    @FXML
+    private Label tab_adb_device_status_txt;
 
-    @FXML private MenuItem tab_adb_btn_reboot_device;
-    @FXML private MenuItem tab_adb_btn_reboot_recovery;
-    @FXML private MenuItem tab_adb_btn_reboot_bootloader;
+    @FXML
+    private MenuItem tab_adb_btn_reboot_device;
+    @FXML
+    private MenuItem tab_adb_btn_reboot_recovery;
+    @FXML
+    private MenuItem tab_adb_btn_reboot_bootloader;
 
-    @FXML private MenuItem tab_adb_btn_server_kill;
-    @FXML private MenuItem tab_adb_btn_server_start;
+    @FXML
+    private MenuItem tab_adb_btn_server_kill;
+    @FXML
+    private MenuItem tab_adb_btn_server_start;
 
-    @FXML private Button tab_adb_btn_file_push;
-    @FXML private Button tab_adb_btn_file_pull;
+    @FXML
+    private Button tab_adb_btn_file_push;
+    @FXML
+    private Button tab_adb_btn_file_pull;
 
-    @FXML private ProgressBar tab_adb_progressbar;
+    @FXML
+    private ProgressBar tab_adb_progressbar;
 
-    /** Settings Tab **/
-    @FXML private TitledPane tab_settings_tool_set_group;
+    /**
+     * Settings Tab *
+     */
+    @FXML
+    private TitledPane tab_settings_tool_set_group;
 
-        /** Tools section **/
-        @FXML private TextField tab_settings_tool_set_txt_tool_directory_browse;
-        @FXML private Button tab_settings_tool_set_btn_tool_directory_browse;
+    /**
+     * Tools section *
+     */
+    @FXML
+    private TextField tab_settings_tool_set_txt_tool_directory_browse;
+    @FXML
+    private Button tab_settings_tool_set_btn_tool_directory_browse;
 
-        /** Override section **/
-        /** fastboot **/
-        @FXML private TextField  tab_settings_override_txt_fastboot_path;
-        @FXML private Button     tab_settings_override_btn_fastboot_browse;
-        @FXML private ToggleButton tab_settings_override_btn_fastboot_override;
+    /** Override section **/
+    /**
+     * fastboot *
+     */
+    @FXML
+    private TextField tab_settings_override_txt_fastboot_path;
+    @FXML
+    private Button tab_settings_override_btn_fastboot_browse;
+    @FXML
+    private ToggleButton tab_settings_override_btn_fastboot_override;
 
-        /** adb **/
-        @FXML private TextField  tab_settings_override_txt_adb_path;
-        @FXML private Button     tab_settings_override_btn_adb_browse;
-        @FXML private ToggleButton     tab_settings_override_btn_adb_override;
+    /**
+     * adb *
+     */
+    @FXML
+    private TextField tab_settings_override_txt_adb_path;
+    @FXML
+    private Button tab_settings_override_btn_adb_browse;
+    @FXML
+    private ToggleButton tab_settings_override_btn_adb_override;
 
-        /** others **/
-        @FXML private Button    tab_settings_others_btn_reinitialize;
+    /**
+     * others *
+     */
+    @FXML
+    private Button tab_settings_others_btn_reinitialize;
     //</editor-fold>
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
-
-    public void logToConsole(String appendString){
-        tab_main_txt_area_log.appendText(appendString);
+    public void initUIPreferences() {
+        tab_settings_accord.setExpandedPane(tab_settings_tool_set_group);
     }
 
-    public void initToggleBtn(){
+    /** Buttons initialize **/
+    public void initToggleBtn() {
         tab_settings_override_btn_fastboot_override.setOnAction((event) -> {
             if (tab_settings_override_btn_fastboot_override.isSelected()) {
                 tab_settings_override_txt_fastboot_path.setDisable(true);
                 tab_settings_override_btn_fastboot_browse.setDisable(true);
             } else {
                 tab_settings_override_txt_fastboot_path.setDisable(false);
-                tab_settings_override_btn_fastboot_browse.setDisable(false);}
-            });
+                tab_settings_override_btn_fastboot_browse.setDisable(false);
+            }
+        });
         tab_settings_override_btn_adb_override.setOnAction((event) -> {
-                if(tab_settings_override_btn_adb_override.isSelected()){
-                    tab_settings_override_txt_adb_path.setDisable(true);
-                    tab_settings_override_btn_adb_browse.setDisable(true);
-                } else {
-                    tab_settings_override_txt_adb_path.setDisable(false);
-                    tab_settings_override_btn_adb_browse.setDisable(false);}
-                });
+            if (tab_settings_override_btn_adb_override.isSelected()) {
+                tab_settings_override_txt_adb_path.setDisable(true);
+                tab_settings_override_btn_adb_browse.setDisable(true);
+            } else {
+                tab_settings_override_txt_adb_path.setDisable(false);
+                tab_settings_override_btn_adb_browse.setDisable(false);
+            }
+        });
     }
-    public void initBtn(){
-
+    public void initBtn() {
         /** Check device **/
         tab_adb_btn_check_device.setOnAction((event) -> {
             try {
-                String adb_devices_output=runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "devices", "-l");
+                String adb_devices_output = runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "devices", "-l");
                 String[] finder = adb_devices_output.split("\n");
-                if(!finder[finder.length-1].equals("List of devices attached ")){
+                if (!finder[finder.length - 1].equals("List of devices attached ")) {
                     tab_adb_device_status_orb.setFill(Color.GREENYELLOW);
-                    String[] device_info = finder[finder.length-1].split("\\s+");
+                    String[] device_info = finder[finder.length - 1].split("\\s+");
                     showDialogInformation("Success!", "Adb device detected.", "Device information is: " + device_info[0]);
-                    tab_adb_device_status_txt.setText(device_info[4]+" "+device_info[5]+" "+device_info[3]);
+                    tab_adb_device_status_txt.setText(device_info[4] + " " + device_info[5] + " " + device_info[3]);
                 } else {
                     tab_adb_device_status_orb.setFill(Color.RED);
-                    showDialogError("Ooops!", "Adb device not detected.","Try to reconnect.");
+                    showDialogError("Ooops!", "Adb device not detected.", "Try to reconnect.");
                     tab_adb_device_status_txt.setText("No device detected.");
                 }
             } catch (IOException e) {
@@ -225,24 +256,24 @@ public class Controller implements Initializable {
         tab_settings_override_btn_fastboot_browse.setOnAction((event) -> {
             try {
                 File dir = directoryChooser();
-                if(checkFastbootBin(dir)){
-                    tab_settings_override_txt_fastboot_path.setText(dir.getPath()+"/fastboot");
+                if (checkFastbootBin(dir)) {
+                    tab_settings_override_txt_fastboot_path.setText(dir.getPath() + "/fastboot");
                 } else {
                     showDialogErrorIsNotValidToolsDirectorySelected("fastboot");
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 showDialogErrorNoDirectorySelected();
             }
         });
         tab_settings_override_btn_adb_browse.setOnAction((event) -> {
             try {
                 File dir = directoryChooser();
-                if(checkAdbBin(dir)){
-                    tab_settings_override_txt_adb_path.setText(dir.getPath()+"/adb");
+                if (checkAdbBin(dir)) {
+                    tab_settings_override_txt_adb_path.setText(dir.getPath() + "/adb");
                 } else {
                     showDialogErrorIsNotValidToolsDirectorySelected("adb");
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 showDialogErrorNoDirectorySelected();
             }
         });
@@ -254,11 +285,37 @@ public class Controller implements Initializable {
             tab_main_txt_area_log.appendText("done...\n");
         });
     }
-    public void initUIPreferences(){
-        tab_settings_accord.setExpandedPane(tab_settings_tool_set_group);
+
+    /** File control **/
+    public String remotePushSetPath(String filename) {
+        TextInputDialog dialog = new TextInputDialog("/sdcard/" + filename);
+        dialog.setTitle("Set remote path");
+        dialog.setHeaderText("File will be pushed to this remote path");
+        dialog.setContentText("Remote path:");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            return result.get();
+        } else {
+            return "";
+        }
+    }
+    public String remotePullSetPath(String filename) {
+        TextInputDialog dialog = new TextInputDialog("/sdcard/" + filename);
+        dialog.setTitle("Enter remote path");
+        dialog.setHeaderText("File will be pulled from this remote path to the local machine");
+        dialog.setContentText("Remote path:");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            return result.get();
+        } else {
+            return "";
+        }
     }
 
-    public File directoryChooser(){
+    /** File chooser **/
+    public File directoryChooser() {
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("Select directory");
         File defaultDirectory = new File(".");
@@ -266,7 +323,7 @@ public class Controller implements Initializable {
         File selectedDirectory = chooser.showDialog(Main.globalStage);
         return selectedDirectory;
     }
-    public File fileChooser(){
+    public File fileChooser() {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Select file");
         File defaultDirectory = new File(".");
@@ -274,7 +331,7 @@ public class Controller implements Initializable {
         File selectedFile = chooser.showOpenDialog(Main.globalStage);
         return selectedFile;
     }
-    public File fileSaver(){
+    public File fileSaver() {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Select new file");
         File defaultDirectory = new File(".");
@@ -283,55 +340,29 @@ public class Controller implements Initializable {
         return selectedFile;
     }
 
-    public String remotePushSetPath(String filename){
-        TextInputDialog dialog = new TextInputDialog("/sdcard/"+filename);
-        dialog.setTitle("Set remote path");
-        dialog.setHeaderText("File will be pushed to this remote path");
-        dialog.setContentText("Remote path:");
-
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()){
-            return result.get();
-        } else {
-            return "";
-        }
-    }
-    public String remotePullSetPath(String filename){
-        TextInputDialog dialog = new TextInputDialog("/sdcard/"+filename);
-        dialog.setTitle("Enter remote path");
-        dialog.setHeaderText("File will be pulled from this remote path to the local machine");
-        dialog.setContentText("Remote path:");
-
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()){
-            return result.get();
-        } else {
-            return "";
-        }
-    }
-
-    private void showDialogErrorNoDirectorySelected(){
+    /** Show Dialog **/
+    private void showDialogErrorNoDirectorySelected() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Oops..");
         alert.setHeaderText("Operation rejected by user!");
         alert.setContentText("Please try again.");
         alert.showAndWait();
     }
-    private void showDialogErrorIsNotValidToolsDirectorySelected(String binaries){
+    private void showDialogErrorIsNotValidToolsDirectorySelected(String binaries) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Oops..");
         alert.setHeaderText("No " + binaries + " binaries in this directory!");
         alert.setContentText("Please try again.");
         alert.showAndWait();
     }
-    private void showDialogInformation(String title, String header, String text){
+    private void showDialogInformation(String title, String header, String text) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(text);
         alert.showAndWait();
     }
-    private void showDialogError(String title, String header, String text){
+    private void showDialogError(String title, String header, String text) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(header);
@@ -339,24 +370,25 @@ public class Controller implements Initializable {
         alert.showAndWait();
     }
 
-
-    private boolean checkAdbBin(File f){
-        if(new File(f.getPath()+"/adb").exists()){
+    /** Check inventory **/
+    private boolean checkAdbBin(File f) {
+        if (new File(f.getPath() + "/adb").exists()) {
             return true;
         } else {
             return false;
         }
     }
-    private boolean checkFastbootBin(File f){
-        if(new File(f.getPath()+"/fastboot").exists()){
+    private boolean checkFastbootBin(File f) {
+        if (new File(f.getPath() + "/fastboot").exists()) {
             return true;
         } else {
             return false;
         }
     }
 
+    /** Console **/
     private String runCmd(String... args) throws IOException {
-        String locallog="";
+        String locallog = "";
 
         Runtime rt = Runtime.getRuntime();
 
@@ -374,12 +406,12 @@ public class Controller implements Initializable {
         while ((s = stdInput.readLine()) != null) {
             //System.out.println(s);
             logToConsole(s + "\n");
-            locallog=locallog+s+"\n";
+            locallog = locallog + s + "\n";
         }
 
         while ((s = stdError.readLine()) != null) {
             logToConsole("err:" + s + "\n");
-            locallog="err";
+            locallog = "err";
             //System.out.println(s);
         }//}
         return locallog;
@@ -406,4 +438,8 @@ public class Controller implements Initializable {
         }
     }
 
+    /** LOG **/
+    public void logToConsole(String appendString) {
+        tab_main_txt_area_log.appendText(appendString);
+    }
 }
