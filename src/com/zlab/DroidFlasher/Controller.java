@@ -11,6 +11,7 @@ import javafx.stage.FileChooser;
 import java.io.*;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -21,16 +22,34 @@ public class Controller implements Initializable {
 
     /** Adb Tab **/
     @FXML private Button tab_adb_btn_check_device;
-    @FXML private Circle tab_adb_device_status_orb;
-    @FXML private Label  tab_adb_device_status_txt;
+    @FXML private Button tab_adb_btn_file_push;
+    @FXML private Button tab_adb_btn_file_pull;
+    @FXML private Button tab_adb_btn_backup;
+    @FXML private Button tab_adb_btn_restore;
+    @FXML private CheckBox tab_adb_chk_backup_apk;
+    @FXML private CheckBox tab_adb_chk_backup_obb;
+    @FXML private CheckBox tab_adb_chk_backup_shared;
+    @FXML private CheckBox tab_adb_chk_backup_system;
+    @FXML private CheckBox tab_adb_chk_backup_all;
+    @FXML private CheckBox tab_adb_btn_install_flock;
+    @FXML private CheckBox tab_adb_btn_install_replace;
+    @FXML private CheckBox tab_adb_btn_install_test;
+    @FXML private CheckBox tab_adb_btn_install_sdcard;
+    @FXML private CheckBox tab_adb_btn_install_downgrade;
+    @FXML private CheckBox tab_adb_btn_install_partial;
     @FXML private MenuItem tab_adb_btn_reboot_device;
     @FXML private MenuItem tab_adb_btn_reboot_recovery;
     @FXML private MenuItem tab_adb_btn_reboot_bootloader;
     @FXML private MenuItem tab_adb_btn_server_kill;
     @FXML private MenuItem tab_adb_btn_server_start;
-    @FXML private Button tab_adb_btn_file_push;
-    @FXML private Button tab_adb_btn_file_pull;
+    @FXML private MenuItem tab_adb_btn_install;
+    @FXML private MenuItem tab_adb_btn_install_multiple;
+    @FXML private MenuItem tab_adb_btn_uninstall;
+    @FXML private MenuItem tab_adb_btn_uninstall_keep_data;
     @FXML private ProgressBar tab_adb_progressbar;
+    @FXML private Circle tab_adb_device_status_orb;
+    @FXML private Label  tab_adb_device_status_txt;
+
 
     /** Settings Tab **/
     @FXML private TitledPane tab_settings_tool_set_group;
@@ -234,12 +253,109 @@ public class Controller implements Initializable {
             }
         });
 
+        /** Application **/
+        tab_adb_btn_install.setOnAction((event) -> {
+            try{
+            File localfile = fileChooser();
+                if(localfile!=null){
+            new Thread(() -> {
+                try {
+                    String log;
+                    if(getInstallArgs(false)==null) {
+                        log=runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "install", localfile.getPath());
+                    } else {
+                        log=runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "install", getInstallArgs(false), localfile.getPath());
+                    }
+                    Platform.runLater(() -> tab_adb_progressbar.setProgress(1.0));
+
+                    Platform.runLater(() -> {
+                        if(log.contains("INSTALL_PARSE_FAILED_NO_CERTIFICATES")){
+                            showDialogError("Error","Installation FAIL!","Selected apk is not signed!");
+                        } else if (log.contains("INSTALL_FAILED_ALREADY_EXISTS")) {
+                            showDialogError("Error","Installation FAIL!","Application exist! Use replace option to overwrite.");
+                        } else if (log.contains("Failure")) {
+                            showDialogError("Error","Installation FAIL!","Can't install APK, see console for detail.");
+                        } else {
+                            showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " installed on device.");
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }).start();}
+            } catch (Exception e) {
+                showDialogErrorNoDirectorySelected();
+            }
+        });
+        tab_adb_btn_install_multiple.setOnAction((event) -> {
+            try{
+            List<File> localfiles = fileChooserMultiple();
+                if(localfiles!=null){
+                new Thread(() -> {
+                    try {
+                        String log="";
+                        Double percentile=0.0;
+                        int maxpercentile=localfiles.size();
+                        Double counter=0.0;
+
+                        if(getInstallArgs(false)==null) {
+                            for(File f:localfiles){
+                                log=log+runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "install", f.getPath())+"\n";
+                                counter++;
+                                percentile=counter / maxpercentile;
+                                final Double finalPercentile = percentile;
+                                Platform.runLater(() -> tab_adb_progressbar.setProgress(finalPercentile));}
+                        } else {
+                            for(File f:localfiles){
+                                log=log+runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "install", getInstallArgs(false), f.getPath())+"\n";
+                                counter++;
+                                percentile=counter / maxpercentile;
+                                final Double finalPercentile = percentile;
+                                Platform.runLater(() -> tab_adb_progressbar.setProgress(finalPercentile));
+                            }
+                        }
+
+                        final String finalLog = log;
+                        Platform.runLater(() -> {
+                            int failure = (finalLog.length() - finalLog.substring(0).replaceAll("Failure", "").length())/7;
+                            int success = (finalLog.length() - finalLog.substring(0).replaceAll("Success","").length())/7;
+
+                            showDialogInformation("adb", "Operation complete",
+                                    "Success: "+success
+                                    +"\nFailure: "+failure+"\n"
+                                    +"\nSee Console for detail."+"\n"
+                                    +"\nFile list:\n"+Arrays.asList(localfiles).toString().replace(", ","\n").replace("[","").replace("]",""));
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();}
+            } catch (Exception e) {
+                showDialogErrorNoDirectorySelected();
+            }
+        });
+
         /** Reinitialize **/
         tab_settings_others_btn_reinitialize.setOnAction((event) -> {
             tab_main_txt_area_log.appendText("Reinitialize inventory...\n");
             /** РЕИНИЦИАЛИЗАЦИЯ **/
             tab_main_txt_area_log.appendText("done...\n");
         });
+    }
+
+    /** Application **/
+    public String getInstallArgs(boolean isMultipleApk){
+        String install_args = "-";
+        if(tab_adb_btn_install_flock.isSelected()){install_args=install_args+"l";}
+        if(tab_adb_btn_install_replace.isSelected()){install_args=install_args+"r";}
+        if(tab_adb_btn_install_test.isSelected()){install_args=install_args+"t";}
+        if(tab_adb_btn_install_sdcard.isSelected()){install_args=install_args+"s";}
+        if(tab_adb_btn_install_downgrade.isSelected()){install_args=install_args+"d";}
+        if(isMultipleApk){
+            if(tab_adb_btn_install_partial.isSelected()){install_args=install_args+"p";}
+        }
+        if(install_args.equals("-")){install_args=null;}
+        return install_args;
     }
 
     /** File control **/
@@ -285,6 +401,14 @@ public class Controller implements Initializable {
         File defaultDirectory = new File(".");
         chooser.setInitialDirectory(defaultDirectory);
         File selectedFile = chooser.showOpenDialog(Main.globalStage);
+        return selectedFile;
+    }
+    public List<File> fileChooserMultiple() {
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Select file");
+        File defaultDirectory = new File(".");
+        chooser.setInitialDirectory(defaultDirectory);
+        List<File> selectedFile = chooser.showOpenMultipleDialog(Main.globalStage);
         return selectedFile;
     }
     public File fileSaver() {
@@ -367,7 +491,7 @@ public class Controller implements Initializable {
 
         while ((s = stdError.readLine()) != null) {
             logToConsole("err:" + s + "\n");
-            locallog = "err";
+            locallog = locallog + "err:" + s + "\n";
             //System.out.println(s);
         }//}
         return locallog;

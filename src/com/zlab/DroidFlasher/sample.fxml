@@ -35,23 +35,88 @@
                   </MenuButton>
                   <ProgressBar fx:id="tab_adb_progressbar" layoutX="14.0" layoutY="299.0" prefHeight="20.0" prefWidth="573.0" progress="0.0" />
                   <Separator layoutX="-3.0" layoutY="37.0" prefHeight="11.0" prefWidth="617.0" />
-                  <SplitPane dividerPositions="0.12552301255230125" layoutX="14.0" layoutY="51.0" orientation="VERTICAL" prefHeight="241.0" prefWidth="160.0">
+                  <SplitPane dividerPositions="0.12552301255230125" layoutX="14.0" layoutY="51.0" orientation="VERTICAL" prefHeight="241.0" prefWidth="133.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
                            <children>
-                              <Label layoutX="35.0" layoutY="5.0" text="File operation" />
+                              <Label layoutX="25.0" layoutY="5.0" text="File operation" />
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="158.0" prefWidth="158.0">
                            <children>
-                              <Button fx:id="tab_adb_btn_file_push" layoutX="6.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="146.0" text="push to device" />
-                              <Button fx:id="tab_adb_btn_file_pull" layoutX="6.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="146.0" text="pull from device" />
+                              <Button fx:id="tab_adb_btn_file_push" layoutX="6.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="push to device" />
+                              <Button fx:id="tab_adb_btn_file_pull" layoutX="6.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="pull from device" />
                            </children>
                         </AnchorPane>
                     </items>
                      <effect>
                         <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
                      </effect>
+                  </SplitPane>
+                  <SplitPane dividerPositions="0.12552301255230125, 0.8410041841004184" layoutX="341.0" layoutY="51.0" orientation="VERTICAL" prefHeight="241.0" prefWidth="147.0">
+                     <effect>
+                        <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
+                     </effect>
+                     <items>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
+                           <children>
+                              <Label layoutX="39.0" layoutY="5.0" text="Application" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="109.0" prefWidth="158.0">
+                           <children>
+                              <CheckBox fx:id="tab_adb_btn_install_flock" layoutX="5.0" layoutY="37.0" mnemonicParsing="false" text="forward lock" />
+                              <CheckBox fx:id="tab_adb_btn_install_replace" layoutX="5.0" layoutY="58.0" mnemonicParsing="false" text="replace existing" />
+                              <CheckBox fx:id="tab_adb_btn_install_test" layoutX="5.0" layoutY="79.0" mnemonicParsing="false" text="allow test package" />
+                              <CheckBox fx:id="tab_adb_btn_install_sdcard" layoutX="5.0" layoutY="100.0" mnemonicParsing="false" text="install on sdcard" />
+                              <CheckBox fx:id="tab_adb_btn_install_downgrade" layoutX="5.0" layoutY="121.0" mnemonicParsing="false" text="allow downgrade" />
+                              <CheckBox fx:id="tab_adb_btn_install_partial" layoutX="5.0" layoutY="142.0" mnemonicParsing="false" text="partial install" />
+                              <MenuButton layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="135.0" text="Install">
+                                <items>
+                                  <MenuItem fx:id="tab_adb_btn_install" mnemonicParsing="false" text="Single *.APK" />
+                                  <MenuItem fx:id="tab_adb_btn_install_multiple" mnemonicParsing="false" text="Multiple *.APK" />
+                                </items>
+                              </MenuButton>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="158.0" prefWidth="158.0">
+                           <children>
+                              <MenuButton layoutX="5.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="135.0" text="Uninstall">
+                                <items>
+                                  <MenuItem fx:id="tab_adb_btn_uninstall" mnemonicParsing="false" text="With data and cache" />
+                                  <MenuItem fx:id="tab_adb_btn_uninstall_keep_data" mnemonicParsing="false" text="Keep data and cache" />
+                                </items>
+                              </MenuButton>
+                           </children>
+                        </AnchorPane>
+                     </items>
+                  </SplitPane>
+                  <SplitPane dividerPositions="0.12552301255230125, 0.8410041841004184" layoutX="494.0" layoutY="51.0" orientation="VERTICAL" prefHeight="241.0" prefWidth="93.0">
+                     <effect>
+                        <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
+                     </effect>
+                     <items>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
+                           <children>
+                              <Label layoutX="23.0" layoutY="5.0" text="Backup" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="109.0" prefWidth="158.0">
+                           <children>
+                              <Button fx:id="tab_adb_btn_backup" layoutX="4.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="83.0" text="Backup" />
+                              <CheckBox fx:id="tab_adb_chk_backup_apk" layoutX="5.0" layoutY="37.0" mnemonicParsing="false" text="apk" />
+                              <CheckBox fx:id="tab_adb_chk_backup_obb" layoutX="5.0" layoutY="62.0" mnemonicParsing="false" text="obb" />
+                              <CheckBox fx:id="tab_adb_chk_backup_shared" layoutX="5.0" layoutY="87.0" mnemonicParsing="false" text="shared" />
+                              <CheckBox fx:id="tab_adb_chk_backup_system" layoutX="5.0" layoutY="111.0" mnemonicParsing="false" text="system" />
+                              <CheckBox fx:id="tab_adb_chk_backup_all" layoutX="5.0" layoutY="136.0" mnemonicParsing="false" text="all" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="158.0" prefWidth="158.0">
+                           <children>
+                              <Button fx:id="tab_adb_btn_restore" layoutX="4.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="80.0" text="Restore" />
+                           </children>
+                        </AnchorPane>
+                     </items>
                   </SplitPane>
                </children></AnchorPane>
          </content>
