@@ -1,4 +1,4 @@
-package sample;
+package com.zlab.DroidFlasher;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -16,12 +16,9 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 
-import javax.swing.*;
-import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
