@@ -18,84 +18,40 @@ public class Controller implements Initializable {
 
     //<editor-fold desc="Init UI">
     /** Init UI **/
-    /**
-     * Console Tab *
-     */
-    @FXML
-    private Accordion tab_settings_accord;
-    @FXML
-    private TextArea tab_main_txt_area_log;
 
-    /**
-     * Adb Tab *
-     */
-    @FXML
-    private Button tab_adb_btn_check_device;
-    @FXML
-    private Circle tab_adb_device_status_orb;
-    @FXML
-    private Label tab_adb_device_status_txt;
+    /** Adb Tab **/
+    @FXML private Button tab_adb_btn_check_device;
+    @FXML private Circle tab_adb_device_status_orb;
+    @FXML private Label  tab_adb_device_status_txt;
+    @FXML private MenuItem tab_adb_btn_reboot_device;
+    @FXML private MenuItem tab_adb_btn_reboot_recovery;
+    @FXML private MenuItem tab_adb_btn_reboot_bootloader;
+    @FXML private MenuItem tab_adb_btn_server_kill;
+    @FXML private MenuItem tab_adb_btn_server_start;
+    @FXML private Button tab_adb_btn_file_push;
+    @FXML private Button tab_adb_btn_file_pull;
+    @FXML private ProgressBar tab_adb_progressbar;
 
-    @FXML
-    private MenuItem tab_adb_btn_reboot_device;
-    @FXML
-    private MenuItem tab_adb_btn_reboot_recovery;
-    @FXML
-    private MenuItem tab_adb_btn_reboot_bootloader;
+    /** Settings Tab **/
+    @FXML private TitledPane tab_settings_tool_set_group;
+    /** Tools section */
+        @FXML private TextField tab_settings_tool_set_txt_tool_directory_browse;
+        @FXML private Button tab_settings_tool_set_btn_tool_directory_browse;
+    /** Override section */
+        /** fastboot */
+        @FXML private TextField tab_settings_override_txt_fastboot_path;
+        @FXML private Button tab_settings_override_btn_fastboot_browse;
+        @FXML private ToggleButton tab_settings_override_btn_fastboot_override;
+        /** adb */
+        @FXML private TextField tab_settings_override_txt_adb_path;
+        @FXML private Button tab_settings_override_btn_adb_browse;
+        @FXML private ToggleButton tab_settings_override_btn_adb_override;
+        /** others */
+        @FXML private Button tab_settings_others_btn_reinitialize;
 
-    @FXML
-    private MenuItem tab_adb_btn_server_kill;
-    @FXML
-    private MenuItem tab_adb_btn_server_start;
-
-    @FXML
-    private Button tab_adb_btn_file_push;
-    @FXML
-    private Button tab_adb_btn_file_pull;
-
-    @FXML
-    private ProgressBar tab_adb_progressbar;
-
-    /**
-     * Settings Tab *
-     */
-    @FXML
-    private TitledPane tab_settings_tool_set_group;
-
-    /**
-     * Tools section *
-     */
-    @FXML
-    private TextField tab_settings_tool_set_txt_tool_directory_browse;
-    @FXML
-    private Button tab_settings_tool_set_btn_tool_directory_browse;
-
-    /** Override section **/
-    /**
-     * fastboot *
-     */
-    @FXML
-    private TextField tab_settings_override_txt_fastboot_path;
-    @FXML
-    private Button tab_settings_override_btn_fastboot_browse;
-    @FXML
-    private ToggleButton tab_settings_override_btn_fastboot_override;
-
-    /**
-     * adb *
-     */
-    @FXML
-    private TextField tab_settings_override_txt_adb_path;
-    @FXML
-    private Button tab_settings_override_btn_adb_browse;
-    @FXML
-    private ToggleButton tab_settings_override_btn_adb_override;
-
-    /**
-     * others *
-     */
-    @FXML
-    private Button tab_settings_others_btn_reinitialize;
+    /** Console Tab **/
+    @FXML private Accordion tab_settings_accord;
+    @FXML private TextArea  tab_main_txt_area_log;
     //</editor-fold>
 
     @Override
