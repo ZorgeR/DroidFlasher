@@ -410,8 +410,6 @@ public class Controller implements Initializable {
 
         Runtime rt = Runtime.getRuntime();
 
-        //String[] commands = {bin,args};
-
         Process proc = rt.exec(args);
 
         BufferedReader stdInput = new BufferedReader(new
@@ -420,8 +418,6 @@ public class Controller implements Initializable {
         BufferedReader stdError = new BufferedReader(new
                 InputStreamReader(proc.getErrorStream()));
 
-// read the output from the command
-        //System.out.println("Here is the standard output of the command:\n");
         appendMainTabLog("===\nrun cmd: "+/*bin+*/" "+ Arrays.toString(args)+"\n\n");
 
         String s = null;
@@ -431,11 +427,6 @@ public class Controller implements Initializable {
             locallog=locallog+s+"\n";
         }
 
-// read any errors from the attempted command
-        //System.out.println("Here is the standard error of the command (if any):\n");
-        /*if(stdError == null){
-            appendMainTabLog("\n\nNo error detected.\n===");
-        } else {*/
         while ((s = stdError.readLine()) != null) {
             appendMainTabLog("err:"+s+"\n");
             locallog="err";
@@ -466,65 +457,6 @@ public class Controller implements Initializable {
             e.printStackTrace();
         }
     }
-
-                //String locallog = "";
-                //Runtime rt = Runtime.getRuntime();
-                //String[] commands = {bin,args};
-                //Process proc = null;
-               // try {
-               //     proc = rt.exec(args);
-               // } catch (IOException e) {
-               //     e.printStackTrace();
-               // }
-
-               // BufferedReader stdInput = new BufferedReader(new
-               //         InputStreamReader(proc.getInputStream()));
-
-              //  BufferedReader stdError = new BufferedReader(new
-              //          InputStreamReader(proc.getErrorStream()));
-
-              //  appendMainTabLog("===\nrun cmd: " +/*bin+*/" " + Arrays.toString(args) + "\n\n");
-
-              //  String s = null;
-             /*   try {
-                    while ((s = stdInput.readLine()) != null) {
-                        //System.out.println(s);
-                        appendMainTabLog(s + "\n");
-                        locallog = locallog + s + "\n";
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }*/
-
-      //  try {
-              //      while ((s = stdError.readLine()) != null) {
-                 //       if (s.startsWith("Transferring")) {
-                          //  Double progress = Double.parseDouble(s.split("\\(")[1].split("%")[0]) / 100;
-                           // Platform.runLater(() -> tab_adb_progressbar.setProgress(progress));
-                            //updateProgressBar(progress);
-                            //Platform.runLater(() -> updateProgressBar(progress));
-                            //progressbarpossition=progress;
-        //updateProgressBar(progress);
-        //Platform.runLater(() -> updateProgressBar(progress));
-        //progressbarpossition=progress;
-
-        //  } else {
-                          //  appendMainTabLog("err:" + s + "\n");
-                         //   locallog = "err";
-                      //  }
-                        //System.out.println(s);
-                    //}//}
-             //   } catch (IOException e) {
-               //     e.printStackTrace();
-               // }
-               // }
-               // return null;
-            //}
-        //};
-      //  Thread th = new Thread(task);
-       // th.setDaemon(true);
-      //  th.start();
-
 
     private void updateProgressBar(Double progress){
         Task task = new Task<Void>() {
