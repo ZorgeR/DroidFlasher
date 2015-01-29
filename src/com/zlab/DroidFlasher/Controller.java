@@ -1,7 +1,6 @@
 package com.zlab.DroidFlasher;
 
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -24,6 +23,7 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
+    //<editor-fold desc="Init UI">
     /** Init UI **/
     /** Console Tab **/
     @FXML private Accordion tab_settings_accord;
@@ -47,18 +47,18 @@ public class Controller implements Initializable {
     @FXML private ProgressBar tab_adb_progressbar;
 
     /** Settings Tab **/
-    @FXML private TitledPane tab_settings_toolset_group;
+    @FXML private TitledPane tab_settings_tool_set_group;
 
         /** Tools section **/
-        @FXML private TextField  tab_settings_toolset_txt_tool_directory_browse;
-        @FXML private Button     tab_settings_toolset_btn_tool_directory_browse;
+        @FXML private TextField tab_settings_tool_set_txt_tool_directory_browse;
+        @FXML private Button tab_settings_tool_set_btn_tool_directory_browse;
 
         /** Override section **/
         /** fastboot **/
         @FXML private TextField  tab_settings_override_txt_fastboot_path;
         @FXML private Button     tab_settings_override_btn_fastboot_browse;
         @FXML private ToggleButton tab_settings_override_btn_fastboot_override;
-        //@FXML private CheckBox tab_settings_override_chk_fastboot_override;
+
         /** adb **/
         @FXML private TextField  tab_settings_override_txt_adb_path;
         @FXML private Button     tab_settings_override_btn_adb_browse;
@@ -66,15 +66,14 @@ public class Controller implements Initializable {
 
         /** others **/
         @FXML private Button    tab_settings_others_btn_reinitialize;
-
-    //public static Double progressbarpossition=0.0;
+    //</editor-fold>
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
 
-    public void appendMainTabLog(String appenString){
-        tab_main_txt_area_log.appendText(appenString);
+    public void logToConsole(String appendString){
+        tab_main_txt_area_log.appendText(appendString);
     }
 
     public void initToggleBtn(){
@@ -96,13 +95,10 @@ public class Controller implements Initializable {
                 });
     }
     public void initBtn(){
-
         tab_adb_btn_check_device.setOnAction((event) -> {
             try {
-                String adbdeviceout=runCmd(tab_settings_toolset_txt_tool_directory_browse.getText() + "/adb", "devices", "-l");
-
-                String[] finder = adbdeviceout.split("\n");
-
+                String adb_devices_output=runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "devices", "-l");
+                String[] finder = adb_devices_output.split("\n");
                 if(!finder[finder.length-1].equals("List of devices attached ")){
                     tab_adb_device_status_orb.setFill(Color.GREENYELLOW);
                     String[] device_info = finder[finder.length-1].split("\\s+");
@@ -113,19 +109,13 @@ public class Controller implements Initializable {
                     showDialogError("Ooops!", "Adb device not detected.","Try to reconnect.");
                     tab_adb_device_status_txt.setText("No device detected.");
                 }
-
-                String s=finder[0];
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-
-
-
         tab_adb_btn_kill_server.setOnAction((event) -> {
             try {
-                runCmd(tab_settings_toolset_txt_tool_directory_browse.getText() + "/adb", "kill-server");
+                runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "kill-server");
                 showDialogInformation("adb", "Operation complete", "Command kill-server sended to adb.");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -133,7 +123,7 @@ public class Controller implements Initializable {
         });
         tab_adb_btn_start_server.setOnAction((event) -> {
             try {
-                runCmd(tab_settings_toolset_txt_tool_directory_browse.getText() + "/adb", "start-server");
+                runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "start-server");
                 showDialogInformation("adb", "Operation complete", "Command start-server sended to adb.");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -141,7 +131,7 @@ public class Controller implements Initializable {
         });
         tab_adb_btn_reboot_device.setOnAction((event) -> {
             try {
-                runCmd(tab_settings_toolset_txt_tool_directory_browse.getText() + "/adb", "reboot");
+                runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "reboot");
                 showDialogInformation("adb", "Operation complete", "Reboot command sended to device.");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -149,7 +139,7 @@ public class Controller implements Initializable {
         });
         tab_adb_btn_reboot_recovery.setOnAction((event) -> {
             try {
-                runCmd(tab_settings_toolset_txt_tool_directory_browse.getText() + "/adb", "reboot", "recovery");
+                runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "reboot", "recovery");
                 showDialogInformation("adb", "Operation complete", "Command \"reboot to recovery\" sended to device.");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -157,34 +147,12 @@ public class Controller implements Initializable {
         });
         tab_adb_btn_reboot_bootloader.setOnAction((event) -> {
             try {
-                runCmd(tab_settings_toolset_txt_tool_directory_browse.getText() + "/adb", "reboot", "bootloader");
+                runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "reboot", "bootloader");
                 showDialogInformation("adb", "Operation complete", "Command \"reboot to bootlader\" sended to device.");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-
-/*
-        progrestest.setOnAction((event) -> {
-            try {
-                runProgressTest();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            new Thread(() -> {
-                tab_adb_progressbar.setProgress(progressbarpossition);
-            }).start();
-
-
-            while(progressbarpossition!=1.0){
-                tab_adb_progressbar.setProgress(progressbarpossition);
-            }
-
-            tab_adb_progressbar.setProgress(1.0);
-        });*/
-
-
         tab_adb_btn_push_file.setOnAction((event) -> {
             try {
                 File localfile = fileChooser();
@@ -193,7 +161,7 @@ public class Controller implements Initializable {
                 if (!remotefile.equals("")){
                     new Thread(() -> {
                         try {
-                            runCmdWithProgress(tab_settings_toolset_txt_tool_directory_browse.getText() + "/adb", "push", "-p", localfile.getPath(), remotefile);
+                            runCmdAdbPushPull(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "push", "-p", localfile.getPath(), remotefile);
                             Platform.runLater(() ->  showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " pushed to remote path " + remotefile));
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -204,7 +172,6 @@ public class Controller implements Initializable {
                 showDialogErrorNoDirectorySelected();
             }
         });
-
         tab_adb_btn_pull_file.setOnAction((event) -> {
             try {
                 String remotefile = remotePullSetPath("test.zip");
@@ -212,7 +179,7 @@ public class Controller implements Initializable {
                     File localfile = fileSaver();
                     new Thread(() -> {
                         try {
-                            runCmdWithProgress(tab_settings_toolset_txt_tool_directory_browse.getText() + "/adb", "pull", "-p", remotefile, localfile.getPath());
+                            runCmdAdbPushPull(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "pull", "-p", remotefile, localfile.getPath());
                             Platform.runLater(() ->  showDialogInformation("adb", "Operation complete", "File "+localfile.getName()+" pulled from remote path "+remotefile));
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -223,29 +190,26 @@ public class Controller implements Initializable {
                 showDialogErrorNoDirectorySelected();
             }
         });
-
-
-        tab_settings_toolset_btn_tool_directory_browse.setOnAction((event) -> {
+        tab_settings_tool_set_btn_tool_directory_browse.setOnAction((event) -> {
             try {
                 File dir = directoryChooser();
-                if(checkAdbBin(dir) && checkFastbootBin(dir)){
-                    tab_settings_toolset_txt_tool_directory_browse.setText(dir.getPath());
+                if (checkAdbBin(dir) && checkFastbootBin(dir)) {
+                    tab_settings_tool_set_txt_tool_directory_browse.setText(dir.getPath());
                 } else {
-                    String binaries="";
-                    if(!checkAdbBin(dir) && !checkFastbootBin(dir)){
+                    String binaries = "";
+                    if (!checkAdbBin(dir) && !checkFastbootBin(dir)) {
                         binaries = "adb and fastboot";
-                    } else if (!checkAdbBin(dir)){
+                    } else if (!checkAdbBin(dir)) {
                         binaries = "adb";
                     } else {
                         binaries = "fastboot";
                     }
                     showDialogErrorIsNotValidToolsDirectorySelected(binaries);
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 showDialogErrorNoDirectorySelected();
             }
         });
-
         tab_settings_override_btn_fastboot_browse.setOnAction((event) -> {
             try {
                 File dir = directoryChooser();
@@ -258,7 +222,6 @@ public class Controller implements Initializable {
                 showDialogErrorNoDirectorySelected();
             }
         });
-
         tab_settings_override_btn_adb_browse.setOnAction((event) -> {
             try {
                 File dir = directoryChooser();
@@ -271,7 +234,6 @@ public class Controller implements Initializable {
                 showDialogErrorNoDirectorySelected();
             }
         });
-
         tab_settings_override_btn_fastboot_browse.setOnAction((event) -> {
             try {
                 File dir = directoryChooser();
@@ -284,10 +246,6 @@ public class Controller implements Initializable {
                 showDialogErrorNoDirectorySelected();
             }
         });
-
-
-
-
         tab_settings_others_btn_reinitialize.setOnAction((event) -> {
             tab_main_txt_area_log.appendText("Reinitialize inventory...\n");
             /** РЕИНИЦИАЛИЗАЦИЯ **/
@@ -295,7 +253,7 @@ public class Controller implements Initializable {
         });
     }
     public void initUIPreferences(){
-        tab_settings_accord.setExpandedPane(tab_settings_toolset_group);
+        tab_settings_accord.setExpandedPane(tab_settings_tool_set_group);
     }
 
     public File directoryChooser(){
@@ -329,7 +287,6 @@ public class Controller implements Initializable {
         dialog.setHeaderText("File will be pushed to this remote path");
         dialog.setContentText("Remote path:");
 
-// Traditional way to get the response value.
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()){
             return result.get();
@@ -337,14 +294,12 @@ public class Controller implements Initializable {
             return "";
         }
     }
-
     public String remotePullSetPath(String filename){
         TextInputDialog dialog = new TextInputDialog("/sdcard/"+filename);
         dialog.setTitle("Enter remote path");
         dialog.setHeaderText("File will be pulled from this remote path to the local machine");
         dialog.setContentText("Remote path:");
 
-// Traditional way to get the response value.
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()){
             return result.get();
@@ -358,7 +313,6 @@ public class Controller implements Initializable {
         alert.setTitle("Oops..");
         alert.setHeaderText("Operation rejected by user!");
         alert.setContentText("Please try again.");
-
         alert.showAndWait();
     }
     private void showDialogErrorIsNotValidToolsDirectorySelected(String binaries){
@@ -366,7 +320,6 @@ public class Controller implements Initializable {
         alert.setTitle("Oops..");
         alert.setHeaderText("No " + binaries + " binaries in this directory!");
         alert.setContentText("Please try again.");
-
         alert.showAndWait();
     }
     private void showDialogInformation(String title, String header, String text){
@@ -374,7 +327,6 @@ public class Controller implements Initializable {
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(text);
-
         alert.showAndWait();
     }
     private void showDialogError(String title, String header, String text){
@@ -382,7 +334,6 @@ public class Controller implements Initializable {
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(text);
-
         alert.showAndWait();
     }
 
@@ -415,25 +366,23 @@ public class Controller implements Initializable {
         BufferedReader stdError = new BufferedReader(new
                 InputStreamReader(proc.getErrorStream()));
 
-        appendMainTabLog("===\nrun cmd: "+/*bin+*/" "+ Arrays.toString(args)+"\n\n");
+        logToConsole("===\nrun cmd: " +/*bin+*/" " + Arrays.toString(args) + "\n\n");
 
         String s = null;
         while ((s = stdInput.readLine()) != null) {
             //System.out.println(s);
-            appendMainTabLog(s+"\n");
+            logToConsole(s + "\n");
             locallog=locallog+s+"\n";
         }
 
         while ((s = stdError.readLine()) != null) {
-            appendMainTabLog("err:"+s+"\n");
+            logToConsole("err:" + s + "\n");
             locallog="err";
             //System.out.println(s);
         }//}
         return locallog;
     }
-
-
-    private void runCmdWithProgress(String... args) throws IOException {
+    private void runCmdAdbPushPull(String... args) throws IOException {
         Process proc = Runtime.getRuntime().exec(args);
         InputStream inputStream = proc.getErrorStream();
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -445,7 +394,7 @@ public class Controller implements Initializable {
                 Double progress = Double.parseDouble(s.split("\\(")[1].split("%")[0]) / 100;
                 Platform.runLater(() -> tab_adb_progressbar.setProgress(progress));
             } else {
-                appendMainTabLog("err:" + s + "\n");
+                logToConsole("err:" + s + "\n");
             }
         }
         try {
@@ -455,16 +404,4 @@ public class Controller implements Initializable {
         }
     }
 
-    private void updateProgressBar(Double progress){
-        Task task = new Task<Void>() {
-            @Override
-            public Void call() throws Exception {
-                    Platform.runLater(() -> tab_adb_progressbar.setProgress(progress));
-                return null;
-            }
-        };
-        Thread th = new Thread(task);
-        th.setDaemon(true);
-        th.start();
-    }
 }

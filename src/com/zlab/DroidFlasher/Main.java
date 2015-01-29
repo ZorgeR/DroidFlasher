@@ -42,12 +42,12 @@ public class Main extends Application {
     }
     public void startApp(){
 
-        mController.appendMainTabLog("Initialize UI...\n");
+        mController.logToConsole("Initialize UI...\n");
         mController.initUIPreferences();
         mController.initToggleBtn();
         mController.initBtn();
 
-        mController.appendMainTabLog("Initialize inventory...\n");
+        mController.logToConsole("Initialize inventory...\n");
 
     }
 

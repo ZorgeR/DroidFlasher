@@ -72,12 +72,12 @@
                <children>
                   <Accordion fx:id="tab_settings_accord" layoutX="9.0" layoutY="10.0" prefHeight="348.0" prefWidth="583.0">
                     <panes>
-                      <TitledPane fx:id="tab_settings_toolset_group" animated="false" text="Tools settings">
+                      <TitledPane fx:id="tab_settings_tool_set_group" animated="false" text="Tools settings">
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <TextField fx:id="tab_settings_toolset_txt_tool_directory_browse" layoutX="112.0" layoutY="14.0" prefHeight="26.0" prefWidth="383.0" text="/Users/zorg/Разработка/SDK/android-sdk/platform-tools" />
-                                    <Button fx:id="tab_settings_toolset_btn_tool_directory_browse" layoutX="504.0" layoutY="14.0" mnemonicParsing="false" text="Browse" />
+                                    <TextField fx:id="tab_settings_tool_set_txt_tool_directory_browse" layoutX="112.0" layoutY="14.0" prefHeight="26.0" prefWidth="383.0" text="/Users/zorg/Разработка/SDK/android-sdk/platform-tools" />
+                                    <Button fx:id="tab_settings_tool_set_btn_tool_directory_browse" layoutX="504.0" layoutY="14.0" mnemonicParsing="false" text="Browse" />
                                     <Label layoutX="14.0" layoutY="19.0" text="Tools directory:" />
                                  </children>
                               </AnchorPane>
