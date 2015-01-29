@@ -334,6 +334,70 @@ public class Controller implements Initializable {
                 showDialogErrorNoDirectorySelected();
             }
         });
+        tab_adb_btn_uninstall.setOnAction((event) -> {
+            try {
+                String packagename = setUninstallPackage("com.zlab.datFM");
+
+                    new Thread(() -> {
+                        try {
+                            String log=runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "uninstall", packagename);
+
+                            final String finalLog = log;
+                            Platform.runLater(() -> {
+                                int failure = (finalLog.length() - finalLog.substring(0).replaceAll("Failure", "").length())/7;
+                                int success = (finalLog.length() - finalLog.substring(0).replaceAll("Success","").length())/7;
+
+                                if(success==1){
+                                    showDialogInformation("adb", "Operation complete", "Package " + packagename + " uninstalled from device,");
+                                } else {
+                                    showDialogInformation("adb", "Operation not complete", "Can't uninstall " + packagename + ", see Console for detail.");
+                                }
+                                /** FOR THE NEXT RELEASE (MULTIPLE UNINSTALLER)
+                                showDialogInformation("adb", "Operation complete",
+                                        "Success: "+success
+                                                +"\nFailure: "+failure+"\n"
+                                                +"\nSee Console for detail."+"\n");*/
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
+            } catch (Exception e) {
+                showDialogErrorNoDirectorySelected();
+            }
+        });
+        tab_adb_btn_uninstall_keep_data.setOnAction((event) -> {
+            try {
+                String packagename = setUninstallPackage("com.zlab.datFM");
+
+                new Thread(() -> {
+                    try {
+                        String log=runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "uninstall", "-k", packagename);
+
+                        final String finalLog = log;
+                        Platform.runLater(() -> {
+                            int failure = (finalLog.length() - finalLog.substring(0).replaceAll("Failure", "").length())/7;
+                            int success = (finalLog.length() - finalLog.substring(0).replaceAll("Success","").length())/7;
+
+                            if(success==1){
+                                showDialogInformation("adb", "Operation complete", "Package " + packagename + " uninstalled from device,");
+                            } else {
+                                showDialogInformation("adb", "Operation not complete", "Can't uninstall " + packagename + ", see Console for detail.");
+                            }
+                            /** FOR THE NEXT RELEASE (MULTIPLE UNINSTALLER)
+                             showDialogInformation("adb", "Operation complete",
+                             "Success: "+success
+                             +"\nFailure: "+failure+"\n"
+                             +"\nSee Console for detail."+"\n");*/
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            } catch (Exception e) {
+                showDialogErrorNoDirectorySelected();
+            }
+        });
 
         /** Reinitialize **/
         tab_settings_others_btn_reinitialize.setOnAction((event) -> {
@@ -356,6 +420,19 @@ public class Controller implements Initializable {
         }
         if(install_args.equals("-")){install_args=null;}
         return install_args;
+    }
+    public String setUninstallPackage(String packagename) {
+        TextInputDialog dialog = new TextInputDialog(packagename);
+        dialog.setTitle("Set package name");
+        dialog.setHeaderText("Enter package name to uninstall");
+        dialog.setContentText("Package:");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            return result.get();
+        } else {
+            return "";
+        }
     }
 
     /** File control **/
