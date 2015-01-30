@@ -367,42 +367,43 @@ public class Controller implements Initializable {
             }
         });
         tab_adb_btn_uninstall_keep_data.setOnAction((event) -> {
-            try {
-                String packagename = setUninstallPackage("com.zlab.datFM");
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("WARNING!");
+                alert.setHeaderText("PLEASE READ CAREFULLY!");
+                alert.setContentText("The -k option uninstalls the application while retaining the data/cache.\n" +
+                        "At the moment, there is no way to remove the remaining data.\n" +
+                        "You will have to reinstall the application with the same signature, and fully uninstall it.\n" +
+                        "If you truly wish to continue, enter package name on next screen, for example com.zlab.datFM");
 
-                new Thread(() -> {
-                    try {
-                        /** ADD WARNING
-                         The -k option uninstalls the application while retaining the data/cache.
-                         At the moment, there is no way to remove the remaining data.
-                         You will have to reinstall the application with the same signature, and fully uninstall it.
-                         If you truly wish to continue, execute 'adb shell pm uninstall -k com.zlab.datFM'
-                         **/
-                        String log=runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "shell", "pm", "uninstall", "-k", packagename);
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK){
+                    String packagename = setUninstallPackage("com.zlab.datFM");
+                    if(!packagename.equals("")){
+                    new Thread(() -> {
+                        try {
+                            String log=runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "shell", "pm", "uninstall", "-k", packagename);
 
-                        final String finalLog = log;
-                        Platform.runLater(() -> {
-                            int failure = (finalLog.length() - finalLog.substring(0).replaceAll("Failure", "").length())/7;
-                            int success = (finalLog.length() - finalLog.substring(0).replaceAll("Success","").length())/7;
+                            final String finalLog = log;
+                            Platform.runLater(() -> {
+                                int failure = (finalLog.length() - finalLog.substring(0).replaceAll("Failure", "").length())/7;
+                                int success = (finalLog.length() - finalLog.substring(0).replaceAll("Success","").length())/7;
 
-                            if(success==1){
-                                showDialogInformation("adb", "Operation complete", "Package " + packagename + " uninstalled from device,");
-                            } else {
-                                showDialogInformation("adb", "Operation not complete", "Can't uninstall " + packagename + ", see Console for detail.");
-                            }
-                            /** FOR THE NEXT RELEASE (MULTIPLE UNINSTALLER)
-                             showDialogInformation("adb", "Operation complete",
-                             "Success: "+success
-                             +"\nFailure: "+failure+"\n"
-                             +"\nSee Console for detail."+"\n");*/
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
-            } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
-            }
+                                if(success==1){
+                                    showDialogInformation("adb", "Operation complete", "Package " + packagename + " uninstalled from device,");
+                                } else {
+                                    showDialogInformation("adb", "Operation not complete", "Can't uninstall " + packagename + ", see Console for detail.");
+                                }
+                                /** FOR THE NEXT RELEASE (MULTIPLE UNINSTALLER)
+                                 showDialogInformation("adb", "Operation complete",
+                                 "Success: "+success
+                                 +"\nFailure: "+failure+"\n"
+                                 +"\nSee Console for detail."+"\n");*/
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();}
+                } else {}
         });
 
         /** Reinitialize **/
