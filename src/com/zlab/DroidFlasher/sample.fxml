@@ -35,17 +35,18 @@
                   </MenuButton>
                   <ProgressBar fx:id="tab_adb_progressbar" layoutX="14.0" layoutY="299.0" prefHeight="20.0" prefWidth="573.0" progress="0.0" />
                   <Separator layoutX="-3.0" layoutY="37.0" prefHeight="11.0" prefWidth="617.0" />
-                  <SplitPane dividerPositions="0.12552301255230125" layoutX="14.0" layoutY="51.0" orientation="VERTICAL" prefHeight="241.0" prefWidth="133.0">
+                  <SplitPane dividerPositions="0.23255813953488372" layoutX="14.0" layoutY="51.0" orientation="VERTICAL" prefHeight="131.0" prefWidth="133.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
                            <children>
                               <Label layoutX="25.0" layoutY="5.0" text="File operation" />
                            </children>
                         </AnchorPane>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="158.0" prefWidth="158.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="131.0">
                            <children>
                               <Button fx:id="tab_adb_btn_file_push" layoutX="6.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="push to device" />
                               <Button fx:id="tab_adb_btn_file_pull" layoutX="6.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="pull from device" />
+                              <Button disable="true" layoutX="6.0" layoutY="63.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="File Manager" />
                            </children>
                         </AnchorPane>
                     </items>

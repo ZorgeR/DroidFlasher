@@ -372,7 +372,13 @@ public class Controller implements Initializable {
 
                 new Thread(() -> {
                     try {
-                        String log=runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "uninstall", "-k", packagename);
+                        /** ADD WARNING
+                         The -k option uninstalls the application while retaining the data/cache.
+                         At the moment, there is no way to remove the remaining data.
+                         You will have to reinstall the application with the same signature, and fully uninstall it.
+                         If you truly wish to continue, execute 'adb shell pm uninstall -k com.zlab.datFM'
+                         **/
+                        String log=runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "shell", "pm", "uninstall", "-k", packagename);
 
                         final String finalLog = log;
                         Platform.runLater(() -> {
