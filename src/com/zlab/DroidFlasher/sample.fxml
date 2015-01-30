@@ -105,11 +105,11 @@
                         <AnchorPane prefHeight="109.0" prefWidth="158.0">
                            <children>
                               <Button fx:id="tab_adb_btn_backup" layoutX="4.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="83.0" text="Backup" />
-                              <CheckBox fx:id="tab_adb_chk_backup_apk" layoutX="5.0" layoutY="37.0" mnemonicParsing="false" text="apk" />
-                              <CheckBox fx:id="tab_adb_chk_backup_obb" layoutX="5.0" layoutY="62.0" mnemonicParsing="false" text="obb" />
+                              <CheckBox fx:id="tab_adb_chk_backup_apk" layoutX="5.0" layoutY="37.0" mnemonicParsing="false" selected="true" text="apk" />
+                              <CheckBox fx:id="tab_adb_chk_backup_obb" layoutX="5.0" layoutY="62.0" mnemonicParsing="false" selected="true" text="obb" />
                               <CheckBox fx:id="tab_adb_chk_backup_shared" layoutX="5.0" layoutY="87.0" mnemonicParsing="false" text="shared" />
                               <CheckBox fx:id="tab_adb_chk_backup_system" layoutX="5.0" layoutY="111.0" mnemonicParsing="false" text="system" />
-                              <CheckBox fx:id="tab_adb_chk_backup_all" layoutX="5.0" layoutY="136.0" mnemonicParsing="false" text="all" />
+                              <CheckBox fx:id="tab_adb_chk_backup_all" layoutX="5.0" layoutY="136.0" mnemonicParsing="false" selected="true" text="all" />
                            </children>
                         </AnchorPane>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="158.0" prefWidth="158.0">

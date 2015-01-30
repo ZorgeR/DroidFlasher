@@ -172,7 +172,7 @@ public class Controller implements Initializable {
                 File localfile = fileChooser();
                 String remotefile = remotePushSetPath(localfile.getName());
 
-                if (!remotefile.equals("")) {
+                if (!remotefile.equals("") || localfile !=null) {
                     new Thread(() -> {
                         try {
                             runCmdAdbPushPull(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "push", "-p", localfile.getPath(), remotefile);
@@ -191,14 +191,15 @@ public class Controller implements Initializable {
                 String remotefile = remotePullSetPath("test.zip");
                 if (!remotefile.equals("")) {
                     File localfile = fileSaver();
-                    new Thread(() -> {
+                    if(localfile!=null){
+                        new Thread(() -> {
                         try {
                             runCmdAdbPushPull(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "pull", "-p", remotefile, localfile.getPath());
                             Platform.runLater(() -> showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " pulled from remote path " + remotefile));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    }).start();
+                    }).start();}
                 }
             } catch (Exception e) {
                 showDialogErrorNoDirectorySelected();
@@ -337,7 +338,7 @@ public class Controller implements Initializable {
         tab_adb_btn_uninstall.setOnAction((event) -> {
             try {
                 String packagename = setUninstallPackage("com.zlab.datFM");
-
+                if(!packagename.equals("")){
                     new Thread(() -> {
                         try {
                             String log=runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "uninstall", packagename);
@@ -361,7 +362,7 @@ public class Controller implements Initializable {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    }).start();
+                    }).start();}
             } catch (Exception e) {
                 showDialogErrorNoDirectorySelected();
             }
@@ -404,6 +405,59 @@ public class Controller implements Initializable {
                         }
                     }).start();}
                 } else {}
+        });
+
+        /** Backup **/
+        tab_adb_btn_backup.setOnAction((event) -> {
+            if(tab_adb_chk_backup_shared.isSelected() || tab_adb_chk_backup_all.isSelected()){
+            File localfile = fileSaver();
+            if(localfile!=null){
+                int count=8;
+                if(tab_adb_chk_backup_all.isSelected()) {count++;}
+
+                String[] commands = new String[count];
+
+                commands[0]=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb";
+                commands[1]="backup";
+                commands[2]="-f";
+                commands[3]=localfile.getPath();
+
+                if (tab_adb_chk_backup_shared.isSelected()) {commands[4]="-shared";} else {commands[4]="-noshared";}
+                if (tab_adb_chk_backup_apk.isSelected())    {commands[5]="-apk";}    else {commands[5]="-noapk";}
+                if (tab_adb_chk_backup_obb.isSelected())    {commands[6]="-obb";}    else {commands[6]="-noobb";}
+                if (tab_adb_chk_backup_system.isSelected()) {commands[7]="-system";} else {commands[7]="-nosystem";}
+                if (tab_adb_chk_backup_all.isSelected())    {commands[8]="-all";}
+
+                showDialogInformation("Backup", "Attention", "Now:\n-unlock your device\n-press OK in this window\n-confirm the backup operation on the phone.\n\n"
+                        +"Please don't close window on the phone.");
+
+            new Thread(() -> {
+                try {
+                    runCmd(commands);
+                    Platform.runLater(() -> showDialogInformation("Backup", "Operation complete", "All done. Backup file stored at "+localfile.getPath()+"."));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();}
+            } else {
+                Platform.runLater(() -> showDialogInformation("Backup", "Incorrect operation", "SHARED or ALL must be selected."));
+            }
+        });
+        tab_adb_btn_restore.setOnAction((event) -> {
+
+        });
+        tab_adb_chk_backup_all.setOnAction((event) -> {
+            if(tab_adb_chk_backup_all.isSelected()){
+                tab_adb_chk_backup_apk.setSelected(true);
+                tab_adb_chk_backup_obb.setSelected(true);
+                tab_adb_chk_backup_shared.setSelected(true);
+                tab_adb_chk_backup_system.setSelected(true);
+            } else {
+                tab_adb_chk_backup_apk.setSelected(false);
+                tab_adb_chk_backup_obb.setSelected(false);
+                tab_adb_chk_backup_shared.setSelected(false);
+                tab_adb_chk_backup_system.setSelected(false);
+            }
         });
 
         /** Reinitialize **/
@@ -553,9 +607,7 @@ public class Controller implements Initializable {
     /** Console **/
     private String runCmd(String... args) throws IOException {
         String locallog = "";
-
         Runtime rt = Runtime.getRuntime();
-
         Process proc = rt.exec(args);
 
         BufferedReader stdInput = new BufferedReader(new
