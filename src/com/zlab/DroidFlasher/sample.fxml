@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.effect.*?>
@@ -18,8 +19,7 @@
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
                   <Button fx:id="tab_adb_btn_check_device" layoutX="14.0" layoutY="327.0" mnemonicParsing="false" text="Check device" />
-                  <Circle fx:id="tab_adb_device_status_orb" fill="RED" layoutX="137.0" layoutY="340.0" radius="10.0" stroke="BLACK" strokeWidth="2.0" />
-                  <Label fx:id="tab_adb_device_status_txt" layoutX="160.0" layoutY="332.0" text="No device detected." />
+                  <Label fx:id="tab_adb_device_status_txt" layoutX="144.0" layoutY="332.0" text="No device detected." />
                   <MenuButton layoutX="136.0" layoutY="9.0" mnemonicParsing="false" text="reboot device">
                     <items>
                       <MenuItem fx:id="tab_adb_btn_reboot_device" mnemonicParsing="false" text="normal" />
@@ -39,7 +39,12 @@
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
                            <children>
-                              <Label layoutX="25.0" layoutY="5.0" text="File operation" />
+                              <Label layoutX="35.0" layoutY="5.0" text="File operation" />
+                              <ImageView fx:id="img_head_fileoperation" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="5.0">
+                                 <image>
+                                    <Image url="@../../../../res/img/file_extension_bin.png" />
+                                 </image>
+                              </ImageView>
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="131.0">
@@ -62,6 +67,11 @@
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
                            <children>
                               <Label layoutX="39.0" layoutY="5.0" text="Application" />
+                              <ImageView fx:id="img_head_application" fitHeight="16.0" fitWidth="16.0" layoutX="16.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../res/img/application_view_icons.png" />
+                                 </image>
+                              </ImageView>
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="109.0" prefWidth="158.0">
@@ -99,7 +109,12 @@
                      <items>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
                            <children>
-                              <Label layoutX="23.0" layoutY="5.0" text="Backup" />
+                              <Label layoutX="33.0" layoutY="5.0" text="Backup" />
+                              <ImageView fx:id="img_head_backup" fitHeight="16.0" fitWidth="16.0" layoutX="8.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../res/img/backups.png" />
+                                 </image>
+                              </ImageView>
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="109.0" prefWidth="158.0">
@@ -119,6 +134,11 @@
                         </AnchorPane>
                      </items>
                   </SplitPane>
+                  <ImageView fx:id="img_head_adb_status" fitHeight="32.0" fitWidth="32.0" layoutX="113.0" layoutY="324.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../res/img/bullet_red.png" />
+                     </image>
+                  </ImageView>
                </children></AnchorPane>
          </content>
       </Tab>

@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.application.Platform;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.DirectoryChooser;
@@ -47,8 +49,11 @@ public class Controller implements Initializable {
     @FXML private MenuItem tab_adb_btn_uninstall;
     @FXML private MenuItem tab_adb_btn_uninstall_keep_data;
     @FXML private ProgressBar tab_adb_progressbar;
-    @FXML private Circle tab_adb_device_status_orb;
     @FXML private Label  tab_adb_device_status_txt;
+    @FXML private ImageView img_head_fileoperation;
+    @FXML private ImageView img_head_application;
+    @FXML private ImageView img_head_backup;
+    @FXML private ImageView img_head_adb_status;
 
 
     /** Settings Tab **/
@@ -78,6 +83,10 @@ public class Controller implements Initializable {
     }
     public void initUIPreferences() {
         tab_settings_accord.setExpandedPane(tab_settings_tool_set_group);
+        img_head_fileoperation.setImage(new Image(getClass().getResourceAsStream("/img/file_extension_bin.png")));
+        img_head_application.setImage(new Image(getClass().getResourceAsStream("/img/application_view_icons.png")));
+        img_head_backup.setImage(new Image(getClass().getResourceAsStream("/img/backups.png")));
+        img_head_adb_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
     }
 
     /** Buttons initialize **/
@@ -108,12 +117,12 @@ public class Controller implements Initializable {
                 String adb_devices_output = runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "devices", "-l");
                 String[] finder = adb_devices_output.split("\n");
                 if (!finder[finder.length - 1].equals("List of devices attached ")) {
-                    tab_adb_device_status_orb.setFill(Color.GREENYELLOW);
+                    img_head_adb_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_green.png")));
                     String[] device_info = finder[finder.length - 1].split("\\s+");
                     showDialogInformation("Success!", "Adb device detected.", "Device information is: " + device_info[0]);
                     tab_adb_device_status_txt.setText(device_info[4] + " " + device_info[5] + " " + device_info[3]);
                 } else {
-                    tab_adb_device_status_orb.setFill(Color.RED);
+                    img_head_adb_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
                     showDialogError("Ooops!", "Adb device not detected.", "Try to reconnect.");
                     tab_adb_device_status_txt.setText("No device detected.");
                 }
@@ -430,7 +439,6 @@ public class Controller implements Initializable {
 
                 showDialogInformation("Backup", "Attention", "Now:\n-unlock your device\n-press OK in this window\n-confirm the backup operation on the phone.\n\n"
                         +"Please don't close window on the phone.");
-
             new Thread(() -> {
                 try {
                     runCmd(commands);
@@ -444,7 +452,23 @@ public class Controller implements Initializable {
             }
         });
         tab_adb_btn_restore.setOnAction((event) -> {
-
+            try {
+                File localfile = fileChooser();
+                if (localfile !=null) {
+                    showDialogInformation("Restore", "Attention", "Now:\n-unlock your device\n-press OK in this window\n-confirm restore operation on the phone.\n\n"
+                            +"Please don't close window on the phone.");
+                    new Thread(() -> {
+                        try {
+                            runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "restore", localfile.getPath());
+                            Platform.runLater(() -> showDialogInformation("Restore", "Operation complete", "File " + localfile.getName() + " restored. See Console for detail."));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
+                }
+            } catch (Exception e) {
+                showDialogErrorNoDirectorySelected();
+            }
         });
         tab_adb_chk_backup_all.setOnAction((event) -> {
             if(tab_adb_chk_backup_all.isSelected()){
