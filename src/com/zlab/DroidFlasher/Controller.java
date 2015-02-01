@@ -6,8 +6,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import java.io.*;
@@ -19,7 +17,18 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
-    //<editor-fold desc="Init UI">
+    //<editor-fold desc="Init VARS">
+
+    /** GLOBAL VARS **/
+    public static String OS = System.getProperty("os.name").toLowerCase();
+    public static String PLATFORM_TOOLS="";
+    public static String PLATFORM_TOOLS_MAC="/bin/mac/platform-tools";
+    public static String PLATFORM_TOOLS_NIX="/bin/win/platform-tools";
+    public static String PLATFORM_TOOLS_WIN="/bin/unix/platform-tools";
+    public static String PLATFORM_TOOLS_DIRECTORY=System.getProperty("user.dir");
+    public static String ADB_BINARY="";
+    public static String FASTBOOT_BINARY="";
+    //Users/zorg/Разработка/SDK/android-sdk/platform-tools
     /** Init UI **/
 
     /** Adb Tab **/
@@ -28,6 +37,7 @@ public class Controller implements Initializable {
     @FXML private Button tab_adb_btn_file_pull;
     @FXML private Button tab_adb_btn_backup;
     @FXML private Button tab_adb_btn_restore;
+    @FXML private Button tab_settings_override_btn_unpack_binaries;
     @FXML private CheckBox tab_adb_chk_backup_apk;
     @FXML private CheckBox tab_adb_chk_backup_obb;
     @FXML private CheckBox tab_adb_chk_backup_shared;
@@ -87,6 +97,19 @@ public class Controller implements Initializable {
         img_head_application.setImage(new Image(getClass().getResourceAsStream("/img/application_view_icons.png")));
         img_head_backup.setImage(new Image(getClass().getResourceAsStream("/img/backups.png")));
         img_head_adb_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
+        setPlatform();
+        if(!tab_settings_override_btn_adb_override.isSelected()){
+            ADB_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb";
+        }
+        if(!tab_settings_override_btn_fastboot_override.isSelected()){
+            FASTBOOT_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/fastboot";
+        }
+    }
+    private void unpackBuildInBinary(String directory){
+        try {
+            extractResource("adb", directory);
+            extractResource("fastboot", directory);
+        } catch (IOException e) {e.printStackTrace();}
     }
 
     /** Buttons initialize **/
@@ -95,18 +118,22 @@ public class Controller implements Initializable {
             if (tab_settings_override_btn_fastboot_override.isSelected()) {
                 tab_settings_override_txt_fastboot_path.setDisable(true);
                 tab_settings_override_btn_fastboot_browse.setDisable(true);
+                ADB_BINARY=tab_settings_override_txt_adb_path.getText();
             } else {
                 tab_settings_override_txt_fastboot_path.setDisable(false);
                 tab_settings_override_btn_fastboot_browse.setDisable(false);
+                ADB_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb";
             }
         });
         tab_settings_override_btn_adb_override.setOnAction((event) -> {
             if (tab_settings_override_btn_adb_override.isSelected()) {
                 tab_settings_override_txt_adb_path.setDisable(true);
                 tab_settings_override_btn_adb_browse.setDisable(true);
+                FASTBOOT_BINARY=tab_settings_override_txt_fastboot_path.getText();
             } else {
                 tab_settings_override_txt_adb_path.setDisable(false);
                 tab_settings_override_btn_adb_browse.setDisable(false);
+                FASTBOOT_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/fastboot";
             }
         });
     }
@@ -114,7 +141,7 @@ public class Controller implements Initializable {
         /** Check device **/
         tab_adb_btn_check_device.setOnAction((event) -> {
             try {
-                String adb_devices_output = runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "devices", "-l");
+                String adb_devices_output = runCmd(ADB_BINARY, "devices", "-l");
                 String[] finder = adb_devices_output.split("\n");
                 if (!finder[finder.length - 1].equals("List of devices attached ")) {
                     img_head_adb_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_green.png")));
@@ -134,7 +161,7 @@ public class Controller implements Initializable {
         /** Server kill start **/
         tab_adb_btn_server_kill.setOnAction((event) -> {
             try {
-                runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "kill-server");
+                runCmd(ADB_BINARY, "kill-server");
                 showDialogInformation("adb", "Operation complete", "Command kill-server sended to adb.");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -142,7 +169,7 @@ public class Controller implements Initializable {
         });
         tab_adb_btn_server_start.setOnAction((event) -> {
             try {
-                runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "start-server");
+                runCmd(ADB_BINARY, "start-server");
                 showDialogInformation("adb", "Operation complete", "Command start-server sended to adb.");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -152,7 +179,7 @@ public class Controller implements Initializable {
         /** Reboot device **/
         tab_adb_btn_reboot_device.setOnAction((event) -> {
             try {
-                runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "reboot");
+                runCmd(ADB_BINARY, "reboot");
                 showDialogInformation("adb", "Operation complete", "Reboot command sended to device.");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -160,7 +187,7 @@ public class Controller implements Initializable {
         });
         tab_adb_btn_reboot_recovery.setOnAction((event) -> {
             try {
-                runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "reboot", "recovery");
+                runCmd(ADB_BINARY, "reboot", "recovery");
                 showDialogInformation("adb", "Operation complete", "Command \"reboot to recovery\" sended to device.");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -168,7 +195,7 @@ public class Controller implements Initializable {
         });
         tab_adb_btn_reboot_bootloader.setOnAction((event) -> {
             try {
-                runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "reboot", "bootloader");
+                runCmd(ADB_BINARY, "reboot", "bootloader");
                 showDialogInformation("adb", "Operation complete", "Command \"reboot to bootlader\" sended to device.");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -184,7 +211,7 @@ public class Controller implements Initializable {
                 if (!remotefile.equals("") || localfile !=null) {
                     new Thread(() -> {
                         try {
-                            runCmdAdbPushPull(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "push", "-p", localfile.getPath(), remotefile);
+                            runCmdAdbPushPull(ADB_BINARY, "push", "-p", localfile.getPath(), remotefile);
                             Platform.runLater(() -> showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " pushed to remote path " + remotefile));
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -203,7 +230,7 @@ public class Controller implements Initializable {
                     if(localfile!=null){
                         new Thread(() -> {
                         try {
-                            runCmdAdbPushPull(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "pull", "-p", remotefile, localfile.getPath());
+                            runCmdAdbPushPull(ADB_BINARY, "pull", "-p", remotefile, localfile.getPath());
                             Platform.runLater(() -> showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " pulled from remote path " + remotefile));
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -221,6 +248,12 @@ public class Controller implements Initializable {
                 File dir = directoryChooser();
                 if (checkAdbBin(dir) && checkFastbootBin(dir)) {
                     tab_settings_tool_set_txt_tool_directory_browse.setText(dir.getPath());
+                    if(!tab_settings_override_btn_adb_override.isSelected()){
+                        ADB_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb";
+                    }
+                    if(!tab_settings_override_btn_fastboot_override.isSelected()){
+                        FASTBOOT_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/fastboot";
+                    }
                 } else {
                     String binaries = "";
                     if (!checkAdbBin(dir) && !checkFastbootBin(dir)) {
@@ -272,9 +305,9 @@ public class Controller implements Initializable {
                 try {
                     String log;
                     if(getInstallArgs(false)==null) {
-                        log=runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "install", localfile.getPath());
+                        log=runCmd(ADB_BINARY, "install", localfile.getPath());
                     } else {
-                        log=runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "install", getInstallArgs(false), localfile.getPath());
+                        log=runCmd(ADB_BINARY, "install", getInstallArgs(false), localfile.getPath());
                     }
                     Platform.runLater(() -> tab_adb_progressbar.setProgress(1.0));
 
@@ -310,14 +343,14 @@ public class Controller implements Initializable {
 
                         if(getInstallArgs(false)==null) {
                             for(File f:localfiles){
-                                log=log+runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "install", f.getPath())+"\n";
+                                log=log+runCmd(ADB_BINARY, "install", f.getPath())+"\n";
                                 counter++;
                                 percentile=counter / maxpercentile;
                                 final Double finalPercentile = percentile;
                                 Platform.runLater(() -> tab_adb_progressbar.setProgress(finalPercentile));}
                         } else {
                             for(File f:localfiles){
-                                log=log+runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "install", getInstallArgs(false), f.getPath())+"\n";
+                                log=log+runCmd(ADB_BINARY, "install", getInstallArgs(false), f.getPath())+"\n";
                                 counter++;
                                 percentile=counter / maxpercentile;
                                 final Double finalPercentile = percentile;
@@ -350,7 +383,7 @@ public class Controller implements Initializable {
                 if(!packagename.equals("")){
                     new Thread(() -> {
                         try {
-                            String log=runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "uninstall", packagename);
+                            String log=runCmd(ADB_BINARY, "uninstall", packagename);
 
                             final String finalLog = log;
                             Platform.runLater(() -> {
@@ -377,21 +410,19 @@ public class Controller implements Initializable {
             }
         });
         tab_adb_btn_uninstall_keep_data.setOnAction((event) -> {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("WARNING!");
-                alert.setHeaderText("PLEASE READ CAREFULLY!");
-                alert.setContentText("The -k option uninstalls the application while retaining the data/cache.\n" +
-                        "At the moment, there is no way to remove the remaining data.\n" +
-                        "You will have to reinstall the application with the same signature, and fully uninstall it.\n" +
-                        "If you truly wish to continue, enter package name on next screen, for example com.zlab.datFM");
 
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK){
+            boolean keep = showConfirmDialogs("WARNING!", "PLEASE READ CAREFULLY!", "The -k option uninstalls the application while retaining the data/cache.\n" +
+                    "\" +\n" +
+                    "                        \"At the moment, there is no way to remove the remaining data.\\n\" +\n" +
+                    "                        \"You will have to reinstall the application with the same signature, and fully uninstall it.\\n\" +\n" +
+                    "                        \"If you truly wish to continue, enter package name on next screen, for example com.zlab.datFM");
+
+                if (keep){
                     String packagename = setUninstallPackage("com.zlab.datFM");
                     if(!packagename.equals("")){
                     new Thread(() -> {
                         try {
-                            String log=runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "shell", "pm", "uninstall", "-k", packagename);
+                            String log=runCmd(ADB_BINARY, "shell", "pm", "uninstall", "-k", packagename);
 
                             final String finalLog = log;
                             Platform.runLater(() -> {
@@ -426,7 +457,7 @@ public class Controller implements Initializable {
 
                 String[] commands = new String[count];
 
-                commands[0]=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb";
+                commands[0]=ADB_BINARY;
                 commands[1]="backup";
                 commands[2]="-f";
                 commands[3]=localfile.getPath();
@@ -459,7 +490,7 @@ public class Controller implements Initializable {
                             +"Please don't close window on the phone.");
                     new Thread(() -> {
                         try {
-                            runCmd(tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb", "restore", localfile.getPath());
+                            runCmd(ADB_BINARY, "restore", localfile.getPath());
                             Platform.runLater(() -> showDialogInformation("Restore", "Operation complete", "File " + localfile.getName() + " restored. See Console for detail."));
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -489,6 +520,31 @@ public class Controller implements Initializable {
             tab_main_txt_area_log.appendText("Reinitialize inventory...\n");
             /** РЕИНИЦИАЛИЗАЦИЯ **/
             tab_main_txt_area_log.appendText("done...\n");
+        });
+        tab_settings_override_btn_unpack_binaries.setOnAction((event) -> {
+            File unpack_directory = directorySaver();
+            if(unpack_directory!=null){
+                unpackBuildInBinary(unpack_directory.getPath());
+                tab_settings_override_txt_adb_path.setText(unpack_directory.getPath()+"/adb");
+                tab_settings_override_txt_fastboot_path.setText(unpack_directory.getPath()+"/fastboot");
+            }
+
+            if(showConfirmDialogs("Unpack binaries", "Operation complete", "Binaries unpacked in  "+unpack_directory.getPath()+".\n\nOverride adb and fastboot to this binary?")){
+                ADB_BINARY=tab_settings_override_txt_adb_path.getText();
+                FASTBOOT_BINARY=tab_settings_override_txt_fastboot_path.getText();
+                tab_settings_override_btn_fastboot_override.setSelected(true);
+                tab_settings_override_btn_adb_override.setSelected(true);
+                tab_settings_override_txt_fastboot_path.setDisable(true);
+                tab_settings_override_btn_fastboot_browse.setDisable(true);
+                tab_settings_override_txt_adb_path.setDisable(true);
+                tab_settings_override_btn_adb_browse.setDisable(true);
+            }
+
+            if(showConfirmDialogs("Tools directory path", "Configuration", "Use build in binary path as tools directory?")){
+                PLATFORM_TOOLS_DIRECTORY=unpack_directory.getPath();
+                tab_settings_tool_set_txt_tool_directory_browse.setText(PLATFORM_TOOLS_DIRECTORY);
+            }
+
         });
     }
 
@@ -581,6 +637,14 @@ public class Controller implements Initializable {
         File selectedFile = chooser.showSaveDialog(Main.globalStage);
         return selectedFile;
     }
+    public File directorySaver() {
+        DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle("Select directory for extraction");
+        File defaultDirectory = new File(".");
+        chooser.setInitialDirectory(defaultDirectory);
+        File selectedDirectory = chooser.showDialog(Main.globalStage);
+        return selectedDirectory;
+    }
 
     /** Show Dialog **/
     private void showDialogErrorNoDirectorySelected() {
@@ -610,6 +674,19 @@ public class Controller implements Initializable {
         alert.setHeaderText(header);
         alert.setContentText(text);
         alert.showAndWait();
+    }
+    private boolean showConfirmDialogs(String title, String header, String text){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(text);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /** Check inventory **/
@@ -681,5 +758,45 @@ public class Controller implements Initializable {
     /** LOG **/
     public void logToConsole(String appendString) {
         tab_main_txt_area_log.appendText(appendString);
+    }
+
+    private static void setPlatform(){
+        if (isWindows()) {
+            PLATFORM_TOOLS=PLATFORM_TOOLS_WIN;
+        } else if (isMac()) {
+            PLATFORM_TOOLS=PLATFORM_TOOLS_MAC;
+        } else if (isUnix()) {
+            PLATFORM_TOOLS=PLATFORM_TOOLS_NIX;
+        } else {
+            PLATFORM_TOOLS="binary not found";
+        }
+    }
+    private static boolean isWindows() {
+        return (OS.indexOf("win") >= 0);
+    }
+    private static boolean isMac() {
+        return (OS.indexOf("mac") >= 0);
+    }
+    private static boolean isUnix() {
+        return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 );
+    }
+    public String extractResource(String name, String dstDir) throws IOException {
+        File dstFile=new File(dstDir+"/"+name);
+        try {
+            InputStream resource = getClass().getResourceAsStream(PLATFORM_TOOLS+"/"+name);
+            FileOutputStream outStream = new FileOutputStream(dstFile);
+            byte[] buffer = new byte[1024];
+            int bytes;
+            while ((bytes = resource.read(buffer)) != -1) {
+                outStream.write(buffer, 0, bytes);
+            }
+            outStream.close();
+            resource.close();
+        } catch (IOException e) {
+            //System.exit(-1);
+        }
+        dstFile.setExecutable(true);
+        System.out.println("Successfully extracted "+dstFile.getAbsolutePath());
+        return dstFile.getAbsolutePath();
     }
 }
