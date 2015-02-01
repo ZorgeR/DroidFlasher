@@ -28,7 +28,7 @@ public class Controller implements Initializable {
     public static String PLATFORM_TOOLS_DIRECTORY=System.getProperty("user.dir");
     public static String ADB_BINARY="";
     public static String FASTBOOT_BINARY="";
-    //Users/zorg/Разработка/SDK/android-sdk/platform-tools
+
     /** Init UI **/
 
     /** Adb Tab **/
