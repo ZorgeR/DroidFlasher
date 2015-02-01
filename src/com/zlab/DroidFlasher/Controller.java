@@ -24,7 +24,7 @@ public class Controller implements Initializable {
     public static String PLATFORM_TOOLS="";
     public static String PLATFORM_TOOLS_MAC="/bin/mac/platform-tools";
     public static String PLATFORM_TOOLS_NIX="/bin/win/platform-tools";
-    public static String PLATFORM_TOOLS_WIN="/bin/unix/platform-tools";
+    public static String PLATFORM_TOOLS_WIN="/bin/nix/platform-tools";
     public static String PLATFORM_TOOLS_DIRECTORY=System.getProperty("user.dir");
     public static String ADB_BINARY="";
     public static String FASTBOOT_BINARY="";
