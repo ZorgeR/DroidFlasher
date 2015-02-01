@@ -26,6 +26,8 @@ public class Controller implements Initializable {
     public static String PLATFORM_TOOLS_NIX="/bin/win/platform-tools";
     public static String PLATFORM_TOOLS_WIN="/bin/nix/platform-tools";
     public static String PLATFORM_TOOLS_DIRECTORY=System.getProperty("user.dir");
+    public static String ADB="adb";
+    public static String FASTBOOT="fastboot";
     public static String ADB_BINARY="";
     public static String FASTBOOT_BINARY="";
 
@@ -248,7 +250,7 @@ public class Controller implements Initializable {
             try {
                 File dir = directoryChooser();
                 if (checkFastbootBin(dir)) {
-                    tab_settings_override_txt_fastboot_path.setText(dir.getPath() + "/fastboot");
+                    tab_settings_override_txt_fastboot_path.setText(dir.getPath() + "/" + FASTBOOT);
                 } else {
                     showDialogErrorIsNotValidToolsDirectorySelected("fastboot");
                 }
@@ -260,7 +262,7 @@ public class Controller implements Initializable {
             try {
                 File dir = directoryChooser();
                 if (checkAdbBin(dir)) {
-                    tab_settings_override_txt_adb_path.setText(dir.getPath() + "/adb");
+                    tab_settings_override_txt_adb_path.setText(dir.getPath() + "/" + ADB);
                 } else {
                     showDialogErrorIsNotValidToolsDirectorySelected("adb");
                 }
@@ -640,14 +642,14 @@ public class Controller implements Initializable {
 
     /** Check inventory **/
     private boolean checkAdbBin(File f) {
-        if (new File(f.getPath() + "/adb").exists()) {
+        if (new File(f.getPath() + "/"+ADB).exists()) {
             return true;
         } else {
             return false;
         }
     }
     private boolean checkFastbootBin(File f) {
-        if (new File(f.getPath() + "/fastboot").exists()) {
+        if (new File(f.getPath() + "/"+FASTBOOT).exists()) {
             return true;
         } else {
             return false;
@@ -713,6 +715,8 @@ public class Controller implements Initializable {
     private void setPlatform(){
         if (isWindows()) {
             PLATFORM_TOOLS=PLATFORM_TOOLS_WIN;
+            ADB="adb.exe";
+            FASTBOOT="fastboot.exe";
         } else if (isMac()) {
             PLATFORM_TOOLS=PLATFORM_TOOLS_MAC;
         } else if (isUnix()) {
@@ -740,7 +744,7 @@ public class Controller implements Initializable {
         } else {
             tab_settings_override_txt_fastboot_path.setDisable(false);
             tab_settings_override_btn_fastboot_browse.setDisable(false);
-            FASTBOOT_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/fastboot";
+            FASTBOOT_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/"+FASTBOOT;
         }
         if (tab_settings_override_btn_adb_override.isSelected()) {
             tab_settings_override_txt_adb_path.setDisable(true);
@@ -749,15 +753,15 @@ public class Controller implements Initializable {
         } else {
             tab_settings_override_txt_adb_path.setDisable(false);
             tab_settings_override_btn_adb_browse.setDisable(false);
-            ADB_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb";
+            ADB_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/" + ADB;
         }
     }
     private void unpackBuildInBinaryDialog(){
         File unpack_directory = directorySaver();
         if(unpack_directory!=null){
             unpackBuildInBinary(unpack_directory.getPath());
-            tab_settings_override_txt_adb_path.setText(unpack_directory.getPath()+"/adb");
-            tab_settings_override_txt_fastboot_path.setText(unpack_directory.getPath()+"/fastboot");
+            tab_settings_override_txt_adb_path.setText(unpack_directory.getPath()+"/"+ADB);
+            tab_settings_override_txt_fastboot_path.setText(unpack_directory.getPath()+"/"+FASTBOOT);
 
             if(showConfirmDialogs("Unpack binaries", "Operation complete", "Binaries unpacked in  "+unpack_directory.getPath()+".\n\nOverride adb and fastboot to this binary?")){
                 ADB_BINARY=tab_settings_override_txt_adb_path.getText();
@@ -777,8 +781,8 @@ public class Controller implements Initializable {
     }
     private void unpackBuildInBinary(String directory){
         try {
-            extractResource("adb", directory);
-            extractResource("fastboot", directory);
+            extractResource(ADB, directory);
+            extractResource(FASTBOOT, directory);
         } catch (IOException e) {e.printStackTrace();}
     }
     private String extractResource(String name, String dstDir) throws IOException {
