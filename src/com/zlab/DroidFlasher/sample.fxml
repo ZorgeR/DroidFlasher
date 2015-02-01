@@ -20,14 +20,14 @@
                <children>
                   <Button fx:id="tab_adb_btn_check_device" layoutX="14.0" layoutY="327.0" mnemonicParsing="false" text="Check device" />
                   <Label fx:id="tab_adb_device_status_txt" layoutX="144.0" layoutY="332.0" text="No device detected." />
-                  <MenuButton layoutX="136.0" layoutY="9.0" mnemonicParsing="false" text="reboot device">
+                  <MenuButton layoutX="162.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="reboot device">
                     <items>
                       <MenuItem fx:id="tab_adb_btn_reboot_device" mnemonicParsing="false" text="normal" />
                       <MenuItem fx:id="tab_adb_btn_reboot_recovery" mnemonicParsing="false" text="to recovery" />
                         <MenuItem fx:id="tab_adb_btn_reboot_bootloader" mnemonicParsing="false" text="to bootloader" />
                     </items>
                   </MenuButton>
-                  <MenuButton layoutX="13.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="117.0" text="adb control">
+                  <MenuButton layoutX="15.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="adb control">
                     <items>
                       <MenuItem fx:id="tab_adb_btn_server_start" mnemonicParsing="false" text="start-server" />
                       <MenuItem fx:id="tab_adb_btn_server_kill" mnemonicParsing="false" text="kill-server" />
@@ -173,15 +173,20 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <Label layoutX="14.0" layoutY="19.0" text="Fastboot bin:" />
-                                    <TextField fx:id="tab_settings_override_txt_fastboot_path" layoutX="97.0" layoutY="14.0" prefHeight="26.0" prefWidth="314.0" />
+                                    <Label layoutX="23.0" layoutY="19.0" text="fastboot:" />
+                                    <TextField fx:id="tab_settings_override_txt_fastboot_path" layoutX="83.0" layoutY="14.0" prefHeight="26.0" prefWidth="328.0" />
                                     <ToggleButton fx:id="tab_settings_override_btn_fastboot_override" layoutX="498.0" layoutY="14.0" mnemonicParsing="false" text="Override" />
                                     <ToggleButton fx:id="tab_settings_override_btn_adb_override" layoutX="498.0" layoutY="45.0" mnemonicParsing="false" text="Override" />
-                                    <Label layoutX="14.0" layoutY="50.0" text="Adb bin:" />
-                                    <TextField fx:id="tab_settings_override_txt_adb_path" layoutX="97.0" layoutY="45.0" prefHeight="26.0" prefWidth="314.0" />
+                                    <Label layoutX="49.0" layoutY="50.0" text="adb:" />
+                                    <TextField fx:id="tab_settings_override_txt_adb_path" layoutX="83.0" layoutY="45.0" prefHeight="26.0" prefWidth="328.0" />
                                     <Button fx:id="tab_settings_override_btn_fastboot_browse" layoutX="417.0" layoutY="14.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="Browse" />
                                     <Button fx:id="tab_settings_override_btn_adb_browse" layoutX="417.0" layoutY="45.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="Browse" />
-                                    <Button fx:id="tab_settings_override_btn_unpack_binaries" layoutX="13.0" layoutY="76.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="554.0" text="Unpack built-in binaries" />
+                                    <Button fx:id="tab_settings_override_btn_unpack_binaries" layoutX="83.0" layoutY="76.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="484.0" text="Unpack built-in binaries" />
+                                    <ImageView fx:id="img_settings_unpack_binaries" fitHeight="16.0" fitWidth="16.0" layoutX="60.0" layoutY="81.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../../res/img/file_extension_zip.png" />
+                                       </image>
+                                    </ImageView>
                                  </children>
                               </AnchorPane>
                         </content>

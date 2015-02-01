@@ -64,6 +64,7 @@ public class Controller implements Initializable {
     @FXML private ImageView img_head_application;
     @FXML private ImageView img_head_backup;
     @FXML private ImageView img_head_adb_status;
+    @FXML private ImageView img_settings_unpack_binaries;
 
 
     /** Settings Tab **/
@@ -97,6 +98,7 @@ public class Controller implements Initializable {
         img_head_application.setImage(new Image(getClass().getResourceAsStream("/img/application_view_icons.png")));
         img_head_backup.setImage(new Image(getClass().getResourceAsStream("/img/backups.png")));
         img_head_adb_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
+        img_settings_unpack_binaries.setImage(new Image(getClass().getResourceAsStream("/img/file_extension_zip.png")));
 
         setPlatform();
         setBinaries();
@@ -756,22 +758,21 @@ public class Controller implements Initializable {
             unpackBuildInBinary(unpack_directory.getPath());
             tab_settings_override_txt_adb_path.setText(unpack_directory.getPath()+"/adb");
             tab_settings_override_txt_fastboot_path.setText(unpack_directory.getPath()+"/fastboot");
-        }
 
-        if(showConfirmDialogs("Unpack binaries", "Operation complete", "Binaries unpacked in  "+unpack_directory.getPath()+".\n\nOverride adb and fastboot to this binary?")){
-            ADB_BINARY=tab_settings_override_txt_adb_path.getText();
-            FASTBOOT_BINARY=tab_settings_override_txt_fastboot_path.getText();
-            tab_settings_override_btn_fastboot_override.setSelected(true);
-            tab_settings_override_btn_adb_override.setSelected(true);
-            tab_settings_override_txt_fastboot_path.setDisable(true);
-            tab_settings_override_btn_fastboot_browse.setDisable(true);
-            tab_settings_override_txt_adb_path.setDisable(true);
-            tab_settings_override_btn_adb_browse.setDisable(true);
-        }
-
-        if(showConfirmDialogs("Tools directory path", "Configuration", "Use built-in binary path as tools directory?")){
-            PLATFORM_TOOLS_DIRECTORY=unpack_directory.getPath();
-            tab_settings_tool_set_txt_tool_directory_browse.setText(PLATFORM_TOOLS_DIRECTORY);
+            if(showConfirmDialogs("Unpack binaries", "Operation complete", "Binaries unpacked in  "+unpack_directory.getPath()+".\n\nOverride adb and fastboot to this binary?")){
+                ADB_BINARY=tab_settings_override_txt_adb_path.getText();
+                FASTBOOT_BINARY=tab_settings_override_txt_fastboot_path.getText();
+                tab_settings_override_btn_fastboot_override.setSelected(true);
+                tab_settings_override_btn_adb_override.setSelected(true);
+                tab_settings_override_txt_fastboot_path.setDisable(true);
+                tab_settings_override_btn_fastboot_browse.setDisable(true);
+                tab_settings_override_txt_adb_path.setDisable(true);
+                tab_settings_override_btn_adb_browse.setDisable(true);
+            }
+            if(showConfirmDialogs("Tools directory path", "Configuration", "Use built-in binary path as tools directory?")){
+                PLATFORM_TOOLS_DIRECTORY=unpack_directory.getPath();
+                tab_settings_tool_set_txt_tool_directory_browse.setText(PLATFORM_TOOLS_DIRECTORY);
+            }
         }
     }
     private void unpackBuildInBinary(String directory){
