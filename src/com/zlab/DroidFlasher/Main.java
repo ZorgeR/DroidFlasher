@@ -43,7 +43,7 @@ public class Main extends Application {
     public void startApp(){
 
         mController.logToConsole("Initialize UI...\n");
-        mController.initUIPreferences();
+        mController.initConfiguration();
         mController.initToggleBtn();
         mController.initBtn();
 

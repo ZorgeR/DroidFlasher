@@ -91,51 +91,27 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
-    public void initUIPreferences() {
+    public void initConfiguration() {
         tab_settings_accord.setExpandedPane(tab_settings_tool_set_group);
         img_head_fileoperation.setImage(new Image(getClass().getResourceAsStream("/img/file_extension_bin.png")));
         img_head_application.setImage(new Image(getClass().getResourceAsStream("/img/application_view_icons.png")));
         img_head_backup.setImage(new Image(getClass().getResourceAsStream("/img/backups.png")));
         img_head_adb_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
+
         setPlatform();
-        if(!tab_settings_override_btn_adb_override.isSelected()){
-            ADB_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb";
+        setBinaries();
+
+        if(checkAdbBin(new File(ADB_BINARY)) || checkFastbootBin(new File(FASTBOOT_BINARY))) {
+            if (showConfirmDialogs("Binaries", "ADB and FASTBOOT", "Can't locate adb and fastboot binaries, unpack built-in?")) {
+                unpackBuildInBinaryDialog();
+            }
         }
-        if(!tab_settings_override_btn_fastboot_override.isSelected()){
-            FASTBOOT_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/fastboot";
-        }
-    }
-    private void unpackBuildInBinary(String directory){
-        try {
-            extractResource("adb", directory);
-            extractResource("fastboot", directory);
-        } catch (IOException e) {e.printStackTrace();}
     }
 
     /** Buttons initialize **/
     public void initToggleBtn() {
-        tab_settings_override_btn_fastboot_override.setOnAction((event) -> {
-            if (tab_settings_override_btn_fastboot_override.isSelected()) {
-                tab_settings_override_txt_fastboot_path.setDisable(true);
-                tab_settings_override_btn_fastboot_browse.setDisable(true);
-                ADB_BINARY=tab_settings_override_txt_adb_path.getText();
-            } else {
-                tab_settings_override_txt_fastboot_path.setDisable(false);
-                tab_settings_override_btn_fastboot_browse.setDisable(false);
-                ADB_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb";
-            }
-        });
-        tab_settings_override_btn_adb_override.setOnAction((event) -> {
-            if (tab_settings_override_btn_adb_override.isSelected()) {
-                tab_settings_override_txt_adb_path.setDisable(true);
-                tab_settings_override_btn_adb_browse.setDisable(true);
-                FASTBOOT_BINARY=tab_settings_override_txt_fastboot_path.getText();
-            } else {
-                tab_settings_override_txt_adb_path.setDisable(false);
-                tab_settings_override_btn_adb_browse.setDisable(false);
-                FASTBOOT_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/fastboot";
-            }
-        });
+        tab_settings_override_btn_fastboot_override.setOnAction((event) -> setBinaries());
+        tab_settings_override_btn_adb_override.setOnAction((event) -> setBinaries());
     }
     public void initBtn() {
         /** Check device **/
@@ -248,12 +224,7 @@ public class Controller implements Initializable {
                 File dir = directoryChooser();
                 if (checkAdbBin(dir) && checkFastbootBin(dir)) {
                     tab_settings_tool_set_txt_tool_directory_browse.setText(dir.getPath());
-                    if(!tab_settings_override_btn_adb_override.isSelected()){
-                        ADB_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb";
-                    }
-                    if(!tab_settings_override_btn_fastboot_override.isSelected()){
-                        FASTBOOT_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/fastboot";
-                    }
+                    setBinaries();
                 } else {
                     String binaries = "";
                     if (!checkAdbBin(dir) && !checkFastbootBin(dir)) {
@@ -521,35 +492,11 @@ public class Controller implements Initializable {
             /** РЕИНИЦИАЛИЗАЦИЯ **/
             tab_main_txt_area_log.appendText("done...\n");
         });
-        tab_settings_override_btn_unpack_binaries.setOnAction((event) -> {
-            File unpack_directory = directorySaver();
-            if(unpack_directory!=null){
-                unpackBuildInBinary(unpack_directory.getPath());
-                tab_settings_override_txt_adb_path.setText(unpack_directory.getPath()+"/adb");
-                tab_settings_override_txt_fastboot_path.setText(unpack_directory.getPath()+"/fastboot");
-            }
-
-            if(showConfirmDialogs("Unpack binaries", "Operation complete", "Binaries unpacked in  "+unpack_directory.getPath()+".\n\nOverride adb and fastboot to this binary?")){
-                ADB_BINARY=tab_settings_override_txt_adb_path.getText();
-                FASTBOOT_BINARY=tab_settings_override_txt_fastboot_path.getText();
-                tab_settings_override_btn_fastboot_override.setSelected(true);
-                tab_settings_override_btn_adb_override.setSelected(true);
-                tab_settings_override_txt_fastboot_path.setDisable(true);
-                tab_settings_override_btn_fastboot_browse.setDisable(true);
-                tab_settings_override_txt_adb_path.setDisable(true);
-                tab_settings_override_btn_adb_browse.setDisable(true);
-            }
-
-            if(showConfirmDialogs("Tools directory path", "Configuration", "Use build in binary path as tools directory?")){
-                PLATFORM_TOOLS_DIRECTORY=unpack_directory.getPath();
-                tab_settings_tool_set_txt_tool_directory_browse.setText(PLATFORM_TOOLS_DIRECTORY);
-            }
-
-        });
+        tab_settings_override_btn_unpack_binaries.setOnAction((event) -> unpackBuildInBinaryDialog());
     }
 
     /** Application **/
-    public String getInstallArgs(boolean isMultipleApk){
+    private String getInstallArgs(boolean isMultipleApk){
         String install_args = "-";
         if(tab_adb_btn_install_flock.isSelected()){install_args=install_args+"l";}
         if(tab_adb_btn_install_replace.isSelected()){install_args=install_args+"r";}
@@ -562,7 +509,7 @@ public class Controller implements Initializable {
         if(install_args.equals("-")){install_args=null;}
         return install_args;
     }
-    public String setUninstallPackage(String packagename) {
+    private String setUninstallPackage(String packagename) {
         TextInputDialog dialog = new TextInputDialog(packagename);
         dialog.setTitle("Set package name");
         dialog.setHeaderText("Enter package name to uninstall");
@@ -577,7 +524,7 @@ public class Controller implements Initializable {
     }
 
     /** File control **/
-    public String remotePushSetPath(String filename) {
+    private String remotePushSetPath(String filename) {
         TextInputDialog dialog = new TextInputDialog("/sdcard/" + filename);
         dialog.setTitle("Set remote path");
         dialog.setHeaderText("File will be pushed to this remote path");
@@ -590,7 +537,7 @@ public class Controller implements Initializable {
             return "";
         }
     }
-    public String remotePullSetPath(String filename) {
+    private String remotePullSetPath(String filename) {
         TextInputDialog dialog = new TextInputDialog("/sdcard/" + filename);
         dialog.setTitle("Enter remote path");
         dialog.setHeaderText("File will be pulled from this remote path to the local machine");
@@ -605,7 +552,7 @@ public class Controller implements Initializable {
     }
 
     /** File chooser **/
-    public File directoryChooser() {
+    private File directoryChooser() {
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("Select directory");
         File defaultDirectory = new File(".");
@@ -613,7 +560,7 @@ public class Controller implements Initializable {
         File selectedDirectory = chooser.showDialog(Main.globalStage);
         return selectedDirectory;
     }
-    public File fileChooser() {
+    private File fileChooser() {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Select file");
         File defaultDirectory = new File(".");
@@ -621,7 +568,7 @@ public class Controller implements Initializable {
         File selectedFile = chooser.showOpenDialog(Main.globalStage);
         return selectedFile;
     }
-    public List<File> fileChooserMultiple() {
+    private List<File> fileChooserMultiple() {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Select file");
         File defaultDirectory = new File(".");
@@ -629,7 +576,7 @@ public class Controller implements Initializable {
         List<File> selectedFile = chooser.showOpenMultipleDialog(Main.globalStage);
         return selectedFile;
     }
-    public File fileSaver() {
+    private File fileSaver() {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Select new file");
         File defaultDirectory = new File(".");
@@ -637,7 +584,7 @@ public class Controller implements Initializable {
         File selectedFile = chooser.showSaveDialog(Main.globalStage);
         return selectedFile;
     }
-    public File directorySaver() {
+    private File directorySaver() {
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("Select directory for extraction");
         File defaultDirectory = new File(".");
@@ -760,7 +707,8 @@ public class Controller implements Initializable {
         tab_main_txt_area_log.appendText(appendString);
     }
 
-    private static void setPlatform(){
+    /** Platfrom detection **/
+    private void setPlatform(){
         if (isWindows()) {
             PLATFORM_TOOLS=PLATFORM_TOOLS_WIN;
         } else if (isMac()) {
@@ -771,16 +719,68 @@ public class Controller implements Initializable {
             PLATFORM_TOOLS="binary not found";
         }
     }
-    private static boolean isWindows() {
+    private boolean isWindows() {
         return (OS.indexOf("win") >= 0);
     }
-    private static boolean isMac() {
+    private boolean isMac() {
         return (OS.indexOf("mac") >= 0);
     }
-    private static boolean isUnix() {
+    private boolean isUnix() {
         return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 );
     }
-    public String extractResource(String name, String dstDir) throws IOException {
+
+    /** Binaries **/
+    private void setBinaries(){
+        if (tab_settings_override_btn_fastboot_override.isSelected()) {
+            tab_settings_override_txt_fastboot_path.setDisable(true);
+            tab_settings_override_btn_fastboot_browse.setDisable(true);
+            FASTBOOT_BINARY=tab_settings_override_txt_fastboot_path.getText();
+        } else {
+            tab_settings_override_txt_fastboot_path.setDisable(false);
+            tab_settings_override_btn_fastboot_browse.setDisable(false);
+            FASTBOOT_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/fastboot";
+        }
+        if (tab_settings_override_btn_adb_override.isSelected()) {
+            tab_settings_override_txt_adb_path.setDisable(true);
+            tab_settings_override_btn_adb_browse.setDisable(true);
+            ADB_BINARY=tab_settings_override_txt_adb_path.getText();
+        } else {
+            tab_settings_override_txt_adb_path.setDisable(false);
+            tab_settings_override_btn_adb_browse.setDisable(false);
+            ADB_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/adb";
+        }
+    }
+    private void unpackBuildInBinaryDialog(){
+        File unpack_directory = directorySaver();
+        if(unpack_directory!=null){
+            unpackBuildInBinary(unpack_directory.getPath());
+            tab_settings_override_txt_adb_path.setText(unpack_directory.getPath()+"/adb");
+            tab_settings_override_txt_fastboot_path.setText(unpack_directory.getPath()+"/fastboot");
+        }
+
+        if(showConfirmDialogs("Unpack binaries", "Operation complete", "Binaries unpacked in  "+unpack_directory.getPath()+".\n\nOverride adb and fastboot to this binary?")){
+            ADB_BINARY=tab_settings_override_txt_adb_path.getText();
+            FASTBOOT_BINARY=tab_settings_override_txt_fastboot_path.getText();
+            tab_settings_override_btn_fastboot_override.setSelected(true);
+            tab_settings_override_btn_adb_override.setSelected(true);
+            tab_settings_override_txt_fastboot_path.setDisable(true);
+            tab_settings_override_btn_fastboot_browse.setDisable(true);
+            tab_settings_override_txt_adb_path.setDisable(true);
+            tab_settings_override_btn_adb_browse.setDisable(true);
+        }
+
+        if(showConfirmDialogs("Tools directory path", "Configuration", "Use built-in binary path as tools directory?")){
+            PLATFORM_TOOLS_DIRECTORY=unpack_directory.getPath();
+            tab_settings_tool_set_txt_tool_directory_browse.setText(PLATFORM_TOOLS_DIRECTORY);
+        }
+    }
+    private void unpackBuildInBinary(String directory){
+        try {
+            extractResource("adb", directory);
+            extractResource("fastboot", directory);
+        } catch (IOException e) {e.printStackTrace();}
+    }
+    private String extractResource(String name, String dstDir) throws IOException {
         File dstFile=new File(dstDir+"/"+name);
         try {
             InputStream resource = getClass().getResourceAsStream(PLATFORM_TOOLS+"/"+name);
