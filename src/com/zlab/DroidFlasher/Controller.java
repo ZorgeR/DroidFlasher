@@ -6,6 +6,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import java.io.*;
@@ -30,6 +32,8 @@ public class Controller implements Initializable {
     public static String FASTBOOT="fastboot";
     public static String ADB_BINARY="";
     public static String FASTBOOT_BINARY="";
+    private static Alert global_alert;
+    private static TextArea global_alert_text_area;
 
     /** Init UI **/
 
@@ -68,6 +72,13 @@ public class Controller implements Initializable {
     @FXML private ImageView img_head_adb_status;
     @FXML private ImageView img_settings_unpack_binaries;
 
+    /** FASTBOOT Tab **/
+    @FXML private Button tab_fastboot_btn_check_device;
+    @FXML private Button tab_fastboot_btn_reboot;
+    @FXML private Button tab_fastboot_btn_reboot_bootloader;
+    @FXML private Button tab_fastboot_btn_flash_recovery;
+    @FXML private Label  tab_fastboot_device_status_txt;
+    @FXML private ImageView img_head_fastboot_status;
 
     /** Settings Tab **/
     @FXML private TitledPane tab_settings_tool_set_group;
@@ -118,6 +129,8 @@ public class Controller implements Initializable {
         tab_settings_override_btn_adb_override.setOnAction((event) -> setBinaries());
     }
     public void initBtn() {
+        /*********/
+        /** ADB **/
         /** Check device **/
         tab_adb_btn_check_device.setOnAction((event) -> {
             try {
@@ -137,7 +150,6 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
         });
-
         /** Server kill start **/
         tab_adb_btn_server_kill.setOnAction((event) -> {
             try {
@@ -155,7 +167,6 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
         });
-
         /** Reboot device **/
         tab_adb_btn_reboot_device.setOnAction((event) -> {
             try {
@@ -181,7 +192,6 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
         });
-
         /** File control **/
         tab_adb_btn_file_push.setOnAction((event) -> {
             try {
@@ -192,6 +202,7 @@ public class Controller implements Initializable {
                     new Thread(() -> {
                         try {
                             runCmdAdbPushPull(ADB_BINARY, "push", "-p", localfile.getPath(), remotefile);
+
                             Platform.runLater(() -> showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " pushed to remote path " + remotefile));
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -221,56 +232,6 @@ public class Controller implements Initializable {
                 showDialogErrorNoDirectorySelected();
             }
         });
-
-        /** Tools directory select **/
-        tab_settings_tool_set_btn_tool_directory_browse.setOnAction((event) -> {
-            try {
-                File dir = directoryChooser();
-                if (checkAdbBin(dir) && checkFastbootBin(dir)) {
-                    tab_settings_tool_set_txt_tool_directory_browse.setText(dir.getPath());
-                    setBinaries();
-                } else {
-                    String binaries = "";
-                    if (!checkAdbBin(dir) && !checkFastbootBin(dir)) {
-                        binaries = "adb and fastboot";
-                    } else if (!checkAdbBin(dir)) {
-                        binaries = "adb";
-                    } else {
-                        binaries = "fastboot";
-                    }
-                    showDialogErrorIsNotValidToolsDirectorySelected(binaries);
-                }
-            } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
-            }
-        });
-
-        /** Tools bin override **/
-        tab_settings_override_btn_fastboot_browse.setOnAction((event) -> {
-            try {
-                File dir = directoryChooser();
-                if (checkFastbootBin(dir)) {
-                    tab_settings_override_txt_fastboot_path.setText(dir.getPath() + "/" + FASTBOOT);
-                } else {
-                    showDialogErrorIsNotValidToolsDirectorySelected("fastboot");
-                }
-            } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
-            }
-        });
-        tab_settings_override_btn_adb_browse.setOnAction((event) -> {
-            try {
-                File dir = directoryChooser();
-                if (checkAdbBin(dir)) {
-                    tab_settings_override_txt_adb_path.setText(dir.getPath() + "/" + ADB);
-                } else {
-                    showDialogErrorIsNotValidToolsDirectorySelected("adb");
-                }
-            } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
-            }
-        });
-
         /** Application **/
         tab_adb_btn_install.setOnAction((event) -> {
             try{
@@ -421,7 +382,6 @@ public class Controller implements Initializable {
                     }).start();}
                 } else {}
         });
-
         /** Backup **/
         tab_adb_btn_backup.setOnAction((event) -> {
             if(tab_adb_chk_backup_shared.isSelected() || tab_adb_chk_backup_all.isSelected()){
@@ -490,6 +450,103 @@ public class Controller implements Initializable {
             }
         });
 
+        /**************/
+        /** FASTBOOT **/
+        tab_fastboot_btn_check_device.setOnAction((event) -> {
+            try {
+                String fastboot_devices_output = runCmd(FASTBOOT_BINARY, "devices");
+                if (!fastboot_devices_output.equals("")) {
+                    String[] device_info = fastboot_devices_output.split("\t");
+                    img_head_fastboot_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_green.png")));
+                    showDialogInformation("Success!", "Fastboot device detected.", "Device information is: " + device_info[0]+" "+device_info[1]);
+                    tab_fastboot_device_status_txt.setText(device_info[0]+" "+device_info[1]);
+                } else {
+                    img_head_fastboot_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
+                    showDialogError("Ooops!", "Fastboot device not detected.", "Try to reconnect.");
+                    tab_fastboot_device_status_txt.setText("No device detected.");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        tab_fastboot_btn_reboot.setOnAction((event) -> {
+            try {
+                runCmd(FASTBOOT_BINARY, "reboot");
+                showDialogInformation("fastboot", "Operation complete", "Command \"reboot\" sended to device.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        tab_fastboot_btn_reboot_bootloader.setOnAction((event) -> {
+            try {
+                runCmd(FASTBOOT_BINARY, "reboot-bootloader");
+                showDialogInformation("fastboot", "Operation complete", "Command \"reboot-bootloader\" sended to device.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        tab_fastboot_btn_flash_recovery.setOnAction((event) -> {
+            File localfile = fileChooser();
+            if(localfile!=null){
+                new Thread(() -> {
+                    try {
+                        Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to flash recovery " + localfile.getName() + "\n\nPlease wait...\n"));
+                        runCmdToGlobalAlert(FASTBOOT_BINARY, "flash", "recovery", localfile.getPath());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+        }});
+
+        /**************/
+        /** SETTINGS **/
+        /** Tools directory select **/
+        tab_settings_tool_set_btn_tool_directory_browse.setOnAction((event) -> {
+            try {
+                File dir = directoryChooser();
+                if (checkAdbBin(dir) && checkFastbootBin(dir)) {
+                    tab_settings_tool_set_txt_tool_directory_browse.setText(dir.getPath());
+                    setBinaries();
+                } else {
+                    String binaries = "";
+                    if (!checkAdbBin(dir) && !checkFastbootBin(dir)) {
+                        binaries = "adb and fastboot";
+                    } else if (!checkAdbBin(dir)) {
+                        binaries = "adb";
+                    } else {
+                        binaries = "fastboot";
+                    }
+                    showDialogErrorIsNotValidToolsDirectorySelected(binaries);
+                }
+            } catch (Exception e) {
+                showDialogErrorNoDirectorySelected();
+            }
+        });
+        /** Tools bin override **/
+        tab_settings_override_btn_fastboot_browse.setOnAction((event) -> {
+            try {
+                File dir = directoryChooser();
+                if (checkFastbootBin(dir)) {
+                    tab_settings_override_txt_fastboot_path.setText(dir.getPath() + "/" + FASTBOOT);
+                } else {
+                    showDialogErrorIsNotValidToolsDirectorySelected("fastboot");
+                }
+            } catch (Exception e) {
+                showDialogErrorNoDirectorySelected();
+            }
+        });
+        tab_settings_override_btn_adb_browse.setOnAction((event) -> {
+            try {
+                File dir = directoryChooser();
+                if (checkAdbBin(dir)) {
+                    tab_settings_override_txt_adb_path.setText(dir.getPath() + "/" + ADB);
+                } else {
+                    showDialogErrorIsNotValidToolsDirectorySelected("adb");
+                }
+            } catch (Exception e) {
+                showDialogErrorNoDirectorySelected();
+            }
+        });
         /** Reinitialize **/
         tab_settings_others_btn_reinitialize.setOnAction((event) -> {
             tab_main_txt_area_log.appendText("Reinitialize inventory...\n");
@@ -619,6 +676,35 @@ public class Controller implements Initializable {
         alert.setContentText(text);
         alert.showAndWait();
     }
+    private void showDialogInformationGlobal(String title, String header, String text) {
+        global_alert = new Alert(Alert.AlertType.INFORMATION);
+        global_alert.setResizable(true);
+        global_alert.setTitle(title);
+        global_alert.setHeaderText(header);
+        global_alert.setContentText(text);
+// Create expandable Exception.
+
+        Label label = new Label("Console output:");
+
+        global_alert_text_area = new TextArea("");
+        global_alert_text_area.setEditable(false);
+        global_alert_text_area.setWrapText(true);
+
+        global_alert_text_area.setMaxWidth(Double.MAX_VALUE);
+        global_alert_text_area.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setVgrow(global_alert_text_area, Priority.ALWAYS);
+        GridPane.setHgrow(global_alert_text_area, Priority.ALWAYS);
+
+        GridPane expContent = new GridPane();
+        expContent.setMaxWidth(Double.MAX_VALUE);
+        expContent.add(label, 0, 0);
+        expContent.add(global_alert_text_area, 0, 1);
+
+// Set expandable Exception into the dialog pane.
+        global_alert.getDialogPane().setExpandableContent(expContent);
+        global_alert.getDialogPane().setExpanded(true);
+        global_alert.show();
+    }
     private void showDialogError(String title, String header, String text) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -683,6 +769,36 @@ public class Controller implements Initializable {
             //System.out.println(s);
         }//}
         return locallog;
+    }
+    private void runCmdToGlobalAlert(String... args) throws IOException {
+        Process proc = Runtime.getRuntime().exec(args);
+
+        InputStream errStream = proc.getErrorStream();
+        InputStreamReader errStreamReader = new InputStreamReader(errStream);
+        BufferedReader errBufferedReader = new BufferedReader(errStreamReader);
+
+        InputStream stdStream = proc.getInputStream();
+        InputStreamReader stdStreamReader = new InputStreamReader(stdStream);
+        BufferedReader stdBufferedReader = new BufferedReader(stdStreamReader);
+
+        String err = null;
+        //String std = null;
+
+        while ((err = errBufferedReader.readLine()) !=null) {
+            //final String finalStd = std;
+            final String finalErr = err;
+            Platform.runLater(() -> {
+                if(global_alert!=null){
+                    global_alert_text_area.setText(global_alert_text_area.getText()+finalErr + "\n");
+                }
+            });
+
+        }
+        try {
+            proc.waitFor();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     private void runCmdAdbPushPull(String... args) throws IOException {
         Process proc = Runtime.getRuntime().exec(args);
@@ -805,3 +921,4 @@ public class Controller implements Initializable {
         return dstFile.getAbsolutePath();
     }
 }
+
