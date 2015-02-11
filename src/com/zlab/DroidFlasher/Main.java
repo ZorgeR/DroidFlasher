@@ -25,11 +25,11 @@ public class Main extends Application {
 
         globalStage = primaryStage;
 
-        MainUIlocation = getClass().getResource("sample.fxml");
+        MainUIlocation = getClass().getResource("/layout/Main.fxml");
         fxmlLoader = new FXMLLoader(MainUIlocation);
 
         mController = new Controller();
-        mController.initialize(getClass().getResource("sample.fxml"), fxmlLoader.getResources());
+        mController.initialize(getClass().getResource("/layout/Main.fxml"), fxmlLoader.getResources());
         fxmlLoader.setController(mController);
 
         Parent root = fxmlLoader.load();

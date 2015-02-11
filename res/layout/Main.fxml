@@ -27,7 +27,7 @@
                         <MenuItem fx:id="tab_adb_btn_reboot_bootloader" mnemonicParsing="false" text="to bootloader" />
                     </items>
                   </MenuButton>
-                  <MenuButton layoutX="15.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="adb control">
+                  <MenuButton layoutX="14.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="adb control">
                     <items>
                       <MenuItem fx:id="tab_adb_btn_server_start" mnemonicParsing="false" text="start-server" />
                       <MenuItem fx:id="tab_adb_btn_server_kill" mnemonicParsing="false" text="kill-server" />
@@ -42,7 +42,7 @@
                               <Label layoutX="35.0" layoutY="5.0" text="File operation" />
                               <ImageView fx:id="img_head_fileoperation" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="5.0">
                                  <image>
-                                    <Image url="@../../../../res/img/file_extension_bin.png" />
+                                    <Image url="@../img/file_extension_bin.png" />
                                  </image>
                               </ImageView>
                            </children>
@@ -69,7 +69,7 @@
                               <Label layoutX="39.0" layoutY="5.0" text="Application" />
                               <ImageView fx:id="img_head_application" fitHeight="16.0" fitWidth="16.0" layoutX="16.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../../../res/img/application_view_icons.png" />
+                                    <Image url="@../img/application_view_icons.png" />
                                  </image>
                               </ImageView>
                            </children>
@@ -112,7 +112,7 @@
                               <Label layoutX="33.0" layoutY="5.0" text="Backup" />
                               <ImageView fx:id="img_head_backup" fitHeight="16.0" fitWidth="16.0" layoutX="8.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../../../res/img/backups.png" />
+                                    <Image url="@../img/backups.png" />
                                  </image>
                               </ImageView>
                            </children>
@@ -134,9 +134,15 @@
                         </AnchorPane>
                      </items>
                   </SplitPane>
-                  <ImageView fx:id="img_head_adb_status" fitHeight="32.0" fitWidth="32.0" layoutX="113.0" layoutY="324.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="img_adb_status" fitHeight="32.0" fitWidth="32.0" layoutX="113.0" layoutY="324.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../res/img/bullet_red.png" />
+                        <Image url="@../img/bullet_red.png" />
+                     </image>
+                  </ImageView>
+                  <Button fx:id="tab_adb_btn_console" alignment="CENTER_RIGHT" layoutX="479.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="107.0" text="adb console" />
+                  <ImageView fx:id="img_console_adb" fitHeight="16.0" fitWidth="16.0" layoutX="484.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/terminal-pencil.png" />
                      </image>
                   </ImageView>
                </children></AnchorPane>
@@ -146,18 +152,70 @@
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <ImageView fx:id="img_head_fastboot_status" fitHeight="32.0" fitWidth="32.0" layoutX="113.0" layoutY="324.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="img_fastboot_status" fitHeight="32.0" fitWidth="32.0" layoutX="113.0" layoutY="324.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../res/img/bullet_red.png" />
+                        <Image url="@../img/bullet_red.png" />
                      </image>
                   </ImageView>
                   <ProgressBar fx:id="tab_adb_progressbar1" layoutX="14.0" layoutY="299.0" prefHeight="20.0" prefWidth="573.0" progress="0.0" />
                   <Label fx:id="tab_fastboot_device_status_txt" layoutX="144.0" layoutY="332.0" text="No device detected." />
                   <Button fx:id="tab_fastboot_btn_check_device" layoutX="14.0" layoutY="327.0" mnemonicParsing="false" text="Check device" />
                   <Separator layoutY="37.0" prefHeight="11.0" prefWidth="617.0" />
-                  <Button fx:id="tab_fastboot_btn_reboot_bootloader" layoutX="15.0" layoutY="9.0" mnemonicParsing="false" text="reboot-bootloader" />
+                  <Button fx:id="tab_fastboot_btn_reboot_bootloader" layoutX="14.0" layoutY="9.0" mnemonicParsing="false" text="reboot-bootloader" />
                   <Button fx:id="tab_fastboot_btn_reboot" layoutX="148.0" layoutY="9.0" mnemonicParsing="false" text="reboot" />
-                  <Button fx:id="tab_fastboot_btn_flash_recovery" layoutX="15.0" layoutY="48.0" mnemonicParsing="false" text="flash-recovery" />
+                  <SplitPane dividerPositions="0.22900763358778625" layoutX="391.0" layoutY="51.0" orientation="VERTICAL" prefHeight="131.0" prefWidth="196.0">
+                     <effect>
+                        <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
+                     </effect>
+                     <items>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
+                           <children>
+                              <Label layoutX="38.0" layoutY="6.0" text="Unlocking bootloader" />
+                              <ImageView fx:id="img_head_unlocking" fitHeight="16.0" fitWidth="16.0" layoutX="12.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="166.0" AnchorPane.topAnchor="6.0">
+                                 <image>
+                                    <Image url="@../img/lock-unlock.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="131.0">
+                           <children>
+                              <Button fx:id="tab_fastboot_btn_oem_unlock" layoutX="3.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="89.0" text="oem unlock" />
+                              <Button fx:id="tab_fastboot_btn_oem_lock" layoutX="98.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="92.0" text="oem lock" />
+                              <Button fx:id="tab_fastboot_btn_oem_get_unlock_data" layoutX="3.0" layoutY="65.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="187.0" text="oem get_unlock_data" />
+                              <Button fx:id="tab_fastboot_btn_oem_lock_begin" layoutX="3.0" layoutY="35.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="186.0" text="oem lock begin" />
+                           </children>
+                        </AnchorPane>
+                     </items>
+                  </SplitPane>
+                  <SplitPane dividerPositions="0.297029702970297" layoutX="14.0" layoutY="51.0" orientation="VERTICAL" prefHeight="103.0" prefWidth="114.0">
+                     <effect>
+                        <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
+                     </effect>
+                     <items>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
+                           <children>
+                              <Label layoutX="35.0" layoutY="5.0" text="Flashing" />
+                              <ImageView fx:id="img_head_flash" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="5.0">
+                                 <image>
+                                    <Image url="@../img/blue-document-binary.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="131.0">
+                           <children>
+                              <Button fx:id="tab_fastboot_btn_flash_recovery" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" text="flash-recovery" />
+                           </children>
+                        </AnchorPane>
+                     </items>
+                  </SplitPane>
+                  <Button fx:id="tab_fastboot_btn_console" alignment="CENTER_RIGHT" layoutX="453.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="133.0" text="fastboot console" textAlignment="RIGHT" />
+                  <ImageView fx:id="img_console_fastboot" fitHeight="16.0" fitWidth="16.0" layoutX="458.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/terminal-pencil.png" />
+                     </image>
+                  </ImageView>
                </children></AnchorPane>
       </content>
     </Tab>
@@ -198,7 +256,7 @@
                                     <Button fx:id="tab_settings_override_btn_unpack_binaries" layoutX="83.0" layoutY="76.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="484.0" text="Unpack built-in binaries" />
                                     <ImageView fx:id="img_settings_unpack_binaries" fitHeight="16.0" fitWidth="16.0" layoutX="60.0" layoutY="81.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../../../res/img/file_extension_zip.png" />
+                                          <Image url="@../img/file_extension_zip.png" />
                                        </image>
                                     </ImageView>
                                  </children>

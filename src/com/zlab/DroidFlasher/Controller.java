@@ -2,14 +2,22 @@ package com.zlab.DroidFlasher;
 
 import javafx.fxml.FXML;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import javax.xml.soap.Text;
 import java.io.*;
 import java.net.URL;
 import java.util.Arrays;
@@ -44,6 +52,7 @@ public class Controller implements Initializable {
     @FXML private Button tab_adb_btn_backup;
     @FXML private Button tab_adb_btn_restore;
     @FXML private Button tab_settings_override_btn_unpack_binaries;
+    @FXML private Button tab_adb_btn_console;
     @FXML private CheckBox tab_adb_chk_backup_apk;
     @FXML private CheckBox tab_adb_chk_backup_obb;
     @FXML private CheckBox tab_adb_chk_backup_shared;
@@ -69,16 +78,26 @@ public class Controller implements Initializable {
     @FXML private ImageView img_head_fileoperation;
     @FXML private ImageView img_head_application;
     @FXML private ImageView img_head_backup;
-    @FXML private ImageView img_head_adb_status;
+    @FXML private ImageView img_adb_status;
     @FXML private ImageView img_settings_unpack_binaries;
+    @FXML private ImageView img_head_unlocking;
+    @FXML private ImageView img_head_flash;
+    @FXML private ImageView img_console_adb;
 
     /** FASTBOOT Tab **/
     @FXML private Button tab_fastboot_btn_check_device;
     @FXML private Button tab_fastboot_btn_reboot;
     @FXML private Button tab_fastboot_btn_reboot_bootloader;
     @FXML private Button tab_fastboot_btn_flash_recovery;
+    @FXML private Button tab_fastboot_btn_oem_unlock;
+    @FXML private Button tab_fastboot_btn_oem_lock;
+    @FXML private Button tab_fastboot_btn_oem_get_unlock_data;
+    @FXML private Button tab_fastboot_btn_oem_lock_begin;
+    @FXML private Button tab_fastboot_btn_console;
     @FXML private Label  tab_fastboot_device_status_txt;
-    @FXML private ImageView img_head_fastboot_status;
+    @FXML private ImageView img_fastboot_status;
+    @FXML private ImageView img_console_fastboot;
+
 
     /** Settings Tab **/
     @FXML private TitledPane tab_settings_tool_set_group;
@@ -100,6 +119,11 @@ public class Controller implements Initializable {
     /** Console Tab **/
     @FXML private Accordion tab_settings_accord;
     @FXML private TextArea  tab_main_txt_area_log;
+
+    /** Console UI**/
+    @FXML private Button console_btn_send;
+    @FXML private TextField console_text_input;
+    @FXML private TextArea console_text_output;
     //</editor-fold>
 
     @Override
@@ -110,8 +134,14 @@ public class Controller implements Initializable {
         img_head_fileoperation.setImage(new Image(getClass().getResourceAsStream("/img/file_extension_bin.png")));
         img_head_application.setImage(new Image(getClass().getResourceAsStream("/img/application_view_icons.png")));
         img_head_backup.setImage(new Image(getClass().getResourceAsStream("/img/backups.png")));
-        img_head_adb_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
+        img_adb_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
         img_settings_unpack_binaries.setImage(new Image(getClass().getResourceAsStream("/img/file_extension_zip.png")));
+        img_head_flash.setImage(new Image(getClass().getResourceAsStream("/img/blue-document-binary.png")));
+        img_head_unlocking.setImage(new Image(getClass().getResourceAsStream("/img/lock-unlock.png")));
+        img_console_adb.setImage(new Image(getClass().getResourceAsStream("/img/terminal-pencil.png")));
+        img_console_fastboot.setImage(new Image(getClass().getResourceAsStream("/img/terminal-pencil.png")));
+
+        holdSplitPaneDevider(img_head_fileoperation, img_head_application, img_head_backup, img_head_flash, img_head_unlocking);
 
         setPlatform();
         setBinaries();
@@ -137,12 +167,12 @@ public class Controller implements Initializable {
                 String adb_devices_output = runCmd(ADB_BINARY, "devices", "-l");
                 String[] finder = adb_devices_output.split("\n");
                 if (!finder[finder.length - 1].equals("List of devices attached ")) {
-                    img_head_adb_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_green.png")));
+                    img_adb_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_green.png")));
                     String[] device_info = finder[finder.length - 1].split("\\s+");
                     showDialogInformation("Success!", "Adb device detected.", "Device information is: " + device_info[0]);
                     tab_adb_device_status_txt.setText(device_info[4] + " " + device_info[5] + " " + device_info[3]);
                 } else {
-                    img_head_adb_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
+                    img_adb_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
                     showDialogError("Ooops!", "Adb device not detected.", "Try to reconnect.");
                     tab_adb_device_status_txt.setText("No device detected.");
                 }
@@ -166,6 +196,10 @@ public class Controller implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        });
+        /** Console **/
+        tab_adb_btn_console.setOnAction((event) -> {
+            openConsole(ADB_BINARY, "Adb");
         });
         /** Reboot device **/
         tab_adb_btn_reboot_device.setOnAction((event) -> {
@@ -450,6 +484,7 @@ public class Controller implements Initializable {
             }
         });
 
+
         /**************/
         /** FASTBOOT **/
         tab_fastboot_btn_check_device.setOnAction((event) -> {
@@ -457,11 +492,11 @@ public class Controller implements Initializable {
                 String fastboot_devices_output = runCmd(FASTBOOT_BINARY, "devices");
                 if (!fastboot_devices_output.equals("")) {
                     String[] device_info = fastboot_devices_output.split("\t");
-                    img_head_fastboot_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_green.png")));
+                    img_fastboot_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_green.png")));
                     showDialogInformation("Success!", "Fastboot device detected.", "Device information is: " + device_info[0]+" "+device_info[1]);
                     tab_fastboot_device_status_txt.setText(device_info[0]+" "+device_info[1]);
                 } else {
-                    img_head_fastboot_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
+                    img_fastboot_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
                     showDialogError("Ooops!", "Fastboot device not detected.", "Try to reconnect.");
                     tab_fastboot_device_status_txt.setText("No device detected.");
                 }
@@ -497,6 +532,50 @@ public class Controller implements Initializable {
                     }
                 }).start();
         }});
+        tab_fastboot_btn_oem_unlock.setOnAction((event) -> {
+            new Thread(() -> {
+                try {
+                    Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to oem unlock." + "\n\nPlease wait...\n"));
+                    runCmdToGlobalAlert(FASTBOOT_BINARY, "oem", "unlock");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        });
+        tab_fastboot_btn_oem_lock.setOnAction((event) -> {
+            new Thread(() -> {
+                try {
+                    Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to oem lock." + "\n\nPlease wait...\n"));
+                    runCmdToGlobalAlert(FASTBOOT_BINARY, "oem", "lock");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        });
+        tab_fastboot_btn_oem_get_unlock_data.setOnAction((event) -> {
+            new Thread(() -> {
+                try {
+                    Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to oem get_unlock_data." + "\n\nPlease wait...\n"));
+                    runCmdToGlobalAlert(FASTBOOT_BINARY, "oem", "get_unlock_data");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        });
+        tab_fastboot_btn_oem_lock_begin.setOnAction((event) -> {
+            new Thread(() -> {
+                try {
+                    Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to oem lock begin." + "\n\nPlease wait...\n"));
+                    runCmdToGlobalAlert(FASTBOOT_BINARY, "oem", "lock", "begin");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        });
+        /** Console **/
+        tab_fastboot_btn_console.setOnAction((event) -> {
+            openConsole(FASTBOOT_BINARY, "Fastboot");
+        });
 
         /**************/
         /** SETTINGS **/
@@ -554,6 +633,7 @@ public class Controller implements Initializable {
             tab_main_txt_area_log.appendText("done...\n");
         });
         tab_settings_override_btn_unpack_binaries.setOnAction((event) -> unpackBuildInBinaryDialog());
+
     }
 
     /** Application **/
@@ -821,6 +901,90 @@ public class Controller implements Initializable {
             e.printStackTrace();
         }
     }
+    private void openConsole(String binary, String type){
+        String CONSOLE_BINARY=binary;
+
+        URL MainUIlocation = getClass().getResource("/layout/Console.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(MainUIlocation);
+
+        Controller mController = new Controller();
+        mController.initialize(getClass().getResource("/layout/Console.fxml"), fxmlLoader.getResources());
+        fxmlLoader.setController(mController);
+
+        Parent root = null;
+        try { root = fxmlLoader.load();
+        } catch (IOException e) { e.printStackTrace(); }
+
+        Scene consoleScene = new Scene(root);
+
+        console_btn_send = (Button) consoleScene.lookup("#console_btn_send");
+        console_text_input = (TextField) consoleScene.lookup("#console_text_input");
+        console_text_output = (TextArea) consoleScene.lookup("#console_text_output");
+        console_text_output.setScrollTop(Double.MAX_VALUE);
+
+        console_btn_send.setOnAction((event) -> {
+            String[] input = console_text_input.getText().toString().split(" ");
+            //if (input.length>0){
+                String[] args = new String[input.length+1];
+
+                args[0] = CONSOLE_BINARY;
+                for (int i = 0; i<input.length;i++){
+                    args[i+1]=input[i];
+                }
+                new Thread(() -> {
+                    try {
+                        runCmdToConsoleOutput(console_text_output, args);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            //}
+        });
+
+        Stage consoleStage = new Stage();
+        consoleStage.setTitle(type +" console");
+        consoleStage.setScene(consoleScene);
+
+        consoleStage.show();
+    }
+    private void runCmdToConsoleOutput(TextArea output, String... args) throws IOException {
+        Process proc = Runtime.getRuntime().exec(args);
+
+        InputStream errStream = proc.getErrorStream();
+        InputStreamReader errStreamReader = new InputStreamReader(errStream);
+        BufferedReader errBufferedReader = new BufferedReader(errStreamReader);
+
+        InputStream stdStream = proc.getInputStream();
+        InputStreamReader stdStreamReader = new InputStreamReader(stdStream);
+        BufferedReader stdBufferedReader = new BufferedReader(stdStreamReader);
+
+        String err = null;
+        String std = null;
+
+        while ((err = errBufferedReader.readLine()) !=null) {
+            final String finalErr = err;
+            Platform.runLater(() -> {
+                if(output!=null){
+                    output.appendText(finalErr + "\n");
+                }
+            });
+        }
+
+        while ((std = stdBufferedReader.readLine()) !=null) {
+            final String finalStd = std;
+            Platform.runLater(() -> {
+                if(output!=null){
+                    output.appendText(finalStd + "\n");
+                }
+            });
+        }
+
+        try {
+            proc.waitFor();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     /** LOG **/
     public void logToConsole(String appendString) {
@@ -920,5 +1084,14 @@ public class Controller implements Initializable {
         System.out.println("Successfully extracted "+dstFile.getAbsolutePath());
         return dstFile.getAbsolutePath();
     }
+
+    /** UI reconfigure **/
+    private void holdSplitPaneDevider(Node... objects){
+        for (Node obj : objects) {
+            SplitPane splitpane = (SplitPane) obj.getParent().getParent().getParent();
+            splitpane.lookupAll(".split-pane-divider").stream()
+                    .forEach(div -> div.setMouseTransparent(true));
+        }
+    };
 }
 
