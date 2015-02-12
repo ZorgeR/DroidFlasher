@@ -170,7 +170,8 @@ public class Controller implements Initializable {
                     img_adb_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_green.png")));
                     String[] device_info = finder[finder.length - 1].split("\\s+");
                     showDialogInformation("Success!", "Adb device detected.", "Device information is: " + device_info[0]);
-                    tab_adb_device_status_txt.setText(device_info[4] + " " + device_info[5] + " " + device_info[3]);
+
+                    tab_adb_device_status_txt.setText(device_info[device_info.length-2] + " " + device_info[device_info.length-1] + " " + device_info[device_info.length-3]);
                 } else {
                     img_adb_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
                     showDialogError("Ooops!", "Adb device not detected.", "Try to reconnect.");
