@@ -33,8 +33,8 @@ public class Controller implements Initializable {
     public static String OS = System.getProperty("os.name").toLowerCase();
     public static String PLATFORM_TOOLS="";
     public static String PLATFORM_TOOLS_MAC="/bin/mac/platform-tools";
-    public static String PLATFORM_TOOLS_NIX="/bin/win/platform-tools";
-    public static String PLATFORM_TOOLS_WIN="/bin/nix/platform-tools";
+    public static String PLATFORM_TOOLS_NIX="/bin/nix/platform-tools";
+    public static String PLATFORM_TOOLS_WIN="/bin/win/platform-tools";
     public static String PLATFORM_TOOLS_DIRECTORY=System.getProperty("user.dir");
     public static String ADB="adb";
     public static String FASTBOOT="fastboot";
@@ -146,7 +146,7 @@ public class Controller implements Initializable {
         setPlatform();
         setBinaries();
 
-        if(checkAdbBin(new File(ADB_BINARY)) || checkFastbootBin(new File(FASTBOOT_BINARY))) {
+        if(!checkAdbBin(new File(ADB_BINARY)) || !checkFastbootBin(new File(FASTBOOT_BINARY))) {
             if (showConfirmDialogs("Binaries", "ADB and FASTBOOT", "Can't locate adb and fastboot binaries, unpack built-in?")) {
                 unpackBuildInBinaryDialog();
             }
@@ -808,14 +808,14 @@ public class Controller implements Initializable {
 
     /** Check inventory **/
     private boolean checkAdbBin(File f) {
-        if (new File(f.getPath() + "/"+ADB).exists()) {
+        if (f.exists()) {
             return true;
         } else {
             return false;
         }
     }
     private boolean checkFastbootBin(File f) {
-        if (new File(f.getPath() + "/"+FASTBOOT).exists()) {
+        if (f.exists()) {
             return true;
         } else {
             return false;
