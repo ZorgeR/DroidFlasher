@@ -1063,6 +1063,10 @@ public class Controller implements Initializable {
         try {
             extractResource(ADB, directory);
             extractResource(FASTBOOT, directory);
+            if(isWindows()){
+                extractResource("AdbWinApi.dll", directory);
+                extractResource("AdbWinUsbApi.dll", directory);
+            }
         } catch (IOException e) {e.printStackTrace();}
     }
     private String extractResource(String name, String dstDir) throws IOException {

@@ -6,6 +6,7 @@
         <option name="appClass" value="com.zlab.DroidFlasher.Main" />
         <option name="description" value="" />
         <option name="htmlParamFile" value="" />
+        <option name="nativeBundle" value="dmg" />
         <option name="paramFile" value="" />
         <option name="title" value="DroidFlasher" />
         <option name="vendor" value="Z-lab" />
