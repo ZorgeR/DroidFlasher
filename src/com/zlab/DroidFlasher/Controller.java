@@ -143,9 +143,8 @@ public class Controller implements Initializable {
 
         holdSplitPaneDevider(img_head_fileoperation, img_head_application, img_head_backup, img_head_flash, img_head_unlocking);
 
-        /** TEMPORARY **/
-            tab_settings_tool_set_txt_tool_directory_browse.setText(PLATFORM_TOOLS_DIRECTORY+"/bin");                   /** Set default bin directory **/
-        /** TEMPORARY **/
+        /** Set default bin directory **/
+        tab_settings_tool_set_txt_tool_directory_browse.setText(PLATFORM_TOOLS_DIRECTORY+"/bin");
 
         setPlatform();
         setBinaries();
