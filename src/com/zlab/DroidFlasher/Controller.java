@@ -131,8 +131,6 @@ public class Controller implements Initializable {
     @FXML private Accordion tab_settings_accord;
     @FXML private TextArea  tab_main_txt_area_log;
 
-    /** Console UI**/
-    @FXML private Button console_btn_send;
     @FXML private TextField console_text_input;
     @FXML private TextArea console_text_output;
     //</editor-fold>
@@ -215,9 +213,7 @@ public class Controller implements Initializable {
             }
         });
         /** Console **/
-        tab_adb_btn_console.setOnAction((event) -> {
-            openConsole(ADB_BINARY, "Adb");
-        });
+        tab_adb_btn_console.setOnAction((event) -> openConsole(ADB_BINARY, "Adb"));
         /** Reboot device **/
         tab_adb_btn_reboot_device.setOnAction((event) -> {
             try {
@@ -249,7 +245,7 @@ public class Controller implements Initializable {
                 File localfile = fileChooser();
                 String remotefile = remotePushSetPath(localfile.getName());
 
-                if (!remotefile.equals("") || localfile !=null) {
+                if (!remotefile.equals("")) {
                     new Thread(() -> {
                         try {
                             runCmdAdbPushPull(ADB_BINARY, "push", "-p", localfile.getPath(), remotefile);
@@ -370,11 +366,9 @@ public class Controller implements Initializable {
                 if(!packagename.equals("")){
                     new Thread(() -> {
                         try {
-                            String log=runCmd(ADB_BINARY, "uninstall", packagename);
-
-                            final String finalLog = log;
+                            final String finalLog = runCmd(ADB_BINARY, "uninstall", packagename);
                             Platform.runLater(() -> {
-                                int failure = (finalLog.length() - finalLog.substring(0).replaceAll("Failure", "").length())/7;
+                                //int failure = (finalLog.length() - finalLog.substring(0).replaceAll("Failure", "").length())/7;
                                 int success = (finalLog.length() - finalLog.substring(0).replaceAll("Success","").length())/7;
 
                                 if(success==1){
@@ -409,11 +403,9 @@ public class Controller implements Initializable {
                     if(!packagename.equals("")){
                     new Thread(() -> {
                         try {
-                            String log=runCmd(ADB_BINARY, "shell", "pm", "uninstall", "-k", packagename);
-
-                            final String finalLog = log;
+                            final String finalLog = runCmd(ADB_BINARY, "shell", "pm", "uninstall", "-k", packagename);
                             Platform.runLater(() -> {
-                                int failure = (finalLog.length() - finalLog.substring(0).replaceAll("Failure", "").length())/7;
+                                //int failure = (finalLog.length() - finalLog.substring(0).replaceAll("Failure", "").length())/7;
                                 int success = (finalLog.length() - finalLog.substring(0).replaceAll("Success","").length())/7;
 
                                 if(success==1){
@@ -431,7 +423,7 @@ public class Controller implements Initializable {
                             e.printStackTrace();
                         }
                     }).start();}
-                } else {}
+                }// else {}
         });
         /** Backup **/
         tab_adb_btn_backup.setOnAction((event) -> {
@@ -634,51 +626,41 @@ public class Controller implements Initializable {
                     }
                 }).start();
             }});
-        tab_fastboot_btn_oem_unlock.setOnAction((event) -> {
-            new Thread(() -> {
-                try {
-                    Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to oem unlock." + "\n\nPlease wait...\n"));
-                    runCmdToGlobalAlert(FASTBOOT_BINARY, "oem", "unlock");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        });
-        tab_fastboot_btn_oem_lock.setOnAction((event) -> {
-            new Thread(() -> {
-                try {
-                    Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to oem lock." + "\n\nPlease wait...\n"));
-                    runCmdToGlobalAlert(FASTBOOT_BINARY, "oem", "lock");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        });
-        tab_fastboot_btn_oem_get_unlock_data.setOnAction((event) -> {
-            new Thread(() -> {
-                try {
-                    Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to oem get_unlock_data." + "\n\nPlease wait...\n"));
-                    runCmdToGlobalAlert(FASTBOOT_BINARY, "oem", "get_unlock_data");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        });
-        tab_fastboot_btn_oem_lock_begin.setOnAction((event) -> {
-            new Thread(() -> {
-                try {
-                    Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to oem lock begin." + "\n\nPlease wait...\n"));
-                    runCmdToGlobalAlert(FASTBOOT_BINARY, "oem", "lock", "begin");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        });
+        tab_fastboot_btn_oem_unlock.setOnAction((event) -> new Thread(() -> {
+            try {
+                Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to oem unlock." + "\n\nPlease wait...\n"));
+                runCmdToGlobalAlert(FASTBOOT_BINARY, "oem", "unlock");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start());
+        tab_fastboot_btn_oem_lock.setOnAction((event) -> new Thread(() -> {
+            try {
+                Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to oem lock." + "\n\nPlease wait...\n"));
+                runCmdToGlobalAlert(FASTBOOT_BINARY, "oem", "lock");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start());
+        tab_fastboot_btn_oem_get_unlock_data.setOnAction((event) -> new Thread(() -> {
+            try {
+                Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to oem get_unlock_data." + "\n\nPlease wait...\n"));
+                runCmdToGlobalAlert(FASTBOOT_BINARY, "oem", "get_unlock_data");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start());
+        tab_fastboot_btn_oem_lock_begin.setOnAction((event) -> new Thread(() -> {
+            try {
+                Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to oem lock begin." + "\n\nPlease wait...\n"));
+                runCmdToGlobalAlert(FASTBOOT_BINARY, "oem", "lock", "begin");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start());
 
         /** Console **/
-        tab_fastboot_btn_console.setOnAction((event) -> {
-            openConsole(FASTBOOT_BINARY, "Fastboot");
-        });
+        tab_fastboot_btn_console.setOnAction((event) -> openConsole(FASTBOOT_BINARY, "Fastboot"));
 
         /**************/
         /** SETTINGS **/
@@ -813,40 +795,35 @@ public class Controller implements Initializable {
         chooser.setTitle("Select directory");
         File defaultDirectory = new File(".");
         chooser.setInitialDirectory(defaultDirectory);
-        File selectedDirectory = chooser.showDialog(Main.globalStage);
-        return selectedDirectory;
+        return chooser.showDialog(Main.globalStage);
     }
     private File fileChooser() {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Select file");
         File defaultDirectory = new File(".");
         chooser.setInitialDirectory(defaultDirectory);
-        File selectedFile = chooser.showOpenDialog(Main.globalStage);
-        return selectedFile;
+        return chooser.showOpenDialog(Main.globalStage);
     }
     private List<File> fileChooserMultiple() {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Select file");
         File defaultDirectory = new File(".");
         chooser.setInitialDirectory(defaultDirectory);
-        List<File> selectedFile = chooser.showOpenMultipleDialog(Main.globalStage);
-        return selectedFile;
+        return chooser.showOpenMultipleDialog(Main.globalStage);
     }
     private File fileSaver() {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Select new file");
         File defaultDirectory = new File(".");
         chooser.setInitialDirectory(defaultDirectory);
-        File selectedFile = chooser.showSaveDialog(Main.globalStage);
-        return selectedFile;
+        return chooser.showSaveDialog(Main.globalStage);
     }
     private File directorySaver() {
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("Select directory for extraction");
         File defaultDirectory = new File(".");
         chooser.setInitialDirectory(defaultDirectory);
-        File selectedDirectory = chooser.showDialog(Main.globalStage);
-        return selectedDirectory;
+        return chooser.showDialog(Main.globalStage);
     }
 
     /** Show Dialog **/
@@ -914,34 +891,18 @@ public class Controller implements Initializable {
         alert.setContentText(text);
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
-            return true;
-        } else {
-            return false;
-        }
+        return result.get() == ButtonType.OK;
     }
 
     /** Check inventory **/
     private boolean checkAdbBin(File f) {
-        if (f.exists()) {
-            return true;
-        } else {
-            return false;
-        }
+        return f.exists();
     }
     private boolean checkFastbootBin(File f) {
-        if (f.exists()) {
-            return true;
-        } else {
-            return false;
-        }
+        return f.exists();
     }
     private boolean checkMFastbootBin(File f) {
-        if (f.exists()) {
-            return true;
-        } else {
-            return false;
-        }
+        return f.exists();
     }
 
     /** Console **/
@@ -958,7 +919,7 @@ public class Controller implements Initializable {
 
         logToConsole("===\nrun cmd: " +/*bin+*/" " + Arrays.toString(args) + "\n\n");
 
-        String s = null;
+        String s;
         while ((s = stdInput.readLine()) != null) {
             //System.out.println(s);
             logToConsole(s + "\n");
@@ -978,12 +939,12 @@ public class Controller implements Initializable {
         InputStream errStream = proc.getErrorStream();
         InputStreamReader errStreamReader = new InputStreamReader(errStream);
         BufferedReader errBufferedReader = new BufferedReader(errStreamReader);
-
+/*
         InputStream stdStream = proc.getInputStream();
         InputStreamReader stdStreamReader = new InputStreamReader(stdStream);
         BufferedReader stdBufferedReader = new BufferedReader(stdStreamReader);
-
-        String err = null;
+*/
+        String err;
         //String std = null;
 
         while ((err = errBufferedReader.readLine()) !=null) {
@@ -1007,7 +968,7 @@ public class Controller implements Initializable {
         InputStream inputStream = proc.getErrorStream();
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-        String s = null;
+        String s;
 
         while ((s = bufferedReader.readLine()) != null) {
             if (s.startsWith("Transferring")) {
@@ -1024,7 +985,6 @@ public class Controller implements Initializable {
         }
     }
     private void openConsole(String binary, String type){
-        String CONSOLE_BINARY=binary;
 
         URL MainUIlocation = getClass().getResource("/layout/Console.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(MainUIlocation);
@@ -1037,22 +997,22 @@ public class Controller implements Initializable {
         try { root = fxmlLoader.load();
         } catch (IOException e) { e.printStackTrace(); }
 
-        Scene consoleScene = new Scene(root);
+        Scene consoleScene = null;
+        if (root != null) {
+            consoleScene = new Scene(root);
+        /* Console UI*/
+            Button console_btn_send = (Button) consoleScene.lookup("#console_btn_send");
+            console_text_input = (TextField) consoleScene.lookup("#console_text_input");
+            console_text_output = (TextArea) consoleScene.lookup("#console_text_output");
+            console_text_output.setScrollTop(Double.MAX_VALUE);
 
-        console_btn_send = (Button) consoleScene.lookup("#console_btn_send");
-        console_text_input = (TextField) consoleScene.lookup("#console_text_input");
-        console_text_output = (TextArea) consoleScene.lookup("#console_text_output");
-        console_text_output.setScrollTop(Double.MAX_VALUE);
+            console_btn_send.setOnAction((event) -> {
+                String[] input = console_text_input.getText().split(" ");
+                //if (input.length>0){
+                String[] args = new String[input.length + 1];
 
-        console_btn_send.setOnAction((event) -> {
-            String[] input = console_text_input.getText().toString().split(" ");
-            //if (input.length>0){
-                String[] args = new String[input.length+1];
-
-                args[0] = CONSOLE_BINARY;
-                for (int i = 0; i<input.length;i++){
-                    args[i+1]=input[i];
-                }
+                args[0] = binary;
+                System.arraycopy(input, 0, args, 1, input.length);
                 new Thread(() -> {
                     try {
                         runCmdToConsoleOutput(console_text_output, args);
@@ -1060,9 +1020,9 @@ public class Controller implements Initializable {
                         Platform.runLater(() -> showDialogError("Ooops!", "Fastboot or adb binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings."));
                     }
                 }).start();
-            //}
-        });
-
+                //}
+            });
+        }
         Stage consoleStage = new Stage();
         consoleStage.setTitle(type +" console");
         consoleStage.setScene(consoleScene);
@@ -1080,8 +1040,8 @@ public class Controller implements Initializable {
         InputStreamReader stdStreamReader = new InputStreamReader(stdStream);
         BufferedReader stdBufferedReader = new BufferedReader(stdStreamReader);
 
-        String err = null;
-        String std = null;
+        String err;
+        String std;
 
         while ((err = errBufferedReader.readLine()) !=null) {
             final String finalErr = err;
@@ -1129,13 +1089,13 @@ public class Controller implements Initializable {
         }
     }
     private boolean isWindows() {
-        return (OS.indexOf("win") >= 0);
+        return (OS.contains("win"));
     }
     private boolean isMac() {
-        return (OS.indexOf("mac") >= 0);
+        return (OS.contains("mac"));
     }
     private boolean isUnix() {
-        return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 );
+        return (OS.contains("nix") || OS.contains("nux") || OS.contains("aix"));
     }
 
     /** Binaries **/
@@ -1201,6 +1161,7 @@ public class Controller implements Initializable {
         try {
             extractResource(ADB, directory);
             extractResource(FASTBOOT, directory);
+            extractResource(MFASTBOOT, directory);
             if(isWindows()){
                 extractResource("AdbWinApi.dll", directory);
                 extractResource("AdbWinUsbApi.dll", directory);
@@ -1222,8 +1183,8 @@ public class Controller implements Initializable {
         } catch (IOException e) {
             //System.exit(-1);
         }
-        dstFile.setExecutable(true);
         System.out.println("Successfully extracted "+dstFile.getAbsolutePath());
+        if (dstFile.setExecutable(true)){System.out.println("Set executable "+dstFile.getAbsolutePath());}
         return dstFile.getAbsolutePath();
     }
 
@@ -1234,6 +1195,6 @@ public class Controller implements Initializable {
             splitpane.lookupAll(".split-pane-divider").stream()
                     .forEach(div -> div.setMouseTransparent(true));
         }
-    };
+    }
 }
 
