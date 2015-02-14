@@ -902,6 +902,8 @@ public class Controller implements Initializable {
 
         global_alert_text_area.setMaxWidth(Double.MAX_VALUE);
         global_alert_text_area.setMaxHeight(Double.MAX_VALUE);
+        global_alert_text_area.setScrollTop(Double.MAX_VALUE);
+
         GridPane.setVgrow(global_alert_text_area, Priority.ALWAYS);
         GridPane.setHgrow(global_alert_text_area, Priority.ALWAYS);
 
@@ -977,23 +979,30 @@ public class Controller implements Initializable {
         InputStream errStream = proc.getErrorStream();
         InputStreamReader errStreamReader = new InputStreamReader(errStream);
         BufferedReader errBufferedReader = new BufferedReader(errStreamReader);
-/*
+
         InputStream stdStream = proc.getInputStream();
         InputStreamReader stdStreamReader = new InputStreamReader(stdStream);
         BufferedReader stdBufferedReader = new BufferedReader(stdStreamReader);
-*/
+
         String err;
-        //String std = null;
+        String std;
 
         while ((err = errBufferedReader.readLine()) !=null) {
-            //final String finalStd = std;
             final String finalErr = err;
             Platform.runLater(() -> {
                 if(global_alert!=null){
-                    global_alert_text_area.setText(global_alert_text_area.getText()+finalErr + "\n");
+                    global_alert_text_area.appendText(finalErr + "\n");
                 }
             });
+        }
 
+        while ((std = stdBufferedReader.readLine()) !=null) {
+            final String finalStd = std;
+            Platform.runLater(() -> {
+                if(global_alert!=null){
+                    global_alert_text_area.appendText(finalStd + "\n");
+                }
+            });
         }
         try {
             proc.waitFor();
@@ -1119,6 +1128,11 @@ public class Controller implements Initializable {
                         Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Running *.dfs script " + dfsFile.getName() + "\n\nPlease wait...\n"));
                         String dfsContent = readFileToString(dfsFile.getPath(), Charset.defaultCharset());
                         String[] cmd_lines = dfsContent.split("\n");
+                        Platform.runLater(() -> {
+                            if(global_alert!=null){
+                                global_alert_text_area.appendText("exec: "+ Arrays.toString(cmd_lines) + ":\n");
+                            }
+                        });
                         for (String args : cmd_lines){
                             String[] commands = args.split(" ");
                             int last = commands.length-1;
