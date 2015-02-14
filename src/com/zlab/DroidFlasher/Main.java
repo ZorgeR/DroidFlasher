@@ -12,8 +12,6 @@ public class Main extends Application {
 
     public String APP_NAME = "DroidFlasher";
     private Controller mController;
-    private FXMLLoader fxmlLoader;
-    private URL MainUIlocation;
     public static Stage globalStage;
 
     public static void main(String[] args) {
@@ -25,8 +23,8 @@ public class Main extends Application {
 
         globalStage = primaryStage;
 
-        MainUIlocation = getClass().getResource("/layout/Main.fxml");
-        fxmlLoader = new FXMLLoader(MainUIlocation);
+        URL mainUIlocation = getClass().getResource("/layout/Main.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(mainUIlocation);
 
         mController = new Controller();
         mController.initialize(getClass().getResource("/layout/Main.fxml"), fxmlLoader.getResources());

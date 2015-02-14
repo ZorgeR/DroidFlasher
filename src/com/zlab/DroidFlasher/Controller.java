@@ -170,7 +170,7 @@ public class Controller implements Initializable {
     public void initToggleBtn() {
         tab_settings_override_btn_fastboot_override.setOnAction((event) -> setBinaries());
         tab_settings_override_btn_adb_override.setOnAction((event) -> setBinaries());
-        tab_settings_override_btn_fastboot_override.setOnAction((event) -> setBinaries());
+        tab_settings_override_btn_mfastboot_override.setOnAction((event) -> setBinaries());
     }
     public void initBtn() {
         /*********/
