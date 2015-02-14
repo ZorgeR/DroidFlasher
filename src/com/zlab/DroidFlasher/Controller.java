@@ -1143,7 +1143,7 @@ public class Controller implements Initializable {
                                     commands[2]=dir.getPath()+"/"+commands[2];
                                 }
                             }
-                            if(commands[3].equals("pull")){
+                            if(commands[1].equals("pull")){
                                 if(!new File(commands[3]).exists()){
                                     commands[3]=dir.getPath()+"/"+commands[3];
                                 }
