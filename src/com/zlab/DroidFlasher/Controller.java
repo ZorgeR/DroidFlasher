@@ -158,7 +158,7 @@ public class Controller implements Initializable {
         img_console_fastboot.setImage(new Image(getClass().getResourceAsStream("/img/terminal-pencil.png")));
         img_head_other.setImage(new Image(getClass().getResourceAsStream("/img/applications-other.png")));
 
-        holdSplitPaneDevider(img_head_fileoperation, img_head_application, img_head_backup, img_head_flash, img_head_unlocking,img_head_other);
+        holdSplitPaneDivider(img_head_fileoperation, img_head_application, img_head_backup, img_head_flash, img_head_unlocking, img_head_other);
 
         /** Set default bin directory **/
         tab_settings_tool_set_txt_tool_directory_browse.setText(PLATFORM_TOOLS_DIRECTORY+"/bin");
@@ -1280,7 +1280,7 @@ public class Controller implements Initializable {
     }
 
     /** UI reconfigure **/
-    private void holdSplitPaneDevider(Node... objects){
+    private void holdSplitPaneDivider(Node... objects){
         for (Node obj : objects) {
             SplitPane splitpane = (SplitPane) obj.getParent().getParent().getParent();
             splitpane.lookupAll(".split-pane-divider").stream()
@@ -1288,4 +1288,3 @@ public class Controller implements Initializable {
         }
     }
 }
-
