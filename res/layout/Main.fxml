@@ -188,7 +188,7 @@
                         </AnchorPane>
                      </items>
                   </SplitPane>
-                  <SplitPane dividerPositions="0.297029702970297" layoutX="14.0" layoutY="51.0" orientation="VERTICAL" prefHeight="103.0" prefWidth="114.0">
+                  <SplitPane dividerPositions="0.13839285714285715" layoutX="14.0" layoutY="51.0" orientation="VERTICAL" prefHeight="222.0" prefWidth="138.0">
                      <effect>
                         <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
                      </effect>
@@ -203,9 +203,14 @@
                               </ImageView>
                            </children>
                         </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="131.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="188.0" prefWidth="136.0">
                            <children>
-                              <Button fx:id="tab_fastboot_btn_flash_recovery" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" text="flash-recovery" />
+                              <Button fx:id="tab_fastboot_btn_flash_recovery" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="flash-recovery" />
+                              <Button fx:id="tab_fastboot_btn_flash_boot" layoutX="5.0" layoutY="35.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="flash-boot (kernel)" />
+                              <Button fx:id="tab_fastboot_btn_flash_cache" layoutX="5.0" layoutY="65.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="flash-cache" />
+                              <Button fx:id="tab_fastboot_btn_flash_userdata" layoutX="4.0" layoutY="95.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="flash-userdata" />
+                              <Button fx:id="tab_fastboot_btn_flash_system" layoutX="4.0" layoutY="125.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="flash-system" />
+                              <Button fx:id="tab_fastboot_btn_flash_radio" layoutX="4.0" layoutY="155.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="flash-radio" />
                            </children>
                         </AnchorPane>
                      </items>
@@ -216,6 +221,28 @@
                         <Image url="@../img/terminal-pencil.png" />
                      </image>
                   </ImageView>
+                  <SplitPane dividerPositions="0.31683168316831684" layoutX="391.0" layoutY="188.0" orientation="VERTICAL" prefHeight="103.0" prefWidth="196.0">
+                     <effect>
+                        <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
+                     </effect>
+                     <items>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
+                           <children>
+                              <Label layoutX="38.0" layoutY="6.0" text="Other" />
+                              <ImageView fx:id="img_head_other" layoutX="12.0" layoutY="6.0">
+                                 <image>
+                                    <Image url="@../../../../../Pictures/icons/faience-icon-theme_0.5/Faience/categories/16/applications-other.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="131.0">
+                           <children>
+                              <Button fx:id="tab_fastboot_btn_boot_img" layoutX="4.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="80.0" text="boot *.img" />
+                           </children>
+                        </AnchorPane>
+                     </items>
+                  </SplitPane>
                </children></AnchorPane>
       </content>
     </Tab>

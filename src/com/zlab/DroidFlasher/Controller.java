@@ -4,8 +4,6 @@ import javafx.fxml.FXML;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -17,7 +15,6 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import javax.xml.soap.Text;
 import java.io.*;
 import java.net.URL;
 import java.util.Arrays;
@@ -89,6 +86,12 @@ public class Controller implements Initializable {
     @FXML private Button tab_fastboot_btn_reboot;
     @FXML private Button tab_fastboot_btn_reboot_bootloader;
     @FXML private Button tab_fastboot_btn_flash_recovery;
+    @FXML private Button tab_fastboot_btn_flash_boot;
+    @FXML private Button tab_fastboot_btn_flash_cache;
+    @FXML private Button tab_fastboot_btn_flash_userdata;
+    @FXML private Button tab_fastboot_btn_flash_system;
+    @FXML private Button tab_fastboot_btn_flash_radio;
+    @FXML private Button tab_fastboot_btn_boot_img;
     @FXML private Button tab_fastboot_btn_oem_unlock;
     @FXML private Button tab_fastboot_btn_oem_lock;
     @FXML private Button tab_fastboot_btn_oem_get_unlock_data;
@@ -97,6 +100,7 @@ public class Controller implements Initializable {
     @FXML private Label  tab_fastboot_device_status_txt;
     @FXML private ImageView img_fastboot_status;
     @FXML private ImageView img_console_fastboot;
+    @FXML private ImageView img_head_other;
 
 
     /** Settings Tab **/
@@ -140,8 +144,9 @@ public class Controller implements Initializable {
         img_head_unlocking.setImage(new Image(getClass().getResourceAsStream("/img/lock-unlock.png")));
         img_console_adb.setImage(new Image(getClass().getResourceAsStream("/img/terminal-pencil.png")));
         img_console_fastboot.setImage(new Image(getClass().getResourceAsStream("/img/terminal-pencil.png")));
+        img_head_other.setImage(new Image(getClass().getResourceAsStream("/img/applications-other.png")));
 
-        holdSplitPaneDevider(img_head_fileoperation, img_head_application, img_head_backup, img_head_flash, img_head_unlocking);
+        holdSplitPaneDevider(img_head_fileoperation, img_head_application, img_head_backup, img_head_flash, img_head_unlocking,img_head_other);
 
         /** Set default bin directory **/
         tab_settings_tool_set_txt_tool_directory_browse.setText(PLATFORM_TOOLS_DIRECTORY+"/bin");
@@ -181,7 +186,7 @@ public class Controller implements Initializable {
                     tab_adb_device_status_txt.setText("No device detected.");
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                showDialogError("Ooops!", "Adb binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings.");
             }
         });
         /** Server kill start **/
@@ -505,7 +510,7 @@ public class Controller implements Initializable {
                     tab_fastboot_device_status_txt.setText("No device detected.");
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                showDialogError("Ooops!", "Fastboot binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings.");
             }
         });
         tab_fastboot_btn_reboot.setOnAction((event) -> {
@@ -536,6 +541,79 @@ public class Controller implements Initializable {
                     }
                 }).start();
         }});
+        tab_fastboot_btn_flash_boot.setOnAction((event) -> {
+            File localfile = fileChooser();
+            if(localfile!=null){
+                new Thread(() -> {
+                    try {
+                        Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to flash boot " + localfile.getName() + "\n\nPlease wait...\n"));
+                        runCmdToGlobalAlert(FASTBOOT_BINARY, "flash", "boot", localfile.getPath());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }});
+        tab_fastboot_btn_flash_cache.setOnAction((event) -> {
+            File localfile = fileChooser();
+            if(localfile!=null){
+                new Thread(() -> {
+                    try {
+                        Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to flash cache " + localfile.getName() + "\n\nPlease wait...\n"));
+                        runCmdToGlobalAlert(FASTBOOT_BINARY, "flash", "cache", localfile.getPath());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }});
+        tab_fastboot_btn_flash_userdata.setOnAction((event) -> {
+            File localfile = fileChooser();
+            if(localfile!=null){
+                new Thread(() -> {
+                    try {
+                        Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to flash userdata " + localfile.getName() + "\n\nPlease wait...\n"));
+                        runCmdToGlobalAlert(FASTBOOT_BINARY, "flash", "userdata", localfile.getPath());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }});
+        tab_fastboot_btn_flash_system.setOnAction((event) -> {
+            File localfile = fileChooser();
+            if(localfile!=null){
+                new Thread(() -> {
+                    try {
+                        Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to flash system " + localfile.getName() + "\n\nPlease wait...\n"));
+                        runCmdToGlobalAlert(FASTBOOT_BINARY, "flash", "system", localfile.getPath());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }});
+        tab_fastboot_btn_flash_radio.setOnAction((event) -> {
+            File localfile = fileChooser();
+            if(localfile!=null){
+                new Thread(() -> {
+                    try {
+                        Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to flash radio " + localfile.getName() + "\n\nPlease wait...\n"));
+                        runCmdToGlobalAlert(FASTBOOT_BINARY, "flash", "radio", localfile.getPath());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }});
+        tab_fastboot_btn_boot_img.setOnAction((event) -> {
+            File localfile = fileChooser();
+            if (localfile != null) {
+                new Thread(() -> {
+                    try {
+                        Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to boot " + localfile.getName() + "\n\nPlease wait...\n"));
+                        runCmdToGlobalAlert(FASTBOOT_BINARY, "boot", localfile.getPath());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }
+        });
         tab_fastboot_btn_oem_unlock.setOnAction((event) -> {
             new Thread(() -> {
                 try {
@@ -576,6 +654,7 @@ public class Controller implements Initializable {
                 }
             }).start();
         });
+
         /** Console **/
         tab_fastboot_btn_console.setOnAction((event) -> {
             openConsole(FASTBOOT_BINARY, "Fastboot");
@@ -939,7 +1018,7 @@ public class Controller implements Initializable {
                     try {
                         runCmdToConsoleOutput(console_text_output, args);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Platform.runLater(() -> showDialogError("Ooops!", "Fastboot or adb binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings."));
                     }
                 }).start();
             //}
