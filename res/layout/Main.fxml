@@ -251,7 +251,11 @@
     </Tab>
       <Tab text="Recovery">
          <content>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="tab_recovery_btn_adb_sideload" layoutX="14.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="adb sideload" />
+                  <Separator layoutY="37.0" prefHeight="11.0" prefWidth="617.0" />
+               </children></AnchorPane>
          </content>
       </Tab>
     <Tab text="Settings">
