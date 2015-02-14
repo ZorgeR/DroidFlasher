@@ -17,6 +17,9 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -52,6 +55,7 @@ public class Controller implements Initializable {
     @FXML private Button tab_adb_btn_restore;
     @FXML private Button tab_settings_override_btn_unpack_binaries;
     @FXML private Button tab_adb_btn_console;
+    @FXML private Button tab_adb_btn_run_dfs;
     @FXML private CheckBox tab_adb_chk_backup_apk;
     @FXML private CheckBox tab_adb_chk_backup_obb;
     @FXML private CheckBox tab_adb_chk_backup_shared;
@@ -87,6 +91,7 @@ public class Controller implements Initializable {
     @FXML private Button tab_fastboot_btn_check_device;
     @FXML private Button tab_fastboot_btn_reboot;
     @FXML private Button tab_fastboot_btn_reboot_bootloader;
+    @FXML private Button tab_fastboot_btn_run_dfs;
     @FXML private Button tab_fastboot_btn_flash_recovery;
     @FXML private Button tab_fastboot_btn_flash_boot;
     @FXML private Button tab_fastboot_btn_flash_cache;
@@ -239,6 +244,7 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
         });
+        tab_adb_btn_run_dfs.setOnAction((event) -> runDfs());
         /** File control **/
         tab_adb_btn_file_push.setOnAction((event) -> {
             try {
@@ -493,7 +499,6 @@ public class Controller implements Initializable {
             }
         });
 
-
         /**************/
         /** FASTBOOT **/
         tab_fastboot_btn_check_device.setOnAction((event) -> {
@@ -529,6 +534,7 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
         });
+        tab_fastboot_btn_run_dfs.setOnAction((event) -> runDfs());
         tab_fastboot_btn_flash_recovery.setOnAction((event) -> {
             File localfile = fileChooser();
             if(localfile!=null){
@@ -797,9 +803,23 @@ public class Controller implements Initializable {
         chooser.setInitialDirectory(defaultDirectory);
         return chooser.showDialog(Main.globalStage);
     }
+    private File directoryChooserAdv(String title) {
+        DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle(title);
+        File defaultDirectory = new File(".");
+        chooser.setInitialDirectory(defaultDirectory);
+        return chooser.showDialog(Main.globalStage);
+    }
     private File fileChooser() {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Select file");
+        File defaultDirectory = new File(".");
+        chooser.setInitialDirectory(defaultDirectory);
+        return chooser.showOpenDialog(Main.globalStage);
+    }
+    private File fileChooserAdv(String title) {
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle(title);
         File defaultDirectory = new File(".");
         chooser.setInitialDirectory(defaultDirectory);
         return chooser.showOpenDialog(Main.globalStage);
@@ -1065,6 +1085,44 @@ public class Controller implements Initializable {
             proc.waitFor();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+    static String readFileToString(String path, Charset encoding) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, encoding);
+    }
+    private void runDfs(){
+        try{
+            File dfsFile = fileChooserAdv("Select *.dfs script file");
+            File dir = directoryChooserAdv("Select working directory (with images)");
+            if(dir!=null && dfsFile!=null){
+                new Thread(() -> {
+                    try {
+                        Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Running *.dfs script " + dfsFile.getName() + "\n\nPlease wait...\n"));
+                        String dfsContent = readFileToString(dfsFile.getPath(), Charset.defaultCharset());
+                        String[] cmd_lines = dfsContent.split("\n");
+                        for (String args : cmd_lines){
+                            String[] commands = args.split(" ");
+                            switch (commands[0]) {
+                                case "fastboot":
+                                    commands[0] = FASTBOOT_BINARY;
+                                    break;
+                                case "adb":
+                                    commands[0] = ADB_BINARY;
+                                    break;
+                                case "mfastboot":
+                                    commands[0] = MFASTBOOT_BINARY;
+                                    break;
+                            }
+                            commands[commands.length-1]=dir.getPath()+"/"+commands[commands.length-1];
+                            runCmdToGlobalAlert(commands);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();}
+        } catch (Exception e) {
+            showDialogErrorNoDirectorySelected();
         }
     }
 
