@@ -94,12 +94,12 @@ public class Controller implements Initializable {
     @FXML private Button tab_fastboot_btn_flash_system;
     @FXML private Button tab_fastboot_btn_flash_radio;
     @FXML private Button tab_fastboot_btn_boot_img;
+    @FXML private Button tab_fastboot_btn_flash_mfastboot_system;
     @FXML private Button tab_fastboot_btn_oem_unlock;
     @FXML private Button tab_fastboot_btn_oem_lock;
     @FXML private Button tab_fastboot_btn_oem_get_unlock_data;
     @FXML private Button tab_fastboot_btn_oem_lock_begin;
     @FXML private Button tab_fastboot_btn_console;
-    @FXML private Button tab_fastboot_btn_flash_mfastboot_system;
     @FXML private Label  tab_fastboot_device_status_txt;
     @FXML private ImageView img_fastboot_status;
     @FXML private ImageView img_console_fastboot;
