@@ -929,7 +929,6 @@ public class Controller implements Initializable {
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(text);
-
         Optional<ButtonType> result = alert.showAndWait();
         return result.get() == ButtonType.OK;
     }
