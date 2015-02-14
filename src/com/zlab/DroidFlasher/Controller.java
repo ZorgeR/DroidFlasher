@@ -1128,13 +1128,13 @@ public class Controller implements Initializable {
                         Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Running *.dfs script " + dfsFile.getName() + "\n\nPlease wait...\n"));
                         String dfsContent = readFileToString(dfsFile.getPath(), Charset.defaultCharset());
                         String[] cmd_lines = dfsContent.split("\n");
-                        Platform.runLater(() -> {
-                            if(global_alert!=null){
-                                global_alert_text_area.appendText("exec: "+ Arrays.toString(cmd_lines) + ":\n");
-                            }
-                        });
                         for (String args : cmd_lines){
                             String[] commands = args.split(" ");
+                            Platform.runLater(() -> {
+                                if(global_alert!=null){
+                                    global_alert_text_area.appendText("exec "+ Arrays.toString(commands) + " :\n");
+                                }
+                            });
                             int last = commands.length-1;
                             switch (commands[0]) {
                                 case "fastboot":
