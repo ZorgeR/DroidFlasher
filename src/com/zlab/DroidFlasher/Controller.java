@@ -898,7 +898,7 @@ public class Controller implements Initializable {
 
         global_alert_text_area = new TextArea("");
         global_alert_text_area.setEditable(false);
-        global_alert_text_area.setWrapText(true);
+        global_alert_text_area.setWrapText(false);
 
         global_alert_text_area.setMaxWidth(Double.MAX_VALUE);
         global_alert_text_area.setMaxHeight(Double.MAX_VALUE);
@@ -1125,7 +1125,7 @@ public class Controller implements Initializable {
             if(dir!=null && dfsFile!=null){
                 new Thread(() -> {
                     try {
-                        Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Running *.dfs script " + dfsFile.getName() + "\n\nPlease wait...\n"));
+                        Platform.runLater(() -> showDialogInformationGlobal("DFS", "Operation in progress", "Running *.dfs script " + dfsFile.getName() + "\n\nPlease wait...\n"));
                         String dfsContent = readFileToString(dfsFile.getPath(), Charset.defaultCharset());
                         String[] cmd_lines = dfsContent.split("\n");
                         for (String args : cmd_lines){
