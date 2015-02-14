@@ -1130,9 +1130,10 @@ public class Controller implements Initializable {
                         String[] cmd_lines = dfsContent.split("\n");
                         for (String args : cmd_lines){
                             String[] commands = args.split(" ");
+                            final String cmdToConsole = Arrays.toString(commands).replaceAll("[,/[/]]", "");
                             Platform.runLater(() -> {
                                 if(global_alert!=null){
-                                    global_alert_text_area.appendText("exec "+ Arrays.toString(commands) + " :\n");
+                                    global_alert_text_area.appendText(cmdToConsole + " :\n");
                                 }
                             });
                             int last = commands.length-1;
