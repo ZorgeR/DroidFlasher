@@ -238,7 +238,8 @@
                         </AnchorPane>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="131.0">
                            <children>
-                              <Button fx:id="tab_fastboot_btn_boot_img" layoutX="4.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="80.0" text="boot *.img" />
+                              <Button fx:id="tab_fastboot_btn_boot_img" layoutX="4.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="185.0" text="boot *.img" />
+                              <Button fx:id="tab_fastboot_btn_flash_mfastboot_system" layoutX="4.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="185.0" text="mfastboot flash-system" />
                            </children>
                         </AnchorPane>
                      </items>
@@ -280,12 +281,16 @@
                                     <TextField fx:id="tab_settings_override_txt_adb_path" layoutX="83.0" layoutY="45.0" prefHeight="26.0" prefWidth="328.0" />
                                     <Button fx:id="tab_settings_override_btn_fastboot_browse" layoutX="417.0" layoutY="14.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="Browse" />
                                     <Button fx:id="tab_settings_override_btn_adb_browse" layoutX="417.0" layoutY="45.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="Browse" />
-                                    <Button fx:id="tab_settings_override_btn_unpack_binaries" layoutX="83.0" layoutY="76.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="484.0" text="Unpack built-in binaries" />
-                                    <ImageView fx:id="img_settings_unpack_binaries" fitHeight="16.0" fitWidth="16.0" layoutX="60.0" layoutY="81.0" pickOnBounds="true" preserveRatio="true">
+                                    <Button fx:id="tab_settings_override_btn_unpack_binaries" layoutX="83.0" layoutY="110.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="484.0" text="Unpack built-in binaries" />
+                                    <ImageView fx:id="img_settings_unpack_binaries" fitHeight="16.0" fitWidth="16.0" layoutX="60.0" layoutY="115.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../img/file_extension_zip.png" />
                                        </image>
                                     </ImageView>
+                                    <Button fx:id="tab_settings_override_btn_mfastboot_browse" layoutX="417.0" layoutY="76.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="Browse" />
+                                    <TextField fx:id="tab_settings_override_txt_mfastboot_path" layoutX="83.0" layoutY="76.0" prefHeight="26.0" prefWidth="328.0" />
+                                    <Label layoutX="12.0" layoutY="81.0" text="mfastboot:" />
+                                    <ToggleButton fx:id="tab_settings_override_btn_mfastboot_override" layoutX="498.0" layoutY="76.0" mnemonicParsing="false" text="Override" />
                                  </children>
                               </AnchorPane>
                         </content>

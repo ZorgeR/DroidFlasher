@@ -35,8 +35,10 @@ public class Controller implements Initializable {
     public static String PLATFORM_TOOLS_DIRECTORY=System.getProperty("user.dir");
     public static String ADB="adb";
     public static String FASTBOOT="fastboot";
+    public static String MFASTBOOT="mfastboot";
     public static String ADB_BINARY="";
     public static String FASTBOOT_BINARY="";
+    public static String MFASTBOOT_BINARY="";
     private static Alert global_alert;
     private static TextArea global_alert_text_area;
 
@@ -97,6 +99,7 @@ public class Controller implements Initializable {
     @FXML private Button tab_fastboot_btn_oem_get_unlock_data;
     @FXML private Button tab_fastboot_btn_oem_lock_begin;
     @FXML private Button tab_fastboot_btn_console;
+    @FXML private Button tab_fastboot_btn_flash_mfastboot_system;
     @FXML private Label  tab_fastboot_device_status_txt;
     @FXML private ImageView img_fastboot_status;
     @FXML private ImageView img_console_fastboot;
@@ -117,6 +120,10 @@ public class Controller implements Initializable {
         @FXML private TextField tab_settings_override_txt_adb_path;
         @FXML private Button tab_settings_override_btn_adb_browse;
         @FXML private ToggleButton tab_settings_override_btn_adb_override;
+        /** mfastboot */
+        @FXML private TextField tab_settings_override_txt_mfastboot_path;
+        @FXML private Button tab_settings_override_btn_mfastboot_browse;
+        @FXML private ToggleButton tab_settings_override_btn_mfastboot_override;
         /** others */
         @FXML private Button tab_settings_others_btn_reinitialize;
 
@@ -155,7 +162,7 @@ public class Controller implements Initializable {
         setBinaries();
 
         if(!checkAdbBin(new File(ADB_BINARY)) || !checkFastbootBin(new File(FASTBOOT_BINARY))) {
-            if (showConfirmDialogs("Binaries", "ADB and FASTBOOT", "Can't locate adb and fastboot binaries, unpack built-in?")) {
+            if (showConfirmDialogs("Binaries", "ADB and FASTBOOT", "Can't locate adb or fastboot binaries, unpack built-in?")) {
                 unpackBuildInBinaryDialog();
             }
         }
@@ -165,6 +172,7 @@ public class Controller implements Initializable {
     public void initToggleBtn() {
         tab_settings_override_btn_fastboot_override.setOnAction((event) -> setBinaries());
         tab_settings_override_btn_adb_override.setOnAction((event) -> setBinaries());
+        tab_settings_override_btn_fastboot_override.setOnAction((event) -> setBinaries());
     }
     public void initBtn() {
         /*********/
@@ -614,6 +622,18 @@ public class Controller implements Initializable {
                 }).start();
             }
         });
+        tab_fastboot_btn_flash_mfastboot_system.setOnAction((event) -> {
+            File localfile = fileChooser();
+            if(localfile!=null){
+                new Thread(() -> {
+                    try {
+                        Platform.runLater(() -> showDialogInformationGlobal("mfastboot", "Operation in progress", "Try to flash system " + localfile.getName() + "\n\nPlease wait...\n"));
+                        runCmdToGlobalAlert(MFASTBOOT_BINARY, "flash", "system", localfile.getPath());
+                    } catch (IOException e) {
+                        Platform.runLater(() -> showDialogError("mfastboot", "Operation fail", "mfastboot binaries not found. Use built-in or select proper platform-tools directory in settings."));
+                    }
+                }).start();
+            }});
         tab_fastboot_btn_oem_unlock.setOnAction((event) -> {
             new Thread(() -> {
                 try {
@@ -687,9 +707,9 @@ public class Controller implements Initializable {
         /** Tools bin override **/
         tab_settings_override_btn_fastboot_browse.setOnAction((event) -> {
             try {
-                File dir = directoryChooser();
-                if (checkFastbootBin(dir)) {
-                    tab_settings_override_txt_fastboot_path.setText(dir.getPath() + "/" + FASTBOOT);
+                File fastboot = fileChooser();
+                if (checkFastbootBin(fastboot)) {
+                    tab_settings_override_txt_fastboot_path.setText(fastboot.getPath());
                 } else {
                     showDialogErrorIsNotValidToolsDirectorySelected("fastboot");
                 }
@@ -699,11 +719,23 @@ public class Controller implements Initializable {
         });
         tab_settings_override_btn_adb_browse.setOnAction((event) -> {
             try {
-                File dir = directoryChooser();
-                if (checkAdbBin(dir)) {
-                    tab_settings_override_txt_adb_path.setText(dir.getPath() + "/" + ADB);
+                File adb = fileChooser();
+                if (checkAdbBin(adb)) {
+                    tab_settings_override_txt_adb_path.setText(adb.getPath());
                 } else {
                     showDialogErrorIsNotValidToolsDirectorySelected("adb");
+                }
+            } catch (Exception e) {
+                showDialogErrorNoDirectorySelected();
+            }
+        });
+        tab_settings_override_btn_mfastboot_browse.setOnAction((event) -> {
+            try {
+                File mfastboot = fileChooser();
+                if (checkMFastbootBin(mfastboot)) {
+                    tab_settings_override_txt_mfastboot_path.setText(mfastboot.getPath());
+                } else {
+                    showDialogErrorIsNotValidToolsDirectorySelected("mfastboot");
                 }
             } catch (Exception e) {
                 showDialogErrorNoDirectorySelected();
@@ -904,6 +936,13 @@ public class Controller implements Initializable {
             return false;
         }
     }
+    private boolean checkMFastbootBin(File f) {
+        if (f.exists()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /** Console **/
     private String runCmd(String... args) throws IOException {
@@ -1080,6 +1119,7 @@ public class Controller implements Initializable {
             PLATFORM_TOOLS=PLATFORM_TOOLS_WIN;
             ADB="adb.exe";
             FASTBOOT="fastboot.exe";
+            MFASTBOOT="mfastboot.exe";
         } else if (isMac()) {
             PLATFORM_TOOLS=PLATFORM_TOOLS_MAC;
         } else if (isUnix()) {
@@ -1118,6 +1158,15 @@ public class Controller implements Initializable {
             tab_settings_override_btn_adb_browse.setDisable(false);
             ADB_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/" + ADB;
         }
+        if (tab_settings_override_btn_mfastboot_override.isSelected()) {
+            tab_settings_override_txt_mfastboot_path.setDisable(true);
+            tab_settings_override_btn_mfastboot_browse.setDisable(true);
+            MFASTBOOT_BINARY=tab_settings_override_txt_mfastboot_path.getText();
+        } else {
+            tab_settings_override_txt_mfastboot_path.setDisable(false);
+            tab_settings_override_btn_mfastboot_browse.setDisable(false);
+            MFASTBOOT_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/"+MFASTBOOT;
+        }
     }
     private void unpackBuildInBinaryDialog(){
         File unpack_directory = directorySaver();
@@ -1125,16 +1174,22 @@ public class Controller implements Initializable {
             unpackBuildInBinary(unpack_directory.getPath());
             tab_settings_override_txt_adb_path.setText(unpack_directory.getPath()+"/"+ADB);
             tab_settings_override_txt_fastboot_path.setText(unpack_directory.getPath()+"/"+FASTBOOT);
+            tab_settings_override_txt_mfastboot_path.setText(unpack_directory.getPath()+"/"+MFASTBOOT);
 
             if(showConfirmDialogs("Unpack binaries", "Operation complete", "Binaries unpacked in  "+unpack_directory.getPath()+".\n\nOverride adb and fastboot to this binary?")){
                 ADB_BINARY=tab_settings_override_txt_adb_path.getText();
                 FASTBOOT_BINARY=tab_settings_override_txt_fastboot_path.getText();
+                MFASTBOOT_BINARY=tab_settings_override_txt_mfastboot_path.getText();
+
                 tab_settings_override_btn_fastboot_override.setSelected(true);
                 tab_settings_override_btn_adb_override.setSelected(true);
+                tab_settings_override_btn_mfastboot_override.setSelected(true);
                 tab_settings_override_txt_fastboot_path.setDisable(true);
                 tab_settings_override_btn_fastboot_browse.setDisable(true);
                 tab_settings_override_txt_adb_path.setDisable(true);
                 tab_settings_override_btn_adb_browse.setDisable(true);
+                tab_settings_override_txt_mfastboot_path.setDisable(true);
+                tab_settings_override_btn_mfastboot_browse.setDisable(true);
             }
             if(showConfirmDialogs("Tools directory path", "Configuration", "Use built-in binary path as tools directory?")){
                 PLATFORM_TOOLS_DIRECTORY=unpack_directory.getPath();
