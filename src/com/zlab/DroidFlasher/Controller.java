@@ -1121,6 +1121,7 @@ public class Controller implements Initializable {
                         String[] cmd_lines = dfsContent.split("\n");
                         for (String args : cmd_lines){
                             String[] commands = args.split(" ");
+                            int last = commands.length-1;
                             switch (commands[0]) {
                                 case "fastboot":
                                     commands[0] = FASTBOOT_BINARY;
@@ -1133,7 +1134,19 @@ public class Controller implements Initializable {
                                     break;
                             }
                             if(commands[1].equals("flash") || commands[1].equals("boot") || commands[1].equals("sideload")){
-                                commands[commands.length-1]=dir.getPath()+"/"+commands[commands.length-1];
+                                if(!new File(commands[last]).exists()){
+                                    commands[last]=dir.getPath()+"/"+commands[last];
+                                }
+                            }
+                            if(commands[1].equals("push")){
+                                if(!new File(commands[2]).exists()){
+                                    commands[2]=dir.getPath()+"/"+commands[2];
+                                }
+                            }
+                            if(commands[3].equals("pull")){
+                                if(!new File(commands[3]).exists()){
+                                    commands[3]=dir.getPath()+"/"+commands[3];
+                                }
                             }
                             runCmdToGlobalAlert(commands);
                         }
