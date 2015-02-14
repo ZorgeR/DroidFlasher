@@ -110,6 +110,8 @@ public class Controller implements Initializable {
     @FXML private ImageView img_console_fastboot;
     @FXML private ImageView img_head_other;
 
+    /** RECOVERY Tab **/
+    @FXML private Button tab_recovery_btn_adb_sideload;
 
     /** Settings Tab **/
     @FXML private TitledPane tab_settings_tool_set_group;
@@ -664,10 +666,26 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
         }).start());
-
         /** Console **/
         tab_fastboot_btn_console.setOnAction((event) -> openConsole(FASTBOOT_BINARY, "Fastboot"));
 
+        /**************/
+        /** RECOVERY **/
+        tab_recovery_btn_adb_sideload.setOnAction((event) -> {
+            try {
+                File localfile = fileChooser();
+                    new Thread(() -> {
+                        try {
+                            Platform.runLater(() -> showDialogInformationGlobal("adb", "Operation in progress", "Try to sideload " + localfile.getName() + "\n\nPlease wait...\n"));
+                            runCmdToGlobalAlert(ADB_BINARY, "sideload", localfile.getPath());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
+            } catch (Exception e) {
+                showDialogErrorNoDirectorySelected();
+            }
+        });
         /**************/
         /** SETTINGS **/
         /** Tools directory select **/
@@ -1114,7 +1132,9 @@ public class Controller implements Initializable {
                                     commands[0] = MFASTBOOT_BINARY;
                                     break;
                             }
-                            commands[commands.length-1]=dir.getPath()+"/"+commands[commands.length-1];
+                            if(commands[1].equals("flash") || commands[1].equals("boot") || commands[1].equals("sideload")){
+                                commands[commands.length-1]=dir.getPath()+"/"+commands[commands.length-1];
+                            }
                             runCmdToGlobalAlert(commands);
                         }
                     } catch (IOException e) {
