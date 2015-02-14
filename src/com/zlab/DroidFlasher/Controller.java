@@ -1130,10 +1130,10 @@ public class Controller implements Initializable {
                         String[] cmd_lines = dfsContent.split("\n");
                         for (String args : cmd_lines){
                             String[] commands = args.split(" ");
-                            final String cmdToConsole = Arrays.toString(commands).replaceAll("[,/[/]]", "");
+                            final String cmdToConsole = Arrays.toString(commands).replaceAll("\\[\\],]", "");
                             Platform.runLater(() -> {
                                 if(global_alert!=null){
-                                    global_alert_text_area.appendText(cmdToConsole + " :\n");
+                                    global_alert_text_area.appendText("exec: " + cmdToConsole + ":\n");
                                 }
                             });
                             int last = commands.length-1;
@@ -1165,6 +1165,11 @@ public class Controller implements Initializable {
                             }
                             runCmdToGlobalAlert(commands);
                         }
+                        Platform.runLater(() -> {
+                            if(global_alert!=null){
+                                global_alert_text_area.appendText("---\n" + "ALL DFS OPERATION COMPLETE.\n"+"---");
+                            }
+                        });
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
