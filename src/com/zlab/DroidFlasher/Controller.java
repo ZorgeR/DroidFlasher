@@ -106,12 +106,24 @@ public class Controller implements Initializable {
     @FXML private Button tab_fastboot_btn_oem_lock_begin;
     @FXML private Button tab_fastboot_btn_console;
     @FXML private Label  tab_fastboot_device_status_txt;
+    @FXML private ProgressBar tab_fastboot_progressbar;
     @FXML private ImageView img_fastboot_status;
     @FXML private ImageView img_console_fastboot;
     @FXML private ImageView img_head_other;
 
     /** RECOVERY Tab **/
     @FXML private Button tab_recovery_btn_adb_sideload;
+    @FXML private Button tab_recovery_btn_flash_zip;
+    @FXML private Button tab_recovery_btn_wipe_cache;
+    @FXML private Button tab_recovery_btn_wipe_data;
+    @FXML private Button tab_recovery_btn_wipe_dalvik;
+    @FXML private Button tab_recovery_btn_backup_all;
+    @FXML private Button tab_recovery_btn_restore;
+    @FXML private Button tab_recovery_btn_mount;
+    @FXML private Button tab_recovery_btn_mkdir;
+    @FXML private Button tab_recovery_btn_chmod;
+    @FXML private Button tab_recovery_btn_off_zip_verify;
+    @FXML private ProgressBar tab_recovery_progressbar;
 
     /** Settings Tab **/
     @FXML private TitledPane tab_settings_tool_set_group;
@@ -256,7 +268,7 @@ public class Controller implements Initializable {
                 if (!remotefile.equals("")) {
                     new Thread(() -> {
                         try {
-                            runCmdAdbPushPull(ADB_BINARY, "push", "-p", localfile.getPath(), remotefile);
+                            runCmdAdbPushPull(tab_adb_progressbar,ADB_BINARY, "push", "-p", localfile.getPath(), remotefile);
 
                             Platform.runLater(() -> showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " pushed to remote path " + remotefile));
                         } catch (IOException e) {
@@ -276,7 +288,7 @@ public class Controller implements Initializable {
                     if(localfile!=null){
                         new Thread(() -> {
                         try {
-                            runCmdAdbPushPull(ADB_BINARY, "pull", "-p", remotefile, localfile.getPath());
+                            runCmdAdbPushPull(tab_adb_progressbar, ADB_BINARY, "pull", "-p", remotefile, localfile.getPath());
                             Platform.runLater(() -> showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " pulled from remote path " + remotefile));
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -686,6 +698,23 @@ public class Controller implements Initializable {
                 showDialogErrorNoDirectorySelected();
             }
         });
+        tab_recovery_btn_flash_zip.setOnAction((event) -> {
+            try {
+                File localfile = fileChooser();
+                String remotefile = remotePushSetPath(localfile.getName());
+                new Thread(() -> {
+                    try {
+                        Platform.runLater(() -> showDialogInformationGlobal("adb", "Operation in progress", "Try to sideload " + localfile.getName() + "\n\nPlease wait...\n"));
+                        runCmdAdbPushPull(tab_recovery_progressbar,ADB_BINARY, "push", "-p", localfile.getPath(), remotefile);
+                        runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "install", remotefile);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            } catch (Exception e) {
+                showDialogErrorNoDirectorySelected();
+            }
+        });
         /**************/
         /** SETTINGS **/
         /** Tools directory select **/
@@ -1009,7 +1038,7 @@ public class Controller implements Initializable {
             e.printStackTrace();
         }
     }
-    private void runCmdAdbPushPull(String... args) throws IOException {
+    private void runCmdAdbPushPull(ProgressBar progressbar, String... args) throws IOException {
         Process proc = Runtime.getRuntime().exec(args);
         InputStream inputStream = proc.getErrorStream();
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -1019,7 +1048,7 @@ public class Controller implements Initializable {
         while ((s = bufferedReader.readLine()) != null) {
             if (s.startsWith("Transferring")) {
                 Double progress = Double.parseDouble(s.split("\\(")[1].split("%")[0]) / 100;
-                Platform.runLater(() -> tab_adb_progressbar.setProgress(progress));
+                Platform.runLater(() -> progressbar.setProgress(progress));
             } else {
                 logToConsole("err:" + s + "\n");
             }

@@ -158,7 +158,7 @@
                         <Image url="@../img/bullet_red.png" />
                      </image>
                   </ImageView>
-                  <ProgressBar fx:id="tab_adb_progressbar1" layoutX="14.0" layoutY="299.0" prefHeight="20.0" prefWidth="573.0" progress="0.0" />
+                  <ProgressBar fx:id="tab_fastboot_progressbar" layoutX="14.0" layoutY="299.0" prefHeight="20.0" prefWidth="573.0" progress="0.0" />
                   <Label fx:id="tab_fastboot_device_status_txt" layoutX="144.0" layoutY="332.0" text="No device detected." />
                   <Button fx:id="tab_fastboot_btn_check_device" layoutX="14.0" layoutY="327.0" mnemonicParsing="false" text="Check device" />
                   <Separator layoutY="37.0" prefHeight="11.0" prefWidth="617.0" />
@@ -255,6 +255,17 @@
                <children>
                   <Button fx:id="tab_recovery_btn_adb_sideload" layoutX="14.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="adb sideload" />
                   <Separator layoutY="37.0" prefHeight="11.0" prefWidth="617.0" />
+                  <Button fx:id="tab_recovery_btn_flash_zip" layoutX="118.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="flash *.zip" />
+                  <Button fx:id="tab_recovery_btn_wipe_cache" layoutX="14.0" layoutY="48.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="wipe cache" />
+                  <Button fx:id="tab_recovery_btn_backup_all" layoutX="118.0" layoutY="48.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="backup all" />
+                  <Button fx:id="tab_recovery_btn_mount" layoutX="221.0" layoutY="48.0" mnemonicParsing="false" text="mount system" />
+                  <Button fx:id="tab_recovery_btn_mkdir" layoutX="330.0" layoutY="48.0" mnemonicParsing="false" text="mkdir" />
+                  <Button fx:id="tab_recovery_btn_wipe_data" layoutX="14.0" layoutY="79.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="wipe data" />
+                  <Button fx:id="tab_recovery_btn_wipe_dalvik" layoutX="14.0" layoutY="110.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="wipe dalvik" />
+                  <Button fx:id="tab_recovery_btn_restore" layoutX="118.0" layoutY="79.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="restore" />
+                  <Button fx:id="tab_recovery_btn_off_zip_verify" layoutX="426.0" layoutY="48.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="160.0" text="turn off zip verification" />
+                  <Button fx:id="tab_recovery_btn_chmod" layoutX="330.0" layoutY="79.0" mnemonicParsing="false" text="chmod" />
+                  <ProgressBar fx:id="tab_recovery_progressbar" layoutX="14.0" layoutY="299.0" prefHeight="20.0" prefWidth="573.0" progress="0.0" />
                </children></AnchorPane>
          </content>
       </Tab>
