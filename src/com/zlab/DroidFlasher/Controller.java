@@ -112,12 +112,13 @@ public class Controller implements Initializable {
     @FXML private ImageView img_head_other;
 
     /** RECOVERY Tab **/
+    @FXML private Button tab_recovery_btn_check_device;
     @FXML private Button tab_recovery_btn_adb_sideload;
     @FXML private Button tab_recovery_btn_flash_zip;
-    @FXML private Button tab_recovery_btn_wipe_cache;
-    @FXML private Button tab_recovery_btn_wipe_data;
-    @FXML private Button tab_recovery_btn_wipe_dalvik;
-    @FXML private Button tab_recovery_btn_backup_all;
+    @FXML private Button tab_recovery_btn_flash_multizip;
+    @FXML private Button tab_recovery_btn_flash_zip_from_sd;
+    @FXML private Button tab_recovery_btn_wipe;
+    @FXML private Button tab_recovery_btn_backup;
     @FXML private Button tab_recovery_btn_restore;
     @FXML private Button tab_recovery_btn_mount;
     @FXML private Button tab_recovery_btn_mkdir;
@@ -125,17 +126,22 @@ public class Controller implements Initializable {
     @FXML private Button tab_recovery_btn_off_zip_verify;
     @FXML private Button tab_recovery_btn_run_dfs;
     @FXML private Button tab_recovery_btn_console;
+    @FXML private CheckBox tab_recovery_chk_wipe_cache;
+    @FXML private CheckBox tab_recovery_chk_wipe_data;
+    @FXML private CheckBox tab_recovery_chk_wipe_dalvik;
     @FXML private MenuItem tab_recovery_btn_reboot_device;
     @FXML private MenuItem tab_recovery_btn_reboot_recovery;
     @FXML private MenuItem tab_recovery_btn_reboot_bootloader;
     @FXML private MenuItem tab_recovery_btn_server_kill;
     @FXML private MenuItem tab_recovery_btn_server_start;
     @FXML private ProgressBar tab_recovery_progressbar;
+    @FXML private Label tab_recovery_device_status_txt;
     @FXML private ImageView img_console_recovery;
     @FXML private ImageView img_head_wipe;
     @FXML private ImageView img_head_flash_from_recovery;
     @FXML private ImageView img_head_backup_from_recovery;
     @FXML private ImageView img_head_recovery_other;
+    @FXML private ImageView img_recovery_status;
 
 
     /** Settings Tab **/
@@ -177,18 +183,20 @@ public class Controller implements Initializable {
         img_head_backup.setImage(new Image(getClass().getResourceAsStream("/img/backups.png")));
         img_adb_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
         img_settings_unpack_binaries.setImage(new Image(getClass().getResourceAsStream("/img/file_extension_zip.png")));
-        img_head_flash.setImage(new Image(getClass().getResourceAsStream("/img/blue-document-binary.png")));
+        img_head_flash.setImage(new Image(getClass().getResourceAsStream("/img/file_extension_bat.png")));
         img_head_unlocking.setImage(new Image(getClass().getResourceAsStream("/img/lock-unlock.png")));
         img_console_adb.setImage(new Image(getClass().getResourceAsStream("/img/terminal-pencil.png")));
         img_console_fastboot.setImage(new Image(getClass().getResourceAsStream("/img/terminal-pencil.png")));
         img_console_recovery.setImage(new Image(getClass().getResourceAsStream("/img/terminal-pencil.png")));
         img_head_other.setImage(new Image(getClass().getResourceAsStream("/img/applications-other.png")));
-        img_head_wipe.setImage(new Image(getClass().getResourceAsStream("/img/blue-document-binary.png")));
-        img_head_flash_from_recovery.setImage(new Image(getClass().getResourceAsStream("/img/blue-document-binary.png")));
+        img_head_wipe.setImage(new Image(getClass().getResourceAsStream("/img/eraser.png")));
+        img_head_flash_from_recovery.setImage(new Image(getClass().getResourceAsStream("/img/file_extension_bat.png")));
         img_head_backup_from_recovery.setImage(new Image(getClass().getResourceAsStream("/img/backups.png")));
-        img_head_recovery_other.setImage(new Image(getClass().getResourceAsStream("/img/blue-document-binary.png")));
+        img_head_recovery_other.setImage(new Image(getClass().getResourceAsStream("/img/applications-other.png")));
+        img_recovery_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
 
-        holdSplitPaneDivider(img_head_fileoperation, img_head_application, img_head_backup, img_head_flash, img_head_unlocking, img_head_other);
+        holdSplitPaneDivider(img_head_fileoperation, img_head_application, img_head_backup, img_head_flash, img_head_unlocking,
+                             img_head_other, img_head_wipe, img_head_flash_from_recovery, img_head_backup_from_recovery,img_head_recovery_other);
 
         /** Set default bin directory **/
         tab_settings_tool_set_txt_tool_directory_browse.setText(PLATFORM_TOOLS_DIRECTORY+"/bin");
@@ -701,9 +709,29 @@ public class Controller implements Initializable {
 
         /**************/
         /** RECOVERY **/
+        tab_recovery_btn_check_device.setOnAction((event) -> {
+            try {
+                String adb_devices_output = runCmd(ADB_BINARY, "devices", "-l");
+                String[] finder = adb_devices_output.split("\n");
+                if (!finder[finder.length - 1].equals("List of devices attached ")) {
+                    img_recovery_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_green.png")));
+                    String[] device_info = finder[finder.length - 1].split("\\s+");
+                    showDialogInformation("Success!", "Adb device detected.", "Device information is: " + device_info[0]);
+
+                    tab_recovery_device_status_txt.setText(device_info[device_info.length-2] + " " + device_info[device_info.length-1] + " " + device_info[device_info.length-3]);
+                } else {
+                    img_recovery_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
+                    showDialogError("Ooops!", "Adb device not detected.", "Try to reconnect.");
+                    tab_recovery_device_status_txt.setText("No device detected.");
+                }
+            } catch (IOException e) {
+                showDialogError("Ooops!", "Adb binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings.");
+            }
+        });
         tab_recovery_btn_adb_sideload.setOnAction((event) -> {
             try {
                 File localfile = fileChooser();
+                if (localfile!=null){
                     new Thread(() -> {
                         try {
                             Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "Try to sideload " + localfile.getName() + "\n\nPlease wait...\n"));
@@ -711,9 +739,9 @@ public class Controller implements Initializable {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    }).start();
+                    }).start();} else {showDialogErrorNoDirectorySelected();}
             } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
+                e.printStackTrace();
             }
         });
         tab_recovery_btn_flash_zip.setOnAction((event) -> {
@@ -722,7 +750,7 @@ public class Controller implements Initializable {
                 String remotefile = remotePushSetPath(localfile.getName());
                 new Thread(() -> {
                     try {
-                        runCmdAdbPushPull(tab_recovery_progressbar,ADB_BINARY, "push", "-p", localfile.getPath(), remotefile);
+                        runCmdAdbPushPull(tab_recovery_progressbar, ADB_BINARY, "push", "-p", localfile.getPath(), remotefile);
                         Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "Try to flash " + localfile.getName() + "\n\nPlease wait...\n"));
                         runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "install", remotefile);
                     } catch (IOException e) {
@@ -733,47 +761,65 @@ public class Controller implements Initializable {
                 showDialogErrorNoDirectorySelected();
             }
         });
-        tab_recovery_btn_wipe_cache.setOnAction((event) -> {
-            try {
-                new Thread(() -> {
-                    try {
-                        Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "wipe cache\n\nPlease wait...\n"));
-                        runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "wipe", "cache");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
+        tab_recovery_btn_flash_multizip.setOnAction((event) -> {
+            try{
+                List<File> localfiles = fileChooserMultiple();
+                if(localfiles!=null){
+                    new Thread(() -> {
+                        try {
+                                for(File f:localfiles){
+                                    Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "Try to flash multiple *.zip" + "\n\nPlease wait...\n"));
+                                    Platform.runLater(() -> {if(global_alert!=null){global_alert_text_area.appendText("exec: push -p "+f.getPath()+" /sdcard/" + f.getName()+"\n");}});
+                                    runCmdToGlobalAlert(ADB_BINARY, "push", "-p", f.getPath(), "/sdcard/" + f.getName());
+                                    Platform.runLater(() -> {if(global_alert!=null){global_alert_text_area.appendText("exec: shell twrp install"+" /sdcard/" + f.getName()+"\n");}});
+                                    runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "install", "/sdcard/" + f.getName());
+                                }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();}
             } catch (Exception e) {
                 showDialogErrorNoDirectorySelected();
             }
         });
-        tab_recovery_btn_wipe_data.setOnAction((event) -> {
+        tab_recovery_btn_flash_zip_from_sd.setOnAction((event) -> {
             try {
-                new Thread(() -> {
+                String remotefile = remotePushSetPath("/sdcard/flash.zip");
+                if(remotefile!=null){
+                    new Thread(() -> {
                     try {
-                        Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "wipe cache\n\nPlease wait...\n"));
-                        runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "wipe", "data");
+                        Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "Try to flash " + remotefile + "\n\nPlease wait...\n"));
+                        runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "install", remotefile);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }).start();
+                }).start();} else {showDialogErrorNoDirectorySelected();}
             } catch (Exception e) {
                 showDialogErrorNoDirectorySelected();
             }
         });
-        tab_recovery_btn_wipe_dalvik.setOnAction((event) -> {
+        tab_recovery_btn_wipe.setOnAction((event) -> {
+            if(tab_recovery_chk_wipe_cache.isSelected() || tab_recovery_chk_wipe_data.isSelected() || tab_recovery_chk_wipe_dalvik.isSelected()){
             try {
                 new Thread(() -> {
                     try {
-                        Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "wipe cache\n\nPlease wait...\n"));
-                        runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "wipe", "dalvik");
+                        Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "wipe\n\nPlease wait...\n"));
+                        if(tab_recovery_chk_wipe_cache.isSelected()){
+                            Platform.runLater(() -> {if(global_alert!=null){global_alert_text_area.appendText("exec: wipe cache\n");}});
+                            runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "wipe", "cache");}
+                        if(tab_recovery_chk_wipe_data.isSelected()){
+                            Platform.runLater(() -> {if(global_alert!=null){global_alert_text_area.appendText("exec: wipe data\n");}});
+                            runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "wipe", "data");}
+                        if(tab_recovery_chk_wipe_dalvik.isSelected()){
+                            Platform.runLater(() -> {if(global_alert!=null){global_alert_text_area.appendText("exec: wipe dalvik\n");}});
+                            runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "wipe", "dalvik");}
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }).start();
             } catch (Exception e) {
                 showDialogErrorNoDirectorySelected();
-            }
+            }}
         });
         tab_recovery_btn_run_dfs.setOnAction((event) -> runDfs());
         tab_recovery_btn_console.setOnAction((event) -> openConsole(ADB_BINARY, "Recovery"));
@@ -819,7 +865,7 @@ public class Controller implements Initializable {
         });
 
         /**
-        tab_recovery_btn_backup_all;
+        tab_recovery_btn_backup;
         tab_recovery_btn_restore;
         tab_recovery_btn_mount;
         tab_recovery_btn_mkdir;

@@ -199,7 +199,7 @@
                               <Label layoutX="35.0" layoutY="5.0" text="Flashing" />
                               <ImageView fx:id="img_head_flash" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="5.0">
                                  <image>
-                                    <Image url="@../img/blue-document-binary.png" />
+                                    <Image url="@../img/file_extension_bat.png" />
                                  </image>
                               </ImageView>
                            </children>
@@ -255,7 +255,7 @@
                <children>
                   <Separator layoutY="37.0" prefHeight="11.0" prefWidth="617.0" />
                   <ProgressBar fx:id="tab_recovery_progressbar" layoutX="14.0" layoutY="299.0" prefHeight="20.0" prefWidth="573.0" progress="0.0" />
-                  <SplitPane dividerPositions="0.13839285714285715" layoutX="14.0" layoutY="51.0" orientation="VERTICAL" prefHeight="222.0" prefWidth="108.0">
+                  <SplitPane dividerPositions="0.20833333333333334" layoutX="14.0" layoutY="51.0" orientation="VERTICAL" prefHeight="146.0" prefWidth="108.0">
                      <effect>
                         <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
                      </effect>
@@ -265,16 +265,17 @@
                               <Label layoutX="35.0" layoutY="5.0" text="Wipe" />
                               <ImageView fx:id="img_head_wipe" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="5.0">
                                  <image>
-                                    <Image url="@../img/blue-document-binary.png" />
+                                    <Image url="@../img/eraser.png" />
                                  </image>
                               </ImageView>
                            </children>
                         </AnchorPane>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="188.0" prefWidth="136.0">
                            <children>
-                              <Button fx:id="tab_recovery_btn_wipe_cache" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="wipe cache" />
-                              <Button fx:id="tab_recovery_btn_wipe_data" layoutX="5.0" layoutY="35.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="wipe data" />
-                              <Button fx:id="tab_recovery_btn_wipe_dalvik" layoutX="5.0" layoutY="65.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="wipe dalvik" />
+                              <Button fx:id="tab_recovery_btn_wipe" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="wipe" />
+                              <CheckBox fx:id="tab_recovery_chk_wipe_cache" layoutX="5.0" layoutY="38.0" mnemonicParsing="false" text="cache" />
+                              <CheckBox fx:id="tab_recovery_chk_wipe_data" layoutX="5.0" layoutY="61.0" mnemonicParsing="false" text="data" />
+                              <CheckBox fx:id="tab_recovery_chk_wipe_dalvik" layoutX="5.0" layoutY="84.0" mnemonicParsing="false" text="dalvik" />
                            </children>
                         </AnchorPane>
                      </items>
@@ -299,7 +300,7 @@
                         <Image url="@../img/terminal-pencil.png" />
                      </image>
                   </ImageView>
-                  <SplitPane dividerPositions="0.13636363636363635" layoutX="129.0" layoutY="51.0" orientation="VERTICAL" prefHeight="222.0" prefWidth="108.0">
+                  <SplitPane dividerPositions="0.18633540372670807" layoutX="129.0" layoutY="51.0" orientation="VERTICAL" prefHeight="162.0" prefWidth="108.0">
                      <effect>
                         <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
                      </effect>
@@ -309,15 +310,17 @@
                               <Label layoutX="35.0" layoutY="5.0" text="Flash" />
                               <ImageView fx:id="img_head_flash_from_recovery" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="5.0">
                                  <image>
-                                    <Image url="@../img/blue-document-binary.png" />
+                                    <Image url="@../img/file_extension_bat.png" />
                                  </image>
                               </ImageView>
                            </children>
                         </AnchorPane>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="188.0" prefWidth="136.0">
                            <children>
-                              <Button fx:id="tab_recovery_btn_flash_zip" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="flash *.zip" />
-                              <Button fx:id="tab_recovery_btn_adb_sideload" layoutX="5.0" layoutY="35.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="adb sideload" />
+                              <Button fx:id="tab_recovery_btn_flash_zip" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="single *.zip" />
+                              <Button fx:id="tab_recovery_btn_adb_sideload" layoutX="5.0" layoutY="95.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="adb sideload" />
+                              <Button fx:id="tab_recovery_btn_flash_zip_from_sd" layoutX="5.0" layoutY="65.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="from sdcard" />
+                              <Button fx:id="tab_recovery_btn_flash_multizip" layoutX="5.0" layoutY="35.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="multiple *.zip" />
                            </children>
                         </AnchorPane>
                      </items>
@@ -332,20 +335,20 @@
                               <Label layoutX="35.0" layoutY="5.0" text="Backup" />
                               <ImageView fx:id="img_head_backup_from_recovery" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="5.0">
                                  <image>
-                                    <Image url="@../img/blue-document-binary.png" />
+                                    <Image url="@../img/backups.png" />
                                  </image>
                               </ImageView>
                            </children>
                         </AnchorPane>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="188.0" prefWidth="136.0">
                            <children>
-                              <Button fx:id="tab_recovery_btn_backup_all" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="backup all" />
-                              <Button fx:id="tab_recovery_btn_restore" layoutX="5.0" layoutY="35.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="restore" />
+                              <Button fx:id="tab_recovery_btn_backup" disable="true" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="backup" />
+                              <Button fx:id="tab_recovery_btn_restore" disable="true" layoutX="5.0" layoutY="156.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="restore" />
                            </children>
                         </AnchorPane>
                      </items>
                   </SplitPane>
-                  <SplitPane dividerPositions="0.13636363636363635" layoutX="359.0" layoutY="51.0" orientation="VERTICAL" prefHeight="222.0" prefWidth="228.0">
+                  <SplitPane dividerPositions="0.13636363636363635" layoutX="414.0" layoutY="51.0" orientation="VERTICAL" prefHeight="222.0" prefWidth="173.0">
                      <effect>
                         <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
                      </effect>
@@ -355,21 +358,28 @@
                               <Label layoutX="35.0" layoutY="5.0" text="Other" />
                               <ImageView fx:id="img_head_recovery_other" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="5.0">
                                  <image>
-                                    <Image url="@../img/blue-document-binary.png" />
+                                    <Image url="@../img/applications-other.png" />
                                  </image>
                               </ImageView>
                            </children>
                         </AnchorPane>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="188.0" prefWidth="136.0">
                            <children>
-                              <Button fx:id="tab_recovery_btn_mount" layoutX="6.0" layoutY="5.0" mnemonicParsing="false" text="mount system" />
-                              <Button fx:id="tab_recovery_btn_mkdir" layoutX="6.0" layoutY="34.0" mnemonicParsing="false" text="mkdir" />
-                              <Button fx:id="tab_recovery_btn_chmod" layoutX="6.0" layoutY="63.0" mnemonicParsing="false" text="chmod" />
-                              <Button fx:id="tab_recovery_btn_off_zip_verify" layoutX="6.0" layoutY="155.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="160.0" text="turn off zip verification" />
+                              <Button fx:id="tab_recovery_btn_mount" disable="true" layoutX="6.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="116.0" text="mount system" />
+                              <Button fx:id="tab_recovery_btn_mkdir" disable="true" layoutX="6.0" layoutY="34.0" mnemonicParsing="false" text="mkdir" />
+                              <Button fx:id="tab_recovery_btn_chmod" disable="true" layoutX="62.0" layoutY="34.0" mnemonicParsing="false" text="chmod" />
+                              <Button fx:id="tab_recovery_btn_off_zip_verify" disable="true" layoutX="6.0" layoutY="155.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="160.0" text="turn off zip verification" />
                            </children>
                         </AnchorPane>
                      </items>
                   </SplitPane>
+                  <ImageView fx:id="img_recovery_status" fitHeight="32.0" fitWidth="32.0" layoutX="113.0" layoutY="324.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/bullet_red.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="tab_recovery_device_status_txt" layoutX="144.0" layoutY="332.0" text="No device detected." />
+                  <Button fx:id="tab_recovery_btn_check_device" layoutX="14.0" layoutY="327.0" mnemonicParsing="false" text="Check device" />
                </children></AnchorPane>
          </content>
       </Tab>
