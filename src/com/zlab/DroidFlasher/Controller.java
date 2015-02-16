@@ -704,8 +704,8 @@ public class Controller implements Initializable {
                 String remotefile = remotePushSetPath(localfile.getName());
                 new Thread(() -> {
                     try {
-                        Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "Try to flash " + localfile.getName() + "\n\nPlease wait...\n"));
                         runCmdAdbPushPull(tab_recovery_progressbar,ADB_BINARY, "push", "-p", localfile.getPath(), remotefile);
+                        Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "Try to flash " + localfile.getName() + "\n\nPlease wait...\n"));
                         runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "install", remotefile);
                     } catch (IOException e) {
                         e.printStackTrace();
