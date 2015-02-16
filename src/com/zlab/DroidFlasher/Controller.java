@@ -123,7 +123,20 @@ public class Controller implements Initializable {
     @FXML private Button tab_recovery_btn_mkdir;
     @FXML private Button tab_recovery_btn_chmod;
     @FXML private Button tab_recovery_btn_off_zip_verify;
+    @FXML private Button tab_recovery_btn_run_dfs;
+    @FXML private Button tab_recovery_btn_console;
+    @FXML private MenuItem tab_recovery_btn_reboot_device;
+    @FXML private MenuItem tab_recovery_btn_reboot_recovery;
+    @FXML private MenuItem tab_recovery_btn_reboot_bootloader;
+    @FXML private MenuItem tab_recovery_btn_server_kill;
+    @FXML private MenuItem tab_recovery_btn_server_start;
     @FXML private ProgressBar tab_recovery_progressbar;
+    @FXML private ImageView img_console_recovery;
+    @FXML private ImageView img_head_wipe;
+    @FXML private ImageView img_head_flash_from_recovery;
+    @FXML private ImageView img_head_backup_from_recovery;
+    @FXML private ImageView img_head_recovery_other;
+
 
     /** Settings Tab **/
     @FXML private TitledPane tab_settings_tool_set_group;
@@ -168,7 +181,12 @@ public class Controller implements Initializable {
         img_head_unlocking.setImage(new Image(getClass().getResourceAsStream("/img/lock-unlock.png")));
         img_console_adb.setImage(new Image(getClass().getResourceAsStream("/img/terminal-pencil.png")));
         img_console_fastboot.setImage(new Image(getClass().getResourceAsStream("/img/terminal-pencil.png")));
+        img_console_recovery.setImage(new Image(getClass().getResourceAsStream("/img/terminal-pencil.png")));
         img_head_other.setImage(new Image(getClass().getResourceAsStream("/img/applications-other.png")));
+        img_head_wipe.setImage(new Image(getClass().getResourceAsStream("/img/blue-document-binary.png")));
+        img_head_flash_from_recovery.setImage(new Image(getClass().getResourceAsStream("/img/blue-document-binary.png")));
+        img_head_backup_from_recovery.setImage(new Image(getClass().getResourceAsStream("/img/backups.png")));
+        img_head_recovery_other.setImage(new Image(getClass().getResourceAsStream("/img/blue-document-binary.png")));
 
         holdSplitPaneDivider(img_head_fileoperation, img_head_application, img_head_backup, img_head_flash, img_head_unlocking, img_head_other);
 
@@ -755,6 +773,48 @@ public class Controller implements Initializable {
                 }).start();
             } catch (Exception e) {
                 showDialogErrorNoDirectorySelected();
+            }
+        });
+        tab_recovery_btn_run_dfs.setOnAction((event) -> runDfs());
+        tab_recovery_btn_console.setOnAction((event) -> openConsole(ADB_BINARY, "Recovery"));
+        tab_recovery_btn_reboot_device.setOnAction((event) -> {
+            try {
+                runCmd(ADB_BINARY, "reboot");
+                showDialogInformation("adb", "Operation complete", "Reboot command sended to device.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        tab_recovery_btn_reboot_recovery.setOnAction((event) -> {
+            try {
+                runCmd(ADB_BINARY, "reboot", "recovery");
+                showDialogInformation("adb", "Operation complete", "Command \"reboot to recovery\" sended to device.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        tab_recovery_btn_reboot_bootloader.setOnAction((event) -> {
+            try {
+                runCmd(ADB_BINARY, "reboot", "bootloader");
+                showDialogInformation("adb", "Operation complete", "Command \"reboot to bootlader\" sended to device.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        tab_recovery_btn_server_kill.setOnAction((event) -> {
+            try {
+                runCmd(ADB_BINARY, "kill-server");
+                showDialogInformation("adb", "Operation complete", "Command kill-server sended to adb.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        tab_recovery_btn_server_start.setOnAction((event) -> {
+            try {
+                runCmd(ADB_BINARY, "kill-server");
+                showDialogInformation("adb", "Operation complete", "Command kill-server sended to adb.");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
 
