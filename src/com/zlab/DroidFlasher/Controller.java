@@ -835,7 +835,6 @@ public class Controller implements Initializable {
             tab_main_txt_area_log.appendText("done...\n");
         });
         tab_settings_override_btn_unpack_binaries.setOnAction((event) -> unpackBuildInBinaryDialog());
-
     }
 
     /** Application **/
