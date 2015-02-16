@@ -688,7 +688,7 @@ public class Controller implements Initializable {
                 File localfile = fileChooser();
                     new Thread(() -> {
                         try {
-                            Platform.runLater(() -> showDialogInformationGlobal("adb", "Operation in progress", "Try to sideload " + localfile.getName() + "\n\nPlease wait...\n"));
+                            Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "Try to sideload " + localfile.getName() + "\n\nPlease wait...\n"));
                             runCmdToGlobalAlert(ADB_BINARY, "sideload", localfile.getPath());
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -704,7 +704,7 @@ public class Controller implements Initializable {
                 String remotefile = remotePushSetPath(localfile.getName());
                 new Thread(() -> {
                     try {
-                        Platform.runLater(() -> showDialogInformationGlobal("adb", "Operation in progress", "Try to sideload " + localfile.getName() + "\n\nPlease wait...\n"));
+                        Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "Try to flash " + localfile.getName() + "\n\nPlease wait...\n"));
                         runCmdAdbPushPull(tab_recovery_progressbar,ADB_BINARY, "push", "-p", localfile.getPath(), remotefile);
                         runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "install", remotefile);
                     } catch (IOException e) {
@@ -715,6 +715,58 @@ public class Controller implements Initializable {
                 showDialogErrorNoDirectorySelected();
             }
         });
+        tab_recovery_btn_wipe_cache.setOnAction((event) -> {
+            try {
+                new Thread(() -> {
+                    try {
+                        Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "wipe cache\n\nPlease wait...\n"));
+                        runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "wipe", "cache");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            } catch (Exception e) {
+                showDialogErrorNoDirectorySelected();
+            }
+        });
+        tab_recovery_btn_wipe_data.setOnAction((event) -> {
+            try {
+                new Thread(() -> {
+                    try {
+                        Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "wipe cache\n\nPlease wait...\n"));
+                        runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "wipe", "data");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            } catch (Exception e) {
+                showDialogErrorNoDirectorySelected();
+            }
+        });
+        tab_recovery_btn_wipe_dalvik.setOnAction((event) -> {
+            try {
+                new Thread(() -> {
+                    try {
+                        Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "wipe cache\n\nPlease wait...\n"));
+                        runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "wipe", "dalvik");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            } catch (Exception e) {
+                showDialogErrorNoDirectorySelected();
+            }
+        });
+
+        /**
+        tab_recovery_btn_backup_all;
+        tab_recovery_btn_restore;
+        tab_recovery_btn_mount;
+        tab_recovery_btn_mkdir;
+        tab_recovery_btn_chmod;
+        tab_recovery_btn_off_zip_verify;
+        **/
+
         /**************/
         /** SETTINGS **/
         /** Tools directory select **/
