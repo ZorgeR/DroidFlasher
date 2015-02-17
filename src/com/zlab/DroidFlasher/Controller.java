@@ -1375,7 +1375,6 @@ public class Controller implements Initializable {
             String adb_devices_output = runCmd(ADB_BINARY, "devices", "-l");
             String[] finder = adb_devices_output.split("\n");
             if (!finder[finder.length - 1].equals("List of devices attached ")) {
-                img_recovery_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_green.png")));
                 String[] device_info = finder[finder.length - 1].split("\\s+");
                 return device_info[0];
             } else {return null;}
