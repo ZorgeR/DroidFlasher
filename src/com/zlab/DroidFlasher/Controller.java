@@ -964,8 +964,7 @@ public class Controller implements Initializable {
             if(!args.equals("")){
                 DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd_HH-mm-ss");
                 Date date = new Date();
-                String backupname = remoteBackupSetName(dateFormat.format(date));
-                String backuppath = remoteRestoreSetName(backupname);
+                String backuppath = remoteRestoreSetName(dateFormat.format(date));
                 if(!backuppath.equals("")){
                     try {
                         final String finalArgs = args;
@@ -974,7 +973,7 @@ public class Controller implements Initializable {
                                     Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "Restore " + backuppath + " "+ finalArgs + "\n\nPlease wait...\n"));
                                     Platform.runLater(() -> {
                                         if (global_alert != null) {
-                                            global_alert_text_area.appendText("exec: shell twrp restore" + backuppath + " " + finalArgs+ "\n");
+                                            global_alert_text_area.appendText("exec: shell twrp restore " + backuppath + " " + finalArgs+ "\n");
                                         }
                                     });
                                     runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "restore", backuppath, finalArgs);
@@ -1139,7 +1138,7 @@ public class Controller implements Initializable {
     }
     private String remoteRestoreSetName(String filename) {
         if(getDeviceID()!=null){
-        TextInputDialog dialog = new TextInputDialog("/sdcard/TWRP/"+getDeviceID()+"/"+filename);
+        TextInputDialog dialog = new TextInputDialog("/sdcard/TWRP/BACKUPS/"+getDeviceID()+"/"+filename);
         dialog.setTitle("Set backup folder");
         dialog.setHeaderText("Set path to backup folder (fully qualified with /sdcard/TWRP/"+getDeviceID()+"/* etc.)");
         dialog.setContentText("Backup path:");
