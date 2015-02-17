@@ -20,10 +20,9 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class Controller implements Initializable {
 
@@ -126,9 +125,20 @@ public class Controller implements Initializable {
     @FXML private Button tab_recovery_btn_off_zip_verify;
     @FXML private Button tab_recovery_btn_run_dfs;
     @FXML private Button tab_recovery_btn_console;
+    @FXML private Button tab_recovery_btn_file_push;
+    @FXML private Button tab_recovery_btn_file_pull;
     @FXML private CheckBox tab_recovery_chk_wipe_cache;
     @FXML private CheckBox tab_recovery_chk_wipe_data;
     @FXML private CheckBox tab_recovery_chk_wipe_dalvik;
+    @FXML private CheckBox tab_recovery_chk_backup_system;
+    @FXML private CheckBox tab_recovery_chk_backup_data;
+    @FXML private CheckBox tab_recovery_chk_backup_cache;
+    @FXML private CheckBox tab_recovery_chk_backup_recovery;
+    @FXML private CheckBox tab_recovery_chk_backup_boot;
+    @FXML private CheckBox tab_recovery_chk_backup_asec;
+    @FXML private CheckBox tab_recovery_chk_backup_sdext;
+    @FXML private CheckBox tab_recovery_chk_backup_compression;
+    @FXML private CheckBox tab_recovery_chk_backup_nomd5;
     @FXML private MenuItem tab_recovery_btn_reboot_device;
     @FXML private MenuItem tab_recovery_btn_reboot_recovery;
     @FXML private MenuItem tab_recovery_btn_reboot_bootloader;
@@ -140,8 +150,10 @@ public class Controller implements Initializable {
     @FXML private ImageView img_head_wipe;
     @FXML private ImageView img_head_flash_from_recovery;
     @FXML private ImageView img_head_backup_from_recovery;
+    @FXML private ImageView img_head_backup_from_recovery_restore;
     @FXML private ImageView img_head_recovery_other;
     @FXML private ImageView img_recovery_status;
+    @FXML private ImageView img_head_fileoperation_recovery;
 
 
     /** Settings Tab **/
@@ -194,9 +206,11 @@ public class Controller implements Initializable {
         img_head_backup_from_recovery.setImage(new Image(getClass().getResourceAsStream("/img/backups.png")));
         img_head_recovery_other.setImage(new Image(getClass().getResourceAsStream("/img/applications-other.png")));
         img_recovery_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
+        img_head_fileoperation_recovery.setImage(new Image(getClass().getResourceAsStream("/img/file_extension_bin.png")));
+        img_head_backup_from_recovery_restore.setImage(new Image(getClass().getResourceAsStream("/img/site_backup_and_restore.png")));
 
         holdSplitPaneDivider(img_head_fileoperation, img_head_application, img_head_backup, img_head_flash, img_head_unlocking,
-                             img_head_other, img_head_wipe, img_head_flash_from_recovery, img_head_backup_from_recovery,img_head_recovery_other);
+                             img_head_other,/** img_head_wipe, */img_head_flash_from_recovery, img_head_backup_from_recovery,img_head_recovery_other,img_head_fileoperation_recovery);
 
         /** Set default bin directory **/
         tab_settings_tool_set_txt_tool_directory_browse.setText(PLATFORM_TOOLS_DIRECTORY+"/bin");
@@ -777,7 +791,7 @@ public class Controller implements Initializable {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    }).start();}
+                    }).start();} else {showDialogErrorNoDirectorySelected();}
             } catch (Exception e) {
                 showDialogErrorNoDirectorySelected();
             }
@@ -785,7 +799,7 @@ public class Controller implements Initializable {
         tab_recovery_btn_flash_zip_from_sd.setOnAction((event) -> {
             try {
                 String remotefile = remotePushSetPath("/sdcard/flash.zip");
-                if(remotefile!=null){
+                if(!remotefile.equals("")){
                     new Thread(() -> {
                     try {
                         Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "Try to flash " + remotefile + "\n\nPlease wait...\n"));
@@ -794,6 +808,45 @@ public class Controller implements Initializable {
                         e.printStackTrace();
                     }
                 }).start();} else {showDialogErrorNoDirectorySelected();}
+            } catch (Exception e) {
+                showDialogErrorNoDirectorySelected();
+            }
+        });
+        tab_recovery_btn_file_push.setOnAction((event) -> {
+            try {
+                File localfile = fileChooser();
+                String remotefile = remotePushSetPath(localfile.getName());
+
+                if (!remotefile.equals("")) {
+                    new Thread(() -> {
+                        try {
+                            runCmdAdbPushPull(tab_adb_progressbar, ADB_BINARY, "push", "-p", localfile.getPath(), remotefile);
+
+                            Platform.runLater(() -> showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " pushed to remote path " + remotefile));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
+                }
+            } catch (Exception e) {
+                showDialogErrorNoDirectorySelected();
+            }
+        });
+        tab_recovery_btn_file_pull.setOnAction((event) -> {
+            try {
+                String remotefile = remotePullSetPath("test.zip");
+                if (!remotefile.equals("")) {
+                    File localfile = fileSaver();
+                    if(localfile!=null){
+                        new Thread(() -> {
+                            try {
+                                runCmdAdbPushPull(tab_adb_progressbar, ADB_BINARY, "pull", "-p", remotefile, localfile.getPath());
+                                Platform.runLater(() -> showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " pulled from remote path " + remotefile));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }).start();}
+                }
             } catch (Exception e) {
                 showDialogErrorNoDirectorySelected();
             }
@@ -814,7 +867,7 @@ public class Controller implements Initializable {
                             Platform.runLater(() -> {if(global_alert!=null){global_alert_text_area.appendText("exec: wipe dalvik\n");}});
                             runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "wipe", "dalvik");}
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        showDialogError("Ooops!", "Adb binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings.");
                     }
                 }).start();
             } catch (Exception e) {
@@ -863,6 +916,77 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
         });
+        tab_recovery_btn_backup.setOnAction((event) -> {
+            String args="";
+            if (tab_recovery_chk_backup_system.isSelected())       {args=args+"S";}
+            if (tab_recovery_chk_backup_data.isSelected())         {args=args+"D";}
+            if (tab_recovery_chk_backup_cache.isSelected())        {args=args+"C";}
+            if (tab_recovery_chk_backup_recovery.isSelected())     {args=args+"R";}
+            if (tab_recovery_chk_backup_boot.isSelected())         {args=args+"B";}
+            if (tab_recovery_chk_backup_asec.isSelected())         {args=args+"A";}
+            if (tab_recovery_chk_backup_sdext.isSelected())        {args=args+"E";}
+            if (tab_recovery_chk_backup_compression.isSelected())  {args=args+"O";}
+            if (tab_recovery_chk_backup_nomd5.isSelected())        {args=args+"M";}
+            if(!args.equals("")){
+                /** http://www.teamw.in/OpenRecoveryScript - backup SDCR123BAEOM foldername */
+                DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd_HH-mm-ss");
+                Date date = new Date();
+                String backupname = remoteBackupSetName(dateFormat.format(date));
+                if(!backupname.equals("")) {
+                        final String finalArgs = args;
+                        new Thread(() -> {
+                            try {
+                                    Platform.runLater(() -> {
+                                        showDialogInformationGlobal("recovery", "Operation in progress", "Backup " + finalArgs + " "+ backupname+ "\n\nPlease wait...\n");
+                                        if (global_alert != null) {
+                                            global_alert_text_area.appendText("exec: shell twrp backup " + finalArgs + " " + backupname+ "\n");
+                                        }
+                                    });
+                                    runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "backup", finalArgs, backupname);
+                            } catch (IOException e) {Platform.runLater(() -> {
+                                showDialogError("Ooops!", "Adb binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings.");});
+                            }
+                        }).start();
+                } else{
+                    showDialogErrorNoDirectorySelected();
+                }}
+        });
+        tab_recovery_btn_restore.setOnAction((event) -> {
+            String args="";
+            if (tab_recovery_chk_backup_system.isSelected())       {args=args+"S";}
+            if (tab_recovery_chk_backup_data.isSelected())         {args=args+"D";}
+            if (tab_recovery_chk_backup_cache.isSelected())        {args=args+"C";}
+            if (tab_recovery_chk_backup_recovery.isSelected())     {args=args+"R";}
+            if (tab_recovery_chk_backup_boot.isSelected())         {args=args+"B";}
+            if (tab_recovery_chk_backup_asec.isSelected())         {args=args+"A";}
+            if (tab_recovery_chk_backup_sdext.isSelected())        {args=args+"E";}
+            if (tab_recovery_chk_backup_nomd5.isSelected())        {args=args+"M";}
+            if(!args.equals("")){
+                DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd_HH-mm-ss");
+                Date date = new Date();
+                String backupname = remoteBackupSetName(dateFormat.format(date));
+                String backuppath = remoteRestoreSetName(backupname);
+                if(!backuppath.equals("")){
+                    try {
+                        final String finalArgs = args;
+                        new Thread(() -> {
+                            try {
+                                    Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "Restore " + backuppath + " "+ finalArgs + "\n\nPlease wait...\n"));
+                                    Platform.runLater(() -> {
+                                        if (global_alert != null) {
+                                            global_alert_text_area.appendText("exec: shell twrp restore" + backuppath + " " + finalArgs+ "\n");
+                                        }
+                                    });
+                                    runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "restore", backuppath, finalArgs);
+                            } catch (IOException e) {
+                                showDialogError("Ooops!", "Adb binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings.");
+                            }
+                        }).start();
+                    } catch (Exception e) {
+                        showDialogErrorNoDirectorySelected();
+                }}
+            }
+         });
 
         /**
         tab_recovery_btn_backup;
@@ -997,6 +1121,36 @@ public class Controller implements Initializable {
         } else {
             return "";
         }
+    }
+    private String remoteBackupSetName(String filename) {
+        if(getDeviceID()!=null){
+        TextInputDialog dialog = new TextInputDialog(filename);
+        dialog.setTitle("Set remote backup name");
+        dialog.setHeaderText("Backup will be stored in /sdcard/TWRP/BACKUPS/" + getDeviceID()+"/*");
+        dialog.setContentText("Backup name:");
+
+        Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()) {
+                return result.get();
+            } else {
+                return "";
+            }
+        } else {return "";}
+    }
+    private String remoteRestoreSetName(String filename) {
+        if(getDeviceID()!=null){
+        TextInputDialog dialog = new TextInputDialog("/sdcard/TWRP/"+getDeviceID()+"/"+filename);
+        dialog.setTitle("Set backup folder");
+        dialog.setHeaderText("Set path to backup folder (fully qualified with /sdcard/TWRP/"+getDeviceID()+"/* etc.)");
+        dialog.setContentText("Backup path:");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            return result.get();
+        } else {
+            return "";
+        }
+        } else {return "";}
     }
 
     /** File chooser **/
@@ -1214,6 +1368,20 @@ public class Controller implements Initializable {
             proc.waitFor();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+    private String getDeviceID(){
+        try{
+            String adb_devices_output = runCmd(ADB_BINARY, "devices", "-l");
+            String[] finder = adb_devices_output.split("\n");
+            if (!finder[finder.length - 1].equals("List of devices attached ")) {
+                img_recovery_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_green.png")));
+                String[] device_info = finder[finder.length - 1].split("\\s+");
+                return device_info[0];
+            } else {return null;}
+        } catch (IOException e) {
+            showDialogError("Ooops!", "Adb binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings.");
+            return null;
         }
     }
     private void openConsole(String binary, String type){

@@ -5,16 +5,19 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+
+<AnchorPane prefHeight="396.0" prefWidth="626.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button id="console_btn_send" fx:id="console_btn_send" layoutX="546.0" layoutY="369.0" mnemonicParsing="false" text="send" />
-      <TextField id="console_text_input" fx:id="console_text_input" layoutX="5.0" layoutY="369.0" prefHeight="26.0" prefWidth="536.0">
+      <TextArea id="console_text_output" fx:id="console_text_output" layoutX="3.0" layoutY="4.0" prefHeight="359.0" prefWidth="619.0" AnchorPane.bottomAnchor="33.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
          <font>
             <Font name="Monospaced Regular" size="13.0" />
-         </font></TextField>
-      <TextArea id="console_text_output" fx:id="console_text_output" layoutX="5.0" layoutY="5.0" prefHeight="359.0" prefWidth="588.0">
+         </font>
+      </TextArea>
+      <TextField id="console_text_input" fx:id="console_text_input" layoutX="3.0" layoutY="367.0" prefHeight="26.0" prefWidth="568.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="55.0">
          <font>
             <Font name="Monospaced Regular" size="13.0" />
-         </font></TextArea>
+         </font>
+      </TextField>
+      <Button id="console_btn_send" fx:id="console_btn_send" layoutX="575.0" layoutY="367.0" mnemonicParsing="false" text="send" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="4.0" />
    </children>
-</Pane>
+</AnchorPane>
