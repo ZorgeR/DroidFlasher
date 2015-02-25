@@ -17,6 +17,8 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -988,8 +990,6 @@ public class Controller implements Initializable {
          });
 
         /**
-        tab_recovery_btn_backup;
-        tab_recovery_btn_restore;
         tab_recovery_btn_mount;
         tab_recovery_btn_mkdir;
         tab_recovery_btn_chmod;
@@ -1481,40 +1481,62 @@ public class Controller implements Initializable {
                         String[] cmd_lines = dfsContent.split("\n");
                         for (String args : cmd_lines){
                             String[] commands = args.split(" ");
+                            int last = commands.length-1;
+
+                            if(!commands[0].equals("dfs")){
+
                             final String cmdToConsole = Arrays.toString(commands).replaceAll("[,]", "");
                             Platform.runLater(() -> {
                                 if(global_alert!=null){
                                     global_alert_text_area.appendText("exec: " + cmdToConsole + ":\n");
                                 }
                             });
-                            int last = commands.length-1;
-                            switch (commands[0]) {
-                                case "fastboot":
-                                    commands[0] = FASTBOOT_BINARY;
-                                    break;
-                                case "adb":
-                                    commands[0] = ADB_BINARY;
-                                    break;
-                                case "mfastboot":
-                                    commands[0] = MFASTBOOT_BINARY;
-                                    break;
-                            }
-                            if(commands[1].equals("flash") || commands[1].equals("boot") || commands[1].equals("sideload")){
-                                if(!new File(commands[last]).exists()){
-                                    commands[last]=dir.getPath()+"/"+commands[last];
+
+                                switch (commands[0]) {
+                                    case "fastboot":
+                                        commands[0] = FASTBOOT_BINARY;
+                                        break;
+                                    case "adb":
+                                        commands[0] = ADB_BINARY;
+                                        break;
+                                    case "mfastboot":
+                                        commands[0] = MFASTBOOT_BINARY;
+                                        break;
+                                }
+                                if(commands[1].equals("flash") || commands[1].equals("boot") || commands[1].equals("sideload")){
+                                    if(!new File(commands[last]).exists()){
+                                        commands[last]=dir.getPath()+"/"+commands[last];
+                                    }
+                                }
+                                if(commands[1].equals("push")){
+                                    if(!new File(commands[2]).exists()){
+                                        commands[2]=dir.getPath()+"/"+commands[2];
+                                    }
+                                }
+                                if(commands[1].equals("pull")){
+                                    if(!new File(commands[3]).exists()){
+                                        commands[3]=dir.getPath()+"/"+commands[3];
+                                    }
+                                }
+                                runCmdToGlobalAlert(commands);
+                            } else if (commands[0].equals("dfs")){
+                                /** TODO: DFS commands fabric, need to implement more commands **/
+                                if(commands[1].equals("download")){
+                                    /** dfs download http://images.org/moto/boot.img **/
+                                    URL remotefile = new URL(commands[2]);
+
+                                    String fileName = remotefile.getFile();
+                                    fileName = fileName.substring( fileName.lastIndexOf('/')+1, fileName.length() );
+
+                                    ReadableByteChannel rbc = Channels.newChannel(remotefile.openStream());
+                                    FileOutputStream fos = new FileOutputStream(dir+"/"+fileName);
+                                    fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+                                } else if(commands[1].equals("radio")){
+                                    /** dfs radiobox TWRP-2.8.5.0|PhilZ-Touch-6.58.7 **/
+                                } else if(commands[1].equals("checkbox")){
+                                    /** dfs checkbox TWRP-2.8.5.0|PhilZ-Touch-6.58.7 **/
                                 }
                             }
-                            if(commands[1].equals("push")){
-                                if(!new File(commands[2]).exists()){
-                                    commands[2]=dir.getPath()+"/"+commands[2];
-                                }
-                            }
-                            if(commands[1].equals("pull")){
-                                if(!new File(commands[3]).exists()){
-                                    commands[3]=dir.getPath()+"/"+commands[3];
-                                }
-                            }
-                            runCmdToGlobalAlert(commands);
                         }
                         Platform.runLater(() -> {
                             if(global_alert!=null){
