@@ -21,6 +21,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
+        /** Set Windows native theme **/
+        //AeroFX.style();
+        //FlatterFX.style();
+        //setUserAgentStylesheet(STYLESHEET_CASPIAN);
+
         globalStage = primaryStage;
 
         URL mainUIlocation = getClass().getResource("/layout/Main.fxml");
@@ -35,6 +40,8 @@ public class Main extends Application {
         primaryStage.setTitle(APP_NAME);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+
+        //primaryStage.getScene().getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
 
         startApp();
     }
