@@ -1,5 +1,6 @@
 package com.zlab.DroidFlasher;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +11,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -43,11 +47,13 @@ public class Controller implements Initializable {
     public static String ADB_BINARY="";
     public static String FASTBOOT_BINARY="";
     public static String MFASTBOOT_BINARY="";
-    public boolean SIMPLEMODE;
+    public static boolean SIMPLEMODE;
     private static Alert global_alert;
     private static TextArea global_alert_text_area;
 
     /** Init UI **/
+    private Scene mScene;
+    @FXML private TabPane top_tab_pane;
 
     /** Adb Tab **/
     @FXML private Button tab_adb_btn_check_device;
@@ -222,6 +228,8 @@ public class Controller implements Initializable {
         /** Set default bin directory **/
         tab_settings_tool_set_txt_tool_directory_browse.setText(PLATFORM_TOOLS_DIRECTORY+"/bin");
 
+        initDragAndDrop();
+
         setPlatform();
         setBinaries();
 
@@ -231,7 +239,41 @@ public class Controller implements Initializable {
             }
         }
     }
+    private void initDragAndDrop(){
+        mScene = top_tab_pane.getScene();
 
+        mScene.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                if (db.hasFiles()) {
+                    event.acceptTransferModes(TransferMode.COPY);
+                } else {
+                    event.consume();
+                }
+            }
+        });
+
+        // Dropping over surface
+        mScene.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                boolean success = false;
+                if (db.hasFiles()) {
+                    success = true;
+                    String filePath = null;
+                    for (File file : db.getFiles()) {
+                        filePath = file.getAbsolutePath();
+                        System.out.println("drag and drop: " + filePath);
+                        runDfs(filePath);
+                    }
+                }
+                event.setDropCompleted(success);
+                event.consume();
+            }
+        });
+    }
     /** Buttons initialize **/
     public void initToggleBtn() {
         tab_settings_override_btn_fastboot_override.setOnAction((event) -> setBinaries());
@@ -239,10 +281,15 @@ public class Controller implements Initializable {
         tab_settings_override_btn_mfastboot_override.setOnAction((event) -> setBinaries());
     }
 
-
-    private void runDfs(){
+    private void runDfs(String dfsfilepath){
         try {
-            File dfsFile = fileChooserAdv("Select *.dfs script file");
+            File dfsFile;
+            if(dfsfilepath==null){
+                dfsFile = fileChooserAdv("Select *.dfs script file");
+            } else {
+                dfsFile = new File(dfsfilepath);
+            }
+
             if (dfsFile == null) {
                 throw new NullPointerException("Nothing selected");
             }
@@ -686,7 +733,7 @@ public class Controller implements Initializable {
         tab_adb_btn_reboot_device.setOnAction((event) -> dfsAdbRebootDeviceNormal());
         tab_adb_btn_reboot_recovery.setOnAction((event) -> dfsAdbRebootDeviceToRecovery());
         tab_adb_btn_reboot_bootloader.setOnAction((event) -> dfsAdbRebootDeviceToBootloader());
-        tab_adb_btn_run_dfs.setOnAction((event) -> runDfs());
+        tab_adb_btn_run_dfs.setOnAction((event) -> runDfs(null));
         /** File control **/
         tab_adb_btn_file_push.setOnAction((event) -> dfsAdbFilePush());
         tab_adb_btn_file_pull.setOnAction((event) -> dfsAdbFilePull());
@@ -735,7 +782,7 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
         });
-        tab_fastboot_btn_run_dfs.setOnAction((event) -> runDfs());
+        tab_fastboot_btn_run_dfs.setOnAction((event) -> runDfs(null));
         tab_fastboot_btn_flash_recovery.setOnAction((event) -> {
             File localfile = fileChooser();
             if(localfile!=null){
@@ -1021,7 +1068,7 @@ public class Controller implements Initializable {
                 showDialogErrorNoDirectorySelected();
             }}
         });
-        tab_recovery_btn_run_dfs.setOnAction((event) -> runDfs());
+        tab_recovery_btn_run_dfs.setOnAction((event) -> runDfs(null));
         tab_recovery_btn_console.setOnAction((event) -> openConsole(ADB_BINARY, "Recovery"));
         tab_recovery_btn_reboot_device.setOnAction((event) -> {
             try {
@@ -1209,7 +1256,7 @@ public class Controller implements Initializable {
         });
         tab_settings_override_btn_unpack_binaries.setOnAction((event) -> unpackBuildInBinaryDialog());
         /** Simple mode **/
-        tab_settings_others_chk_simplemode.setOnAction((event) -> {if(tab_settings_others_chk_simplemode.isSelected()){SIMPLEMODE=true;}else{SIMPLEMODE=false;}});
+        tab_settings_others_chk_simplemode.setOnAction((event) -> SIMPLEMODE = tab_settings_others_chk_simplemode.isSelected());
     }
 
     /** Application **/
@@ -1611,7 +1658,7 @@ public class Controller implements Initializable {
             e.printStackTrace();
         }
     }
-    static String readFileToString(String path, Charset encoding) throws IOException {
+    String readFileToString(String path, Charset encoding) throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(path));
         return new String(encoded, encoding);
     }
