@@ -17,8 +17,6 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -45,6 +43,7 @@ public class Controller implements Initializable {
     public static String ADB_BINARY="";
     public static String FASTBOOT_BINARY="";
     public static String MFASTBOOT_BINARY="";
+    public boolean SIMPLEMODE;
     private static Alert global_alert;
     private static TextArea global_alert_text_area;
 
@@ -180,6 +179,7 @@ public class Controller implements Initializable {
         @FXML private ToggleButton tab_settings_override_btn_mfastboot_override;
         /** others */
         @FXML private Button tab_settings_others_btn_reinitialize;
+        @FXML private CheckBox tab_settings_others_chk_simplemode;
 
     /** Console Tab **/
     @FXML private Accordion tab_settings_accord;
@@ -216,6 +216,9 @@ public class Controller implements Initializable {
         holdSplitPaneDivider(img_head_fileoperation, img_head_application, img_head_backup, img_head_flash, img_head_unlocking,
                              img_head_other,/** img_head_wipe, */img_head_flash_from_recovery, img_head_backup_from_recovery,img_head_recovery_other,img_head_fileoperation_recovery);
 
+        /** Set simple mode **/
+        if(tab_settings_others_chk_simplemode.isSelected()){
+            SIMPLEMODE=true;}
         /** Set default bin directory **/
         tab_settings_tool_set_txt_tool_directory_browse.setText(PLATFORM_TOOLS_DIRECTORY+"/bin");
 
@@ -238,10 +241,23 @@ public class Controller implements Initializable {
 
 
     private void runDfs(){
-        try{
+        try {
             File dfsFile = fileChooserAdv("Select *.dfs script file");
-            if (dfsFile==null){throw new NullPointerException("Nothing selected");}
-            File dir = directoryChooserAdv("Select working directory (with images)");
+            if (dfsFile == null) {
+                throw new NullPointerException("Nothing selected");
+            }
+            File dir;
+
+            if (!SIMPLEMODE){
+                dir = directoryChooserAdv("Select working directory (with images)");
+            } else {
+                Date now = new Date();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("YY.MM.DD-hh-mm-ss");
+                String time = dateFormat.format(now);
+                dir = new File(System.getProperty("user.home")+File.separator+"Downloads"+File.separator+time);
+                dir.mkdir();
+            }
+
             if(dir!=null){
                 new Thread(() -> {
                     try {
@@ -302,7 +318,7 @@ public class Controller implements Initializable {
                                         fileName = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.length());
 
                                         Download dld = new Download(remotefile, dir.getPath());
-                                        new Thread(() -> {dld.run();});
+                                        new Thread(dld::run);
                                         /*
                                         ReadableByteChannel rbc = Channels.newChannel(remotefile.openStream());
                                         FileOutputStream fos = new FileOutputStream(dir + "/" + fileName);
@@ -1192,6 +1208,8 @@ public class Controller implements Initializable {
             tab_main_txt_area_log.appendText("done...\n");
         });
         tab_settings_override_btn_unpack_binaries.setOnAction((event) -> unpackBuildInBinaryDialog());
+        /** Simple mode **/
+        tab_settings_others_chk_simplemode.setOnAction((event) -> {if(tab_settings_others_chk_simplemode.isSelected()){SIMPLEMODE=true;}else{SIMPLEMODE=false;}});
     }
 
     /** Application **/
@@ -1728,7 +1746,7 @@ public class Controller implements Initializable {
     }
 
     public List<String> parseStringToArray(String str){
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(str);
         while (m.find())
             list.add(m.group(1).replace("\"", ""));
