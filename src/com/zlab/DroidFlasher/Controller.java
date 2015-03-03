@@ -25,6 +25,8 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Controller implements Initializable {
 
@@ -233,102 +235,183 @@ public class Controller implements Initializable {
         tab_settings_override_btn_adb_override.setOnAction((event) -> setBinaries());
         tab_settings_override_btn_mfastboot_override.setOnAction((event) -> setBinaries());
     }
-    public void initBtn() {
-        /*********/
-        /** ADB **/
-        /** Check device **/
-        tab_adb_btn_check_device.setOnAction((event) -> {
-            try {
-                String adb_devices_output = runCmd(ADB_BINARY, "devices", "-l");
-                String[] finder = adb_devices_output.split("\n");
-                if (!finder[finder.length - 1].equals("List of devices attached ")) {
-                    img_adb_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_green.png")));
-                    String[] device_info = finder[finder.length - 1].split("\\s+");
-                    showDialogInformation("Success!", "Adb device detected.", "Device information is: " + device_info[0]);
 
-                    tab_adb_device_status_txt.setText(device_info[device_info.length-2] + " " + device_info[device_info.length-1] + " " + device_info[device_info.length-3]);
-                } else {
-                    img_adb_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
-                    showDialogError("Ooops!", "Adb device not detected.", "Try to reconnect.");
-                    tab_adb_device_status_txt.setText("No device detected.");
-                }
-            } catch (IOException e) {
-                showDialogError("Ooops!", "Adb binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings.");
-            }
-        });
-        /** Server kill start **/
-        tab_adb_btn_server_kill.setOnAction((event) -> {
-            try {
-                runCmd(ADB_BINARY, "kill-server");
-                showDialogInformation("adb", "Operation complete", "Command kill-server sended to adb.");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        tab_adb_btn_server_start.setOnAction((event) -> {
-            try {
-                runCmd(ADB_BINARY, "start-server");
-                showDialogInformation("adb", "Operation complete", "Command start-server sended to adb.");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        /** Console **/
-        tab_adb_btn_console.setOnAction((event) -> openConsole(ADB_BINARY, "Adb"));
-        /** Reboot device **/
-        tab_adb_btn_reboot_device.setOnAction((event) -> {
-            try {
-                runCmd(ADB_BINARY, "reboot");
-                showDialogInformation("adb", "Operation complete", "Reboot command sended to device.");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        tab_adb_btn_reboot_recovery.setOnAction((event) -> {
-            try {
-                runCmd(ADB_BINARY, "reboot", "recovery");
-                showDialogInformation("adb", "Operation complete", "Command \"reboot to recovery\" sended to device.");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        tab_adb_btn_reboot_bootloader.setOnAction((event) -> {
-            try {
-                runCmd(ADB_BINARY, "reboot", "bootloader");
-                showDialogInformation("adb", "Operation complete", "Command \"reboot to bootlader\" sended to device.");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        tab_adb_btn_run_dfs.setOnAction((event) -> runDfs());
-        /** File control **/
-        tab_adb_btn_file_push.setOnAction((event) -> {
-            try {
-                File localfile = fileChooser();
-                String remotefile = remotePushSetPath(localfile.getName());
 
-                if (!remotefile.equals("")) {
-                    new Thread(() -> {
-                        try {
-                            runCmdAdbPushPull(tab_adb_progressbar,ADB_BINARY, "push", "-p", localfile.getPath(), remotefile);
+    private void runDfs(){
+        try{
+            File dfsFile = fileChooserAdv("Select *.dfs script file");
+            File dir = directoryChooserAdv("Select working directory (with images)");
+            if(dir!=null && dfsFile!=null){
+                new Thread(() -> {
+                    try {
+                        Platform.runLater(() -> showDialogInformationGlobal("DFS", "Operation in progress", "Running *.dfs script " + dfsFile.getName() + "\n\nPlease wait...\n"));
+                        String dfsContent = readFileToString(dfsFile.getPath(), Charset.defaultCharset());
+                        String[] cmd_lines = dfsContent.split("\n");
+                        for (String args : cmd_lines){
+                            //String[] commands = args.split(" ");
+                            String[] commands = (String[]) parseStringToArray(args).toArray();
 
-                            Platform.runLater(() -> showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " pushed to remote path " + remotefile));
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                            int last = commands.length-1;
+
+                            if(!commands[0].equals("dfs")){
+
+                                final String cmdToConsole = Arrays.toString(commands).replaceAll("[,]", "");
+                                Platform.runLater(() -> {
+                                    if(global_alert!=null){
+                                        global_alert_text_area.appendText("exec: " + cmdToConsole + ":\n");
+                                    }
+                                });
+
+                                switch (commands[0]) {
+                                    case "fastboot":
+                                        commands[0] = FASTBOOT_BINARY;
+                                        break;
+                                    case "adb":
+                                        commands[0] = ADB_BINARY;
+                                        break;
+                                    case "mfastboot":
+                                        commands[0] = MFASTBOOT_BINARY;
+                                        break;
+                                }
+                                if(commands[1].equals("flash") || commands[1].equals("boot") || commands[1].equals("sideload")){
+                                    if(!new File(commands[last]).exists()){
+                                        commands[last]=dir.getPath()+"/"+commands[last];
+                                    }
+                                }
+                                if(commands[1].equals("push")){
+                                    if(!new File(commands[2]).exists()){
+                                        commands[2]=dir.getPath()+"/"+commands[2];
+                                    }
+                                }
+                                if(commands[1].equals("pull")){
+                                    if(!new File(commands[3]).exists()){
+                                        commands[3]=dir.getPath()+"/"+commands[3];
+                                    }
+                                }
+                                runCmdToGlobalAlert(commands);
+                            } else if (commands[0].equals("dfs")){
+                                /** TODO: DFS commands fabric, need to implement more commands **/
+                                switch (commands[1]) {
+                                    case "download":
+                                        /** dfs download http://images.org/moto/boot.img **/
+                                        URL remotefile = new URL(commands[2]);
+
+                                        String fileName = remotefile.getFile();
+                                        fileName = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.length());
+
+                                        ReadableByteChannel rbc = Channels.newChannel(remotefile.openStream());
+                                        FileOutputStream fos = new FileOutputStream(dir + "/" + fileName);
+                                        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+                                        break;
+                                    case "radio":
+                                        /** dfs radiobox TWRP-2.8.5.0|PhilZ-Touch-6.58.7 **/
+                                        break;
+                                    case "checkbox":
+                                        /** dfs checkbox TWRP-2.8.5.0|PhilZ-Touch-6.58.7 **/
+                                        break;
+                                }
+                            }
                         }
-                    }).start();
-                }
-            } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
+                        Platform.runLater(() -> {
+                            if(global_alert!=null){
+                                global_alert_text_area.appendText("---\n" + "ALL DFS OPERATION COMPLETE.\n"+"---");
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();}
+        } catch (Exception e) {
+            showDialogErrorNoDirectorySelected();
+        }
+    }
+    /** ADB Commands **/
+    private void dfsAdbCheckStatus(ImageView status_image, Label status_label){
+        try {
+            String adb_devices_output = runCmd(ADB_BINARY, "devices", "-l");
+            String[] finder = adb_devices_output.split("\n");
+            if (!finder[finder.length - 1].equals("List of devices attached ")) {
+                status_image.setImage(new Image(getClass().getResourceAsStream("/img/bullet_green.png")));
+                String[] device_info = finder[finder.length - 1].split("\\s+");
+                showDialogInformation("Success!", "Adb device detected.", "Device information is: " + device_info[0]);
+
+                status_label.setText(device_info[device_info.length-2] + " " + device_info[device_info.length-1] + " " + device_info[device_info.length-3]);
+            } else {
+                status_image.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
+                showDialogError("Ooops!", "Adb device not detected.", "Try to reconnect.");
+                status_label.setText("No device detected.");
             }
-        });
-        tab_adb_btn_file_pull.setOnAction((event) -> {
-            try {
-                String remotefile = remotePullSetPath("test.zip");
-                if (!remotefile.equals("")) {
-                    File localfile = fileSaver();
-                    if(localfile!=null){
-                        new Thread(() -> {
+        } catch (IOException e) {
+            showDialogError("Ooops!", "Adb binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings.");
+        }
+    }
+    private void dfsAdbKillServer(){
+        try {
+            runCmd(ADB_BINARY, "kill-server");
+            showDialogInformation("adb", "Operation complete", "Command kill-server sended to adb.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void dfsAdbStartServer(){
+        try {
+            runCmd(ADB_BINARY, "start-server");
+            showDialogInformation("adb", "Operation complete", "Command start-server sended to adb.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void dfsAdbRebootDeviceNormal(){
+        try {
+            runCmd(ADB_BINARY, "reboot");
+            showDialogInformation("adb", "Operation complete", "Reboot command sended to device.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void dfsAdbRebootDeviceToRecovery(){
+        try {
+            runCmd(ADB_BINARY, "reboot", "recovery");
+            showDialogInformation("adb", "Operation complete", "Command \"reboot to recovery\" sended to device.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void dfsAdbRebootDeviceToBootloader(){
+        try {
+            runCmd(ADB_BINARY, "reboot", "bootloader");
+            showDialogInformation("adb", "Operation complete", "Command \"reboot to bootlader\" sended to device.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void dfsAdbFilePush(){
+        try {
+            File localfile = fileChooser();
+            String remotefile = remotePushSetPath(localfile.getName());
+
+            if (!remotefile.equals("")) {
+                new Thread(() -> {
+                    try {
+                        runCmdAdbPushPull(tab_adb_progressbar,ADB_BINARY, "push", "-p", localfile.getPath(), remotefile);
+
+                        Platform.runLater(() -> showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " pushed to remote path " + remotefile));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }
+        } catch (Exception e) {
+            showDialogErrorNoDirectorySelected();
+        }
+    }
+    private void dfsAdbFilePull(){
+        try {
+            String remotefile = remotePullSetPath("test.zip");
+            if (!remotefile.equals("")) {
+                File localfile = fileSaver();
+                if(localfile!=null){
+                    new Thread(() -> {
                         try {
                             runCmdAdbPushPull(tab_adb_progressbar, ADB_BINARY, "pull", "-p", remotefile, localfile.getPath());
                             Platform.runLater(() -> showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " pulled from remote path " + remotefile));
@@ -336,49 +419,48 @@ public class Controller implements Initializable {
                             e.printStackTrace();
                         }
                     }).start();}
-                }
-            } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
             }
-        });
-        /** Application **/
-        tab_adb_btn_install.setOnAction((event) -> {
-            try{
+        } catch (Exception e) {
+            showDialogErrorNoDirectorySelected();
+        }
+    }
+    private void dfsAdbInstallApp(){
+        try{
             File localfile = fileChooser();
-                if(localfile!=null){
-            new Thread(() -> {
-                try {
-                    String log;
-                    if(getInstallArgs(false)==null) {
-                        log=runCmd(ADB_BINARY, "install", localfile.getPath());
-                    } else {
-                        log=runCmd(ADB_BINARY, "install", getInstallArgs(false), localfile.getPath());
-                    }
-                    Platform.runLater(() -> tab_adb_progressbar.setProgress(1.0));
-
-                    Platform.runLater(() -> {
-                        if(log.contains("INSTALL_PARSE_FAILED_NO_CERTIFICATES")){
-                            showDialogError("Error","Installation FAIL!","Selected apk is not signed!");
-                        } else if (log.contains("INSTALL_FAILED_ALREADY_EXISTS")) {
-                            showDialogError("Error","Installation FAIL!","Application exist! Use replace option to overwrite.");
-                        } else if (log.contains("Failure")) {
-                            showDialogError("Error","Installation FAIL!","Can't install APK, see console for detail.");
+            if(localfile!=null){
+                new Thread(() -> {
+                    try {
+                        String log;
+                        if(getInstallArgs(false)==null) {
+                            log=runCmd(ADB_BINARY, "install", localfile.getPath());
                         } else {
-                            showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " installed on device.");
+                            log=runCmd(ADB_BINARY, "install", getInstallArgs(false), localfile.getPath());
                         }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();}
-            } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
-            }
-        });
-        tab_adb_btn_install_multiple.setOnAction((event) -> {
-            try{
+                        Platform.runLater(() -> tab_adb_progressbar.setProgress(1.0));
+
+                        Platform.runLater(() -> {
+                            if(log.contains("INSTALL_PARSE_FAILED_NO_CERTIFICATES")){
+                                showDialogError("Error","Installation FAIL!","Selected apk is not signed!");
+                            } else if (log.contains("INSTALL_FAILED_ALREADY_EXISTS")) {
+                                showDialogError("Error","Installation FAIL!","Application exist! Use replace option to overwrite.");
+                            } else if (log.contains("Failure")) {
+                                showDialogError("Error","Installation FAIL!","Can't install APK, see console for detail.");
+                            } else {
+                                showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " installed on device.");
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();}
+        } catch (Exception e) {
+            showDialogErrorNoDirectorySelected();
+        }
+    }
+    private void dfsAdbInstallMultipleApp(){
+        try{
             List<File> localfiles = fileChooserMultiple();
-                if(localfiles!=null){
+            if(localfiles!=null){
                 new Thread(() -> {
                     try {
                         String log="";
@@ -410,86 +492,85 @@ public class Controller implements Initializable {
 
                             showDialogInformation("adb", "Operation complete",
                                     "Success: "+success
-                                    +"\nFailure: "+failure+"\n"
-                                    +"\nSee Console for detail."+"\n"
-                                    +"\nFile list:\n"+Arrays.asList(localfiles).toString().replace(", ","\n").replace("[","").replace("]",""));
+                                            +"\nFailure: "+failure+"\n"
+                                            +"\nSee Console for detail."+"\n"
+                                            +"\nFile list:\n"+Arrays.asList(localfiles).toString().replace(", ","\n").replace("[","").replace("]",""));
                         });
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }).start();}
-            } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
-            }
-        });
-        tab_adb_btn_uninstall.setOnAction((event) -> {
-            try {
-                String packagename = setUninstallPackage("com.zlab.datFM");
-                if(!packagename.equals("")){
-                    new Thread(() -> {
-                        try {
-                            final String finalLog = runCmd(ADB_BINARY, "uninstall", packagename);
-                            Platform.runLater(() -> {
-                                //int failure = (finalLog.length() - finalLog.substring(0).replaceAll("Failure", "").length())/7;
-                                int success = (finalLog.length() - finalLog.substring(0).replaceAll("Success","").length())/7;
+        } catch (Exception e) {
+            showDialogErrorNoDirectorySelected();
+        }
+    }
+    private void dfsAdbUninstallApp(){
+        try {
+            String packagename = setUninstallPackage("com.zlab.datFM");
+            if(!packagename.equals("")){
+                new Thread(() -> {
+                    try {
+                        final String finalLog = runCmd(ADB_BINARY, "uninstall", packagename);
+                        Platform.runLater(() -> {
+                            //int failure = (finalLog.length() - finalLog.substring(0).replaceAll("Failure", "").length())/7;
+                            int success = (finalLog.length() - finalLog.substring(0).replaceAll("Success","").length())/7;
 
-                                if(success==1){
-                                    showDialogInformation("adb", "Operation complete", "Package " + packagename + " uninstalled from device,");
-                                } else {
-                                    showDialogInformation("adb", "Operation not complete", "Can't uninstall " + packagename + ", see Console for detail.");
-                                }
-                                /** FOR THE NEXT RELEASE (MULTIPLE UNINSTALLER)
-                                showDialogInformation("adb", "Operation complete",
-                                        "Success: "+success
-                                                +"\nFailure: "+failure+"\n"
-                                                +"\nSee Console for detail."+"\n");*/
-                            });
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }).start();}
-            } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
-            }
-        });
-        tab_adb_btn_uninstall_keep_data.setOnAction((event) -> {
+                            if(success==1){
+                                showDialogInformation("adb", "Operation complete", "Package " + packagename + " uninstalled from device,");
+                            } else {
+                                showDialogInformation("adb", "Operation not complete", "Can't uninstall " + packagename + ", see Console for detail.");
+                            }
+                            /** FOR THE NEXT RELEASE (MULTIPLE UNINSTALLER)
+                             showDialogInformation("adb", "Operation complete",
+                             "Success: "+success
+                             +"\nFailure: "+failure+"\n"
+                             +"\nSee Console for detail."+"\n");*/
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();}
+        } catch (Exception e) {
+            showDialogErrorNoDirectorySelected();
+        }
+    }
+    private void dfsAdbUninstallAppKeepData(){
 
-            boolean keep = showConfirmDialogs("WARNING!", "PLEASE READ CAREFULLY!", "The -k option uninstalls the application while retaining the data/cache.\n" +
-                    "\" +\n" +
-                    "                        \"At the moment, there is no way to remove the remaining data.\\n\" +\n" +
-                    "                        \"You will have to reinstall the application with the same signature, and fully uninstall it.\\n\" +\n" +
-                    "                        \"If you truly wish to continue, enter package name on next screen, for example com.zlab.datFM");
+        boolean keep = showConfirmDialogs("WARNING!", "PLEASE READ CAREFULLY!", "The -k option uninstalls the application while retaining the data/cache.\n" +
+                "\" +\n" +
+                "                        \"At the moment, there is no way to remove the remaining data.\\n\" +\n" +
+                "                        \"You will have to reinstall the application with the same signature, and fully uninstall it.\\n\" +\n" +
+                "                        \"If you truly wish to continue, enter package name on next screen, for example com.zlab.datFM");
 
-                if (keep){
-                    String packagename = setUninstallPackage("com.zlab.datFM");
-                    if(!packagename.equals("")){
-                    new Thread(() -> {
-                        try {
-                            final String finalLog = runCmd(ADB_BINARY, "shell", "pm", "uninstall", "-k", packagename);
-                            Platform.runLater(() -> {
-                                //int failure = (finalLog.length() - finalLog.substring(0).replaceAll("Failure", "").length())/7;
-                                int success = (finalLog.length() - finalLog.substring(0).replaceAll("Success","").length())/7;
+        if (keep){
+            String packagename = setUninstallPackage("com.zlab.datFM");
+            if(!packagename.equals("")){
+                new Thread(() -> {
+                    try {
+                        final String finalLog = runCmd(ADB_BINARY, "shell", "pm", "uninstall", "-k", packagename);
+                        Platform.runLater(() -> {
+                            //int failure = (finalLog.length() - finalLog.substring(0).replaceAll("Failure", "").length())/7;
+                            int success = (finalLog.length() - finalLog.substring(0).replaceAll("Success","").length())/7;
 
-                                if(success==1){
-                                    showDialogInformation("adb", "Operation complete", "Package " + packagename + " uninstalled from device,");
-                                } else {
-                                    showDialogInformation("adb", "Operation not complete", "Can't uninstall " + packagename + ", see Console for detail.");
-                                }
-                                /** FOR THE NEXT RELEASE (MULTIPLE UNINSTALLER)
-                                 showDialogInformation("adb", "Operation complete",
-                                 "Success: "+success
-                                 +"\nFailure: "+failure+"\n"
-                                 +"\nSee Console for detail."+"\n");*/
-                            });
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }).start();}
-                }// else {}
-        });
-        /** Backup **/
-        tab_adb_btn_backup.setOnAction((event) -> {
-            if(tab_adb_chk_backup_shared.isSelected() || tab_adb_chk_backup_all.isSelected()){
+                            if(success==1){
+                                showDialogInformation("adb", "Operation complete", "Package " + packagename + " uninstalled from device,");
+                            } else {
+                                showDialogInformation("adb", "Operation not complete", "Can't uninstall " + packagename + ", see Console for detail.");
+                            }
+                            /** FOR THE NEXT RELEASE (MULTIPLE UNINSTALLER)
+                             showDialogInformation("adb", "Operation complete",
+                             "Success: "+success
+                             +"\nFailure: "+failure+"\n"
+                             +"\nSee Console for detail."+"\n");*/
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();}
+        }// else {}
+    }
+    private void dfsAdbBackup(){
+        if(tab_adb_chk_backup_shared.isSelected() || tab_adb_chk_backup_all.isSelected()){
             File localfile = fileSaver();
             if(localfile!=null){
                 int count=8;
@@ -510,50 +591,78 @@ public class Controller implements Initializable {
 
                 showDialogInformation("Backup", "Attention", "Now:\n-unlock your device\n-press OK in this window\n-confirm the backup operation on the phone.\n\n"
                         +"Please don't close window on the phone.");
-            new Thread(() -> {
-                try {
-                    runCmd(commands);
-                    Platform.runLater(() -> showDialogInformation("Backup", "Operation complete", "All done. Backup file stored at "+localfile.getPath()+"."));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();}
-            } else {
-                Platform.runLater(() -> showDialogInformation("Backup", "Incorrect operation", "SHARED or ALL must be selected."));
+                new Thread(() -> {
+                    try {
+                        runCmd(commands);
+                        Platform.runLater(() -> showDialogInformation("Backup", "Operation complete", "All done. Backup file stored at "+localfile.getPath()+"."));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }).start();}
+        } else {
+            Platform.runLater(() -> showDialogInformation("Backup", "Incorrect operation", "SHARED or ALL must be selected."));
+        }
+    }
+    private void dfsAdbRestore(){
+        try {
+            File localfile = fileChooser();
+            if (localfile !=null) {
+                showDialogInformation("Restore", "Attention", "Now:\n-unlock your device\n-press OK in this window\n-confirm restore operation on the phone.\n\n"
+                        +"Please don't close window on the phone.");
+                new Thread(() -> {
+                    try {
+                        runCmd(ADB_BINARY, "restore", localfile.getPath());
+                        Platform.runLater(() -> showDialogInformation("Restore", "Operation complete", "File " + localfile.getName() + " restored. See Console for detail."));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
             }
-        });
-        tab_adb_btn_restore.setOnAction((event) -> {
-            try {
-                File localfile = fileChooser();
-                if (localfile !=null) {
-                    showDialogInformation("Restore", "Attention", "Now:\n-unlock your device\n-press OK in this window\n-confirm restore operation on the phone.\n\n"
-                            +"Please don't close window on the phone.");
-                    new Thread(() -> {
-                        try {
-                            runCmd(ADB_BINARY, "restore", localfile.getPath());
-                            Platform.runLater(() -> showDialogInformation("Restore", "Operation complete", "File " + localfile.getName() + " restored. See Console for detail."));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }).start();
-                }
-            } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
-            }
-        });
-        tab_adb_chk_backup_all.setOnAction((event) -> {
-            if(tab_adb_chk_backup_all.isSelected()){
-                tab_adb_chk_backup_apk.setSelected(true);
-                tab_adb_chk_backup_obb.setSelected(true);
-                tab_adb_chk_backup_shared.setSelected(true);
-                tab_adb_chk_backup_system.setSelected(true);
-            } else {
-                tab_adb_chk_backup_apk.setSelected(false);
-                tab_adb_chk_backup_obb.setSelected(false);
-                tab_adb_chk_backup_shared.setSelected(false);
-                tab_adb_chk_backup_system.setSelected(false);
-            }
-        });
+        } catch (Exception e) {
+            showDialogErrorNoDirectorySelected();
+        }
+    }
+    private void dfsAdbCheckBackupAll(){
+        if(tab_adb_chk_backup_all.isSelected()){
+            tab_adb_chk_backup_apk.setSelected(true);
+            tab_adb_chk_backup_obb.setSelected(true);
+            tab_adb_chk_backup_shared.setSelected(true);
+            tab_adb_chk_backup_system.setSelected(true);
+        } else {
+            tab_adb_chk_backup_apk.setSelected(false);
+            tab_adb_chk_backup_obb.setSelected(false);
+            tab_adb_chk_backup_shared.setSelected(false);
+            tab_adb_chk_backup_system.setSelected(false);
+        }
+    }
+
+    public void initBtn() {
+        /*********/
+        /** ADB **/
+        /** Check device **/
+        tab_adb_btn_check_device.setOnAction((event) -> dfsAdbCheckStatus(img_adb_status, tab_adb_device_status_txt));
+        /** Server kill start **/
+        tab_adb_btn_server_kill.setOnAction((event) -> dfsAdbKillServer());
+        tab_adb_btn_server_start.setOnAction((event) -> dfsAdbStartServer());
+        /** Console **/
+        tab_adb_btn_console.setOnAction((event) -> openConsole(ADB_BINARY, "Adb"));
+        /** Reboot device **/
+        tab_adb_btn_reboot_device.setOnAction((event) -> dfsAdbRebootDeviceNormal());
+        tab_adb_btn_reboot_recovery.setOnAction((event) -> dfsAdbRebootDeviceToRecovery());
+        tab_adb_btn_reboot_bootloader.setOnAction((event) -> dfsAdbRebootDeviceToBootloader());
+        tab_adb_btn_run_dfs.setOnAction((event) -> runDfs());
+        /** File control **/
+        tab_adb_btn_file_push.setOnAction((event) -> dfsAdbFilePush());
+        tab_adb_btn_file_pull.setOnAction((event) -> dfsAdbFilePull());
+        /** Application **/
+        tab_adb_btn_install.setOnAction((event) -> dfsAdbInstallApp());
+        tab_adb_btn_install_multiple.setOnAction((event) -> dfsAdbInstallMultipleApp());
+        tab_adb_btn_uninstall.setOnAction((event) -> dfsAdbUninstallApp());
+        tab_adb_btn_uninstall_keep_data.setOnAction((event) -> dfsAdbUninstallAppKeepData());
+        /** Backup **/
+        tab_adb_btn_backup.setOnAction((event) -> dfsAdbBackup());
+        tab_adb_btn_restore.setOnAction((event) -> dfsAdbRestore());
+        tab_adb_chk_backup_all.setOnAction((event) -> dfsAdbCheckBackupAll());
 
         /**************/
         /** FASTBOOT **/
@@ -945,8 +1054,7 @@ public class Controller implements Initializable {
                                         }
                                     });
                                     runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "backup", finalArgs, backupname);
-                            } catch (IOException e) {Platform.runLater(() -> {
-                                showDialogError("Ooops!", "Adb binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings.");});
+                            } catch (IOException e) {Platform.runLater(() -> showDialogError("Ooops!", "Adb binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings."));
                             }
                         }).start();
                 } else{
@@ -1469,88 +1577,6 @@ public class Controller implements Initializable {
         byte[] encoded = Files.readAllBytes(Paths.get(path));
         return new String(encoded, encoding);
     }
-    private void runDfs(){
-        try{
-            File dfsFile = fileChooserAdv("Select *.dfs script file");
-            File dir = directoryChooserAdv("Select working directory (with images)");
-            if(dir!=null && dfsFile!=null){
-                new Thread(() -> {
-                    try {
-                        Platform.runLater(() -> showDialogInformationGlobal("DFS", "Operation in progress", "Running *.dfs script " + dfsFile.getName() + "\n\nPlease wait...\n"));
-                        String dfsContent = readFileToString(dfsFile.getPath(), Charset.defaultCharset());
-                        String[] cmd_lines = dfsContent.split("\n");
-                        for (String args : cmd_lines){
-                            String[] commands = args.split(" ");
-                            int last = commands.length-1;
-
-                            if(!commands[0].equals("dfs")){
-
-                            final String cmdToConsole = Arrays.toString(commands).replaceAll("[,]", "");
-                            Platform.runLater(() -> {
-                                if(global_alert!=null){
-                                    global_alert_text_area.appendText("exec: " + cmdToConsole + ":\n");
-                                }
-                            });
-
-                                switch (commands[0]) {
-                                    case "fastboot":
-                                        commands[0] = FASTBOOT_BINARY;
-                                        break;
-                                    case "adb":
-                                        commands[0] = ADB_BINARY;
-                                        break;
-                                    case "mfastboot":
-                                        commands[0] = MFASTBOOT_BINARY;
-                                        break;
-                                }
-                                if(commands[1].equals("flash") || commands[1].equals("boot") || commands[1].equals("sideload")){
-                                    if(!new File(commands[last]).exists()){
-                                        commands[last]=dir.getPath()+"/"+commands[last];
-                                    }
-                                }
-                                if(commands[1].equals("push")){
-                                    if(!new File(commands[2]).exists()){
-                                        commands[2]=dir.getPath()+"/"+commands[2];
-                                    }
-                                }
-                                if(commands[1].equals("pull")){
-                                    if(!new File(commands[3]).exists()){
-                                        commands[3]=dir.getPath()+"/"+commands[3];
-                                    }
-                                }
-                                runCmdToGlobalAlert(commands);
-                            } else if (commands[0].equals("dfs")){
-                                /** TODO: DFS commands fabric, need to implement more commands **/
-                                if(commands[1].equals("download")){
-                                    /** dfs download http://images.org/moto/boot.img **/
-                                    URL remotefile = new URL(commands[2]);
-
-                                    String fileName = remotefile.getFile();
-                                    fileName = fileName.substring( fileName.lastIndexOf('/')+1, fileName.length() );
-
-                                    ReadableByteChannel rbc = Channels.newChannel(remotefile.openStream());
-                                    FileOutputStream fos = new FileOutputStream(dir+"/"+fileName);
-                                    fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-                                } else if(commands[1].equals("radio")){
-                                    /** dfs radiobox TWRP-2.8.5.0|PhilZ-Touch-6.58.7 **/
-                                } else if(commands[1].equals("checkbox")){
-                                    /** dfs checkbox TWRP-2.8.5.0|PhilZ-Touch-6.58.7 **/
-                                }
-                            }
-                        }
-                        Platform.runLater(() -> {
-                            if(global_alert!=null){
-                                global_alert_text_area.appendText("---\n" + "ALL DFS OPERATION COMPLETE.\n"+"---");
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }).start();}
-        } catch (Exception e) {
-            showDialogErrorNoDirectorySelected();
-        }
-    }
 
     /** LOG **/
     public void logToConsole(String appendString) {
@@ -1679,5 +1705,13 @@ public class Controller implements Initializable {
             splitpane.lookupAll(".split-pane-divider").stream()
                     .forEach(div -> div.setMouseTransparent(true));
         }
+    }
+
+    public List<String> parseStringToArray(String str){
+        List<String> list = new ArrayList<String>();
+        Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(str);
+        while (m.find())
+            list.add(m.group(1).replace("\"", ""));
+        return list;
     }
 }
