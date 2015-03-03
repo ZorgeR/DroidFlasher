@@ -240,8 +240,9 @@ public class Controller implements Initializable {
     private void runDfs(){
         try{
             File dfsFile = fileChooserAdv("Select *.dfs script file");
+            if (dfsFile==null){throw new NullPointerException("Nothing selected");}
             File dir = directoryChooserAdv("Select working directory (with images)");
-            if(dir!=null && dfsFile!=null){
+            if(dir!=null){
                 new Thread(() -> {
                     try {
                         Platform.runLater(() -> showDialogInformationGlobal("DFS", "Operation in progress", "Running *.dfs script " + dfsFile.getName() + "\n\nPlease wait...\n"));
@@ -249,7 +250,8 @@ public class Controller implements Initializable {
                         String[] cmd_lines = dfsContent.split("\n");
                         for (String args : cmd_lines){
                             //String[] commands = args.split(" ");
-                            String[] commands = (String[]) parseStringToArray(args).toArray();
+                            List<String> list = parseStringToArray(args);
+                            String[] commands = list.toArray(new String[list.size()]);
 
                             int last = commands.length-1;
 
@@ -299,9 +301,27 @@ public class Controller implements Initializable {
                                         String fileName = remotefile.getFile();
                                         fileName = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.length());
 
+                                        Download dld = new Download(remotefile, dir.getPath());
+                                        new Thread(() -> {dld.run();});
+                                        /*
                                         ReadableByteChannel rbc = Channels.newChannel(remotefile.openStream());
                                         FileOutputStream fos = new FileOutputStream(dir + "/" + fileName);
-                                        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+                                        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);*/
+                                        while (dld.getStatus()==Download.DOWNLOADING){
+                                            double dl = Double.parseDouble(String.valueOf(dld.getProgress()));
+                                            Platform.runLater(() -> tab_adb_progressbar.setProgress(dl));
+                                            try {
+                                                Thread.sleep(100);
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        if (dld.getStatus()==Download.ERROR){
+                                            Platform.runLater(() -> showDialogError("Ooops!", "Download error.", "Try later."));
+                                            break;
+                                        } else if (dld.getStatus()==Download.COMPLETE){
+                                            Platform.runLater(() -> tab_adb_progressbar.setProgress(dld.getProgress()));
+                                        }
                                         break;
                                     case "radio":
                                         /** dfs radiobox TWRP-2.8.5.0|PhilZ-Touch-6.58.7 **/
@@ -1312,12 +1332,12 @@ public class Controller implements Initializable {
     }
 
     /** Show Dialog **/
-    private void showDialogErrorNoDirectorySelected() {
+    private void showDialogErrorNoDirectorySelected() {/*
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Oops..");
         alert.setHeaderText("Operation rejected by user!");
         alert.setContentText("Please try again.");
-        alert.showAndWait();
+        alert.showAndWait();*/
     }
     private void showDialogErrorIsNotValidToolsDirectorySelected(String binaries) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
