@@ -219,8 +219,13 @@ public class Controller implements Initializable {
         img_head_fileoperation_recovery.setImage(new Image(getClass().getResourceAsStream("/img/file_extension_bin.png")));
         img_head_backup_from_recovery_restore.setImage(new Image(getClass().getResourceAsStream("/img/site_backup_and_restore.png")));
 
-        holdSplitPaneDivider(img_head_fileoperation, img_head_application, img_head_backup, img_head_flash, img_head_unlocking,
-                             img_head_other,/** img_head_wipe, */img_head_flash_from_recovery, img_head_backup_from_recovery,img_head_recovery_other,img_head_fileoperation_recovery);
+
+        /**
+         holdSplitPaneDivider(img_head_fileoperation, img_head_application, img_head_backup, img_head_flash, img_head_unlocking,
+         img_head_other,img_head_flash_from_recovery, img_head_backup_from_recovery,img_head_recovery_other,img_head_fileoperation_recovery);
+         //img_head_wipe
+         */
+
 
         /** Set simple mode **/
         if(tab_settings_others_chk_simplemode.isSelected()){
@@ -1785,12 +1790,11 @@ public class Controller implements Initializable {
 
     /** UI reconfigure **/
     private void holdSplitPaneDivider(Node... objects){
-        /*
         for (Node obj : objects) {
             SplitPane splitpane = (SplitPane) obj.getParent().getParent().getParent();
             splitpane.lookupAll(".split-pane-divider").stream()
                     .forEach(div -> div.setMouseTransparent(true));
-        }*/
+        }
     }
 
     public List<String> parseStringToArray(String str){
