@@ -80,10 +80,10 @@ public class Controller implements Initializable {
     @FXML private MenuItem tab_adb_btn_reboot_bootloader;
     @FXML private MenuItem tab_adb_btn_server_kill;
     @FXML private MenuItem tab_adb_btn_server_start;
-    @FXML private MenuItem tab_adb_btn_install;
-    @FXML private MenuItem tab_adb_btn_install_multiple;
-    @FXML private MenuItem tab_adb_btn_uninstall;
-    @FXML private MenuItem tab_adb_btn_uninstall_keep_data;
+    @FXML private Button tab_adb_btn_install;
+    @FXML private Button tab_adb_btn_install_multiple;
+    @FXML private Button tab_adb_btn_uninstall;
+    @FXML private Button tab_adb_btn_uninstall_keep_data;
     @FXML private ProgressBar tab_adb_progressbar;
     @FXML private Label  tab_adb_device_status_txt;
     @FXML private ImageView img_head_fileoperation;

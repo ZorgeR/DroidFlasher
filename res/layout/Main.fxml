@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
@@ -14,7 +15,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="204.0" prefWidth="295.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TabPane fx:id="top_tab_pane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="894.0" rotateGraphic="true" side="LEFT" stylesheets="@../css/tabpane.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="58.0" tabMaxWidth="24.0" tabMinHeight="58.0" tabMinWidth="24.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <tabs>
@@ -35,17 +36,17 @@
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Button fx:id="tab_adb_btn_file_push" layoutX="12.0" layoutY="338.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="305.0" text="push to device" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="12.0">
+                                          <Button fx:id="tab_adb_btn_file_push" layoutX="12.0" layoutY="338.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="305.0" text="push to device" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="12.0">
                                              <font>
-                                                <Font name="Lucida Grande" size="24.0" />
+                                                <Font name="PT Sans Narrow" size="24.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="tab_adb_btn_file_pull" layoutX="324.0" layoutY="338.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="305.0" text="pull from device" AnchorPane.bottomAnchor="67.0" AnchorPane.rightAnchor="13.0">
+                                          <Button fx:id="tab_adb_btn_file_pull" layoutX="324.0" layoutY="338.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="305.0" text="pull from device" AnchorPane.bottomAnchor="67.0" AnchorPane.rightAnchor="12.0">
                                              <font>
-                                                <Font name="Lucida Grande" size="24.0" />
+                                                <Font name="PT Sans Narrow" size="24.0" />
                                              </font>
                                           </Button>
-                                          <Button defaultButton="true" disable="true" layoutX="169.0" layoutY="154.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="305.0" text="Drag&amp;Drop" AnchorPane.bottomAnchor="251.0" AnchorPane.leftAnchor="169.0" AnchorPane.rightAnchor="168.0" AnchorPane.topAnchor="154.0">
+                                          <Button defaultButton="true" disable="true" layoutX="12.0" layoutY="53.0" mnemonicParsing="false" opacity="0.32" prefHeight="297.0" prefWidth="617.0" text="Drag&amp;Drop" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="53.0">
                                              <font>
                                                 <Font name="Lucida Grande" size="24.0" />
                                              </font>
@@ -65,54 +66,66 @@
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <MenuButton layoutX="14.0" layoutY="61.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="618.0" text="Install" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="10.0">
-                                            <items>
-                                              <MenuItem fx:id="tab_adb_btn_install" mnemonicParsing="false" text="Single *.APK" />
-                                              <MenuItem fx:id="tab_adb_btn_install_multiple" mnemonicParsing="false" text="Multiple *.APK" />
-                                            </items>
+                                          <CheckBox fx:id="tab_adb_btn_install_flock" layoutX="13.0" layoutY="95.0" mnemonicParsing="false" text="forward lock">
                                              <font>
-                                                <Font name="Menlo Bold" size="18.0" />
-                                             </font>
-                                          </MenuButton>
-                                          <CheckBox fx:id="tab_adb_btn_install_flock" layoutX="24.0" layoutY="144.0" mnemonicParsing="false" text="forward lock">
-                                             <font>
-                                                <Font name="Menlo Regular" size="18.0" />
+                                                <Font name="PT Sans Narrow" size="16.0" />
                                              </font>
                                           </CheckBox>
-                                          <CheckBox fx:id="tab_adb_btn_install_replace" layoutX="24.0" layoutY="175.0" mnemonicParsing="false" text="replace existing">
+                                          <CheckBox fx:id="tab_adb_btn_install_replace" layoutX="13.0" layoutY="126.0" mnemonicParsing="false" text="replace existing">
                                              <font>
-                                                <Font name="Menlo Regular" size="18.0" />
+                                                <Font name="PT Sans Narrow" size="16.0" />
                                              </font>
                                           </CheckBox>
-                                          <CheckBox fx:id="tab_adb_btn_install_test" layoutX="24.0" layoutY="206.0" mnemonicParsing="false" text="allow test package">
+                                          <CheckBox fx:id="tab_adb_btn_install_test" layoutX="13.0" layoutY="157.0" mnemonicParsing="false" text="allow test package">
                                              <font>
-                                                <Font name="Menlo Regular" size="18.0" />
+                                                <Font name="PT Sans Narrow" size="16.0" />
                                              </font>
                                           </CheckBox>
-                                          <CheckBox fx:id="tab_adb_btn_install_sdcard" layoutX="24.0" layoutY="237.0" mnemonicParsing="false" text="install on sdcard">
+                                          <CheckBox fx:id="tab_adb_btn_install_sdcard" layoutX="218.0" layoutY="95.0" mnemonicParsing="false" text="install on sdcard">
                                              <font>
-                                                <Font name="Menlo Regular" size="18.0" />
+                                                <Font name="PT Sans Narrow" size="16.0" />
                                              </font>
                                           </CheckBox>
-                                          <CheckBox fx:id="tab_adb_btn_install_downgrade" layoutX="24.0" layoutY="268.0" mnemonicParsing="false" text="allow downgrade">
+                                          <CheckBox fx:id="tab_adb_btn_install_downgrade" layoutX="218.0" layoutY="126.0" mnemonicParsing="false" text="allow downgrade">
                                              <font>
-                                                <Font name="Menlo Regular" size="18.0" />
+                                                <Font name="PT Sans Narrow" size="16.0" />
                                              </font>
                                           </CheckBox>
-                                          <CheckBox fx:id="tab_adb_btn_install_partial" layoutX="24.0" layoutY="299.0" mnemonicParsing="false" text="partial install">
+                                          <CheckBox fx:id="tab_adb_btn_install_partial" layoutX="218.0" layoutY="157.0" mnemonicParsing="false" text="partial install">
                                              <font>
-                                                <Font name="Menlo Regular" size="18.0" />
+                                                <Font name="PT Sans Narrow" size="16.0" />
                                              </font>
                                           </CheckBox>
-                                          <MenuButton layoutX="13.0" layoutY="351.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="618.0" text="Uninstall" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="10.0">
-                                            <items>
-                                              <MenuItem fx:id="tab_adb_btn_uninstall" mnemonicParsing="false" text="With data and cache" />
-                                              <MenuItem fx:id="tab_adb_btn_uninstall_keep_data" mnemonicParsing="false" text="Keep data and cache" />
-                                            </items>
+                                          <Button fx:id="tab_adb_btn_install" layoutX="12.0" layoutY="197.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Single *.APK">
                                              <font>
-                                                <Font name="Menlo Bold" size="18.0" />
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
-                                          </MenuButton>
+                                          </Button>
+                                          <Button fx:id="tab_adb_btn_install_multiple" layoutX="352.0" layoutY="197.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Multiple *.APK" AnchorPane.rightAnchor="12.0">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Button>
+                                          <Label layoutX="11.0" layoutY="51.0" text="Install:">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="11.0" layoutY="326.0" text="Uninstall:">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <Button fx:id="tab_adb_btn_uninstall_keep_data" layoutX="325.0" layoutY="366.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Keep data and cache" AnchorPane.rightAnchor="12.0">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="tab_adb_btn_uninstall" layoutX="12.0" layoutY="366.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="With data and cache">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Button>
                                        </children>
                                     </AnchorPane>
                                  </content>
@@ -128,44 +141,44 @@
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Button fx:id="tab_adb_btn_backup" layoutX="12.0" layoutY="338.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="305.0" text="Backup" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="12.0">
+                                          <Button fx:id="tab_adb_btn_backup" layoutX="12.0" layoutY="338.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Backup" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="12.0">
                                              <font>
-                                                <Font name="Lucida Grande" size="24.0" />
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="tab_adb_btn_restore" layoutX="323.0" layoutY="338.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="305.0" text="Restore" AnchorPane.bottomAnchor="67.0" AnchorPane.rightAnchor="14.0">
+                                          <Button fx:id="tab_adb_btn_restore" layoutX="323.0" layoutY="338.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Restore" AnchorPane.bottomAnchor="67.0" AnchorPane.rightAnchor="14.0">
                                              <font>
-                                                <Font name="Lucida Grande" size="24.0" />
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
-                                          <CheckBox fx:id="tab_adb_chk_backup_apk" layoutX="66.0" layoutY="116.0" mnemonicParsing="false" selected="true" text="apk">
+                                          <CheckBox fx:id="tab_adb_chk_backup_apk" layoutX="13.0" layoutY="95.0" mnemonicParsing="false" selected="true" text="apk">
                                              <font>
-                                                <Font name="Menlo Regular" size="18.0" />
+                                                <Font name="PT Sans Narrow" size="16.0" />
                                              </font>
                                           </CheckBox>
-                                          <CheckBox fx:id="tab_adb_chk_backup_obb" layoutX="66.0" layoutY="161.0" mnemonicParsing="false" selected="true" text="obb">
+                                          <CheckBox fx:id="tab_adb_chk_backup_obb" layoutX="13.0" layoutY="126.0" mnemonicParsing="false" selected="true" text="obb">
                                              <font>
-                                                <Font name="Menlo Regular" size="18.0" />
+                                                <Font name="PT Sans Narrow" size="16.0" />
                                              </font>
                                           </CheckBox>
-                                          <CheckBox fx:id="tab_adb_chk_backup_shared" layoutX="66.0" layoutY="206.0" mnemonicParsing="false" text="shared">
+                                          <CheckBox fx:id="tab_adb_chk_backup_shared" layoutX="13.0" layoutY="157.0" mnemonicParsing="false" text="shared">
                                              <font>
-                                                <Font name="Menlo Regular" size="18.0" />
+                                                <Font name="PT Sans Narrow" size="16.0" />
                                              </font>
                                           </CheckBox>
-                                          <CheckBox fx:id="tab_adb_chk_backup_system" layoutX="66.0" layoutY="248.0" mnemonicParsing="false" text="system">
+                                          <CheckBox fx:id="tab_adb_chk_backup_system" layoutX="153.0" layoutY="125.0" mnemonicParsing="false" text="system">
                                              <font>
-                                                <Font name="Menlo Regular" size="18.0" />
+                                                <Font name="PT Sans Narrow" size="16.0" />
                                              </font>
                                           </CheckBox>
-                                          <CheckBox fx:id="tab_adb_chk_backup_all" layoutX="202.0" layoutY="116.0" mnemonicParsing="false" selected="true" text="all">
+                                          <CheckBox fx:id="tab_adb_chk_backup_all" layoutX="153.0" layoutY="94.0" mnemonicParsing="false" selected="true" text="all">
                                              <font>
-                                                <Font name="Menlo Regular" size="18.0" />
+                                                <Font name="PT Sans Narrow" size="16.0" />
                                              </font>
                                           </CheckBox>
-                                          <Label layoutX="42.0" layoutY="63.0" text="Select partition:">
+                                          <Label layoutX="10.0" layoutY="51.0" text="Select partition:">
                                              <font>
-                                                <Font name="Menlo Regular" size="24.0" />
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Label>
                                        </children>
@@ -187,16 +200,25 @@
                             <MenuItem fx:id="tab_adb_btn_reboot_recovery" mnemonicParsing="false" text="to recovery" />
                               <MenuItem fx:id="tab_adb_btn_reboot_bootloader" mnemonicParsing="false" text="to bootloader" />
                           </items>
+                           <font>
+                              <Font name="PT Sans" size="14.0" />
+                           </font>
                         </MenuButton>
                         <Separator layoutX="170.0" layoutY="36.0" prefHeight="11.0" prefWidth="654.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="-12.0" />
-                        <Button fx:id="tab_adb_btn_check_device" layoutX="182.0" layoutY="448.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="117.0" text="Check device" AnchorPane.bottomAnchor="6.0" />
-                        <ImageView fx:id="img_adb_status" fitHeight="32.0" fitWidth="32.0" layoutX="300.0" layoutY="445.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="3.0">
+                        <Button fx:id="tab_adb_btn_check_device" layoutX="182.0" layoutY="445.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="117.0" text="Check device" AnchorPane.bottomAnchor="7.0">
+                           <font>
+                              <Font name="PT Sans" size="14.0" />
+                           </font></Button>
+                        <ImageView fx:id="img_adb_status" fitHeight="32.0" fitWidth="32.0" layoutX="300.0" layoutY="443.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0">
                            <image>
                               <Image url="@../img/bullet_red.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="tab_adb_device_status_txt" layoutX="340.0" layoutY="453.0" text="No device detected." AnchorPane.bottomAnchor="11.0" />
-                        <Button fx:id="tab_adb_btn_console" alignment="CENTER" layoutX="691.0" layoutY="7.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="115.0" text="adb console" AnchorPane.rightAnchor="6.0">
+                        <Label fx:id="tab_adb_device_status_txt" layoutX="333.0" layoutY="451.0" text="No device detected." AnchorPane.bottomAnchor="11.0">
+                           <font>
+                              <Font name="PT Sans" size="14.0" />
+                           </font></Label>
+                        <Button fx:id="tab_adb_btn_console" alignment="CENTER" layoutX="691.0" layoutY="7.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="115.0" text="adb console" AnchorPane.rightAnchor="12.0">
                            <graphic>
                               <ImageView fx:id="img_console_adb" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -204,15 +226,24 @@
                                  </image>
                               </ImageView>
                            </graphic>
+                           <font>
+                              <Font name="PT Sans" size="14.0" />
+                           </font>
                         </Button>
-                        <Button fx:id="tab_adb_btn_run_dfs" layoutX="458.0" layoutY="7.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="106.0" text="run *.dfs script" />
+                        <Button fx:id="tab_adb_btn_run_dfs" defaultButton="true" layoutX="458.0" layoutY="7.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="115.0" text="run *.dfs script">
+                           <font>
+                              <Font name="PT Sans" size="14.0" />
+                           </font></Button>
                         <MenuButton layoutX="319.0" layoutY="7.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="adb control">
                           <items>
                             <MenuItem fx:id="tab_adb_btn_server_start" mnemonicParsing="false" text="start-server" />
                             <MenuItem fx:id="tab_adb_btn_server_kill" mnemonicParsing="false" text="kill-server" />
                           </items>
+                           <font>
+                              <Font name="PT Sans" size="14.0" />
+                           </font>
                         </MenuButton>
-                        <ProgressBar fx:id="tab_adb_progressbar" layoutX="182.0" layoutY="422.0" prefHeight="20.0" prefWidth="617.0" progress="0.0" AnchorPane.bottomAnchor="38.0" AnchorPane.leftAnchor="182.0" AnchorPane.rightAnchor="13.0" />
+                        <ProgressBar fx:id="tab_adb_progressbar" layoutX="182.0" layoutY="420.0" prefHeight="20.0" prefWidth="617.0" progress="0.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="182.0" AnchorPane.rightAnchor="12.0" />
                      </children>
                   </AnchorPane>
                </content>
@@ -322,7 +353,7 @@
                               </AnchorPane>
                            </items>
                         </SplitPane>
-                        <Button fx:id="tab_fastboot_btn_run_dfs" layoutX="219.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="112.0" text="run *.dfs script" />
+                        <Button fx:id="tab_fastboot_btn_run_dfs" defaultButton="true" layoutX="219.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="112.0" text="run *.dfs script" />
                      </children>
                   </AnchorPane>
             </content>
@@ -360,7 +391,7 @@
                               </AnchorPane>
                            </items>
                         </SplitPane>
-                        <Button fx:id="tab_recovery_btn_run_dfs" layoutX="268.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="114.0" text="run *.dfs script" />
+                        <Button fx:id="tab_recovery_btn_run_dfs" defaultButton="true" layoutX="268.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="114.0" text="run *.dfs script" />
                         <Button fx:id="tab_recovery_btn_console" alignment="CENTER" layoutX="479.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="118.0" text="adb console" AnchorPane.rightAnchor="14.0">
                            <graphic>
                               <ImageView fx:id="img_console_recovery" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">

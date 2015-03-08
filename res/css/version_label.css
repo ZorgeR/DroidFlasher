@@ -1,8 +1,5 @@
 .label{
-	/*-fx-background-image: url("../img/ui/tab_bckgr_2.png");*/
-	-fx-background-color: #2e2e2e; /*484848*/
-/*		-fx-focus: none;*/
-	-fx-border: 1px solid;
+	-fx-background-color: #2e2e2e;
 	-fx-border-color: #232323;
     -fx-text-fill: #e2e2e2;
     -fx-font-size: 12px;
