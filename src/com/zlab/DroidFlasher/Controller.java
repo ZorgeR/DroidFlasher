@@ -1785,11 +1785,12 @@ public class Controller implements Initializable {
 
     /** UI reconfigure **/
     private void holdSplitPaneDivider(Node... objects){
+        /*
         for (Node obj : objects) {
             SplitPane splitpane = (SplitPane) obj.getParent().getParent().getParent();
             splitpane.lookupAll(".split-pane-divider").stream()
                     .forEach(div -> div.setMouseTransparent(true));
-        }
+        }*/
     }
 
     public List<String> parseStringToArray(String str){

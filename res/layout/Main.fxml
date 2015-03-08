@@ -14,481 +14,580 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 
-<TabPane fx:id="top_tab_pane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="708.0" rotateGraphic="true" side="LEFT" stylesheets="@../css/tabpane.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="58.0" tabMaxWidth="24.0" tabMinHeight="58.0" tabMinWidth="24.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-  <tabs>
-      <Tab text="adb">
-         <content>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <Button fx:id="tab_adb_btn_check_device" layoutX="14.0" layoutY="327.0" mnemonicParsing="false" text="Check device" AnchorPane.bottomAnchor="14.0" />
-                  <Label fx:id="tab_adb_device_status_txt" layoutX="144.0" layoutY="332.0" text="No device detected." AnchorPane.bottomAnchor="19.0" />
-                  <MenuButton layoutX="155.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="reboot device">
-                    <items>
-                      <MenuItem fx:id="tab_adb_btn_reboot_device" mnemonicParsing="false" text="normal" />
-                      <MenuItem fx:id="tab_adb_btn_reboot_recovery" mnemonicParsing="false" text="to recovery" />
-                        <MenuItem fx:id="tab_adb_btn_reboot_bootloader" mnemonicParsing="false" text="to bootloader" />
-                    </items>
-                  </MenuButton>
-                  <MenuButton layoutX="14.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="adb control">
-                    <items>
-                      <MenuItem fx:id="tab_adb_btn_server_start" mnemonicParsing="false" text="start-server" />
-                      <MenuItem fx:id="tab_adb_btn_server_kill" mnemonicParsing="false" text="kill-server" />
-                    </items>
-                  </MenuButton>
-                  <ProgressBar fx:id="tab_adb_progressbar" layoutX="14.0" layoutY="299.0" prefHeight="20.0" prefWidth="573.0" progress="0.0" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0" />
-                  <Separator layoutX="-3.0" layoutY="37.0" prefHeight="11.0" prefWidth="617.0" AnchorPane.leftAnchor="-3.0" AnchorPane.rightAnchor="-14.0" />
-                  <SplitPane dividerPositions="0.23255813953488372" layoutX="14.0" layoutY="51.0" orientation="VERTICAL" prefHeight="131.0" prefWidth="133.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="51.0">
-                    <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
-                           <children>
-                              <Label layoutX="35.0" layoutY="5.0" text="File operation" />
-                              <ImageView fx:id="img_head_fileoperation" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="5.0">
-                                 <image>
-                                    <Image url="@../img/file_extension_bin.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </AnchorPane>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="131.0">
-                           <children>
-                              <Button fx:id="tab_adb_btn_file_push" layoutX="6.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="push to device" />
-                              <Button fx:id="tab_adb_btn_file_pull" layoutX="6.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="pull from device" />
-                              <Button disable="true" layoutX="6.0" layoutY="63.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="File Manager" />
-                           </children>
-                        </AnchorPane>
-                    </items>
-                     <effect>
-                        <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
-                     </effect>
-                  </SplitPane>
-                  <SplitPane dividerPositions="0.12552301255230125, 0.8410041841004184" layoutX="282.0" layoutY="51.0" orientation="VERTICAL" prefHeight="241.0" prefWidth="147.0" AnchorPane.rightAnchor="114.0">
-                     <effect>
-                        <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
-                     </effect>
-                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
-                           <children>
-                              <Label layoutX="39.0" layoutY="5.0" text="Application" />
-                              <ImageView fx:id="img_head_application" fitHeight="16.0" fitWidth="16.0" layoutX="16.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/application_view_icons.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane prefHeight="109.0" prefWidth="158.0">
-                           <children>
-                              <CheckBox fx:id="tab_adb_btn_install_flock" layoutX="5.0" layoutY="37.0" mnemonicParsing="false" text="forward lock" />
-                              <CheckBox fx:id="tab_adb_btn_install_replace" layoutX="5.0" layoutY="58.0" mnemonicParsing="false" text="replace existing" />
-                              <CheckBox fx:id="tab_adb_btn_install_test" layoutX="5.0" layoutY="79.0" mnemonicParsing="false" text="allow test package" />
-                              <CheckBox fx:id="tab_adb_btn_install_sdcard" layoutX="5.0" layoutY="100.0" mnemonicParsing="false" text="install on sdcard" />
-                              <CheckBox fx:id="tab_adb_btn_install_downgrade" layoutX="5.0" layoutY="121.0" mnemonicParsing="false" text="allow downgrade" />
-                              <CheckBox fx:id="tab_adb_btn_install_partial" layoutX="5.0" layoutY="142.0" mnemonicParsing="false" text="partial install" />
-                              <MenuButton layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="135.0" text="Install">
-                                <items>
-                                  <MenuItem fx:id="tab_adb_btn_install" mnemonicParsing="false" text="Single *.APK" />
-                                  <MenuItem fx:id="tab_adb_btn_install_multiple" mnemonicParsing="false" text="Multiple *.APK" />
-                                </items>
-                              </MenuButton>
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="158.0" prefWidth="158.0">
-                           <children>
-                              <MenuButton layoutX="5.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="135.0" text="Uninstall">
-                                <items>
-                                  <MenuItem fx:id="tab_adb_btn_uninstall" mnemonicParsing="false" text="With data and cache" />
-                                  <MenuItem fx:id="tab_adb_btn_uninstall_keep_data" mnemonicParsing="false" text="Keep data and cache" />
-                                </items>
-                              </MenuButton>
-                           </children>
-                        </AnchorPane>
-                     </items>
-                  </SplitPane>
-                  <SplitPane dividerPositions="0.12552301255230125, 0.8410041841004184" layoutX="437.0" layoutY="51.0" orientation="VERTICAL" prefHeight="241.0" prefWidth="93.0" AnchorPane.rightAnchor="13.0">
-                     <effect>
-                        <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
-                     </effect>
-                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
-                           <children>
-                              <Label layoutX="33.0" layoutY="5.0" text="Backup" />
-                              <ImageView fx:id="img_head_backup" fitHeight="16.0" fitWidth="16.0" layoutX="8.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/backups.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane prefHeight="109.0" prefWidth="158.0">
-                           <children>
-                              <Button fx:id="tab_adb_btn_backup" layoutX="4.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="83.0" text="Backup" />
-                              <CheckBox fx:id="tab_adb_chk_backup_apk" layoutX="5.0" layoutY="37.0" mnemonicParsing="false" selected="true" text="apk" />
-                              <CheckBox fx:id="tab_adb_chk_backup_obb" layoutX="5.0" layoutY="62.0" mnemonicParsing="false" selected="true" text="obb" />
-                              <CheckBox fx:id="tab_adb_chk_backup_shared" layoutX="5.0" layoutY="87.0" mnemonicParsing="false" text="shared" />
-                              <CheckBox fx:id="tab_adb_chk_backup_system" layoutX="5.0" layoutY="111.0" mnemonicParsing="false" text="system" />
-                              <CheckBox fx:id="tab_adb_chk_backup_all" layoutX="5.0" layoutY="136.0" mnemonicParsing="false" selected="true" text="all" />
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="158.0" prefWidth="158.0">
-                           <children>
-                              <Button fx:id="tab_adb_btn_restore" layoutX="4.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="80.0" text="Restore" />
-                           </children>
-                        </AnchorPane>
-                     </items>
-                  </SplitPane>
-                  <ImageView fx:id="img_adb_status" fitHeight="32.0" fitWidth="32.0" layoutX="113.0" layoutY="324.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="11.0">
-                     <image>
-                        <Image url="@../img/bullet_red.png" />
-                     </image>
-                  </ImageView>
-                  <Button fx:id="tab_adb_btn_console" alignment="CENTER_RIGHT" layoutX="479.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="107.0" text="adb console" AnchorPane.rightAnchor="14.0" />
-                  <ImageView fx:id="img_console_adb" fitHeight="16.0" fitWidth="16.0" layoutX="484.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="100.0">
-                     <image>
-                        <Image url="@../img/terminal-pencil.png" />
-                     </image>
-                  </ImageView>
-                  <Button fx:id="tab_adb_btn_run_dfs" layoutX="295.0" layoutY="9.0" mnemonicParsing="false" text="run *.dfs script" />
-               </children>
-            </AnchorPane>
-         </content>
-      </Tab>
-    <Tab text="fastboot">
-      <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <ImageView fx:id="img_fastboot_status" fitHeight="32.0" fitWidth="32.0" layoutX="113.0" layoutY="324.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="11.0">
-                     <image>
-                        <Image url="@../img/bullet_red.png" />
-                     </image>
-                  </ImageView>
-                  <ProgressBar fx:id="tab_fastboot_progressbar" layoutX="14.0" layoutY="299.0" prefHeight="20.0" prefWidth="573.0" progress="0.0" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0" />
-                  <Label fx:id="tab_fastboot_device_status_txt" layoutX="144.0" layoutY="332.0" text="No device detected." AnchorPane.bottomAnchor="19.0" />
-                  <Button fx:id="tab_fastboot_btn_check_device" layoutX="14.0" layoutY="327.0" mnemonicParsing="false" text="Check device" AnchorPane.bottomAnchor="14.0" />
-                  <Separator layoutY="37.0" prefHeight="11.0" prefWidth="617.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-17.0" />
-                  <Button fx:id="tab_fastboot_btn_reboot_bootloader" layoutX="14.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="reboot-bootloader" />
-                  <Button fx:id="tab_fastboot_btn_reboot" layoutX="154.0" layoutY="9.0" mnemonicParsing="false" text="reboot" />
-                  <SplitPane dividerPositions="0.22900763358778625" layoutX="391.0" layoutY="51.0" orientation="VERTICAL" prefHeight="131.0" prefWidth="196.0" AnchorPane.rightAnchor="13.0">
-                     <effect>
-                        <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
-                     </effect>
-                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
-                           <children>
-                              <Label layoutX="38.0" layoutY="6.0" text="Unlocking bootloader" />
-                              <ImageView fx:id="img_head_unlocking" fitHeight="16.0" fitWidth="16.0" layoutX="12.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="166.0" AnchorPane.topAnchor="6.0">
-                                 <image>
-                                    <Image url="@../img/lock-unlock.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="131.0">
-                           <children>
-                              <Button fx:id="tab_fastboot_btn_oem_unlock" layoutX="3.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="89.0" text="oem unlock" />
-                              <Button fx:id="tab_fastboot_btn_oem_lock" layoutX="98.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="92.0" text="oem lock" />
-                              <Button fx:id="tab_fastboot_btn_oem_get_unlock_data" layoutX="3.0" layoutY="65.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="187.0" text="oem get_unlock_data" />
-                              <Button fx:id="tab_fastboot_btn_oem_lock_begin" layoutX="3.0" layoutY="35.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="186.0" text="oem lock begin" />
-                           </children>
-                        </AnchorPane>
-                     </items>
-                  </SplitPane>
-                  <SplitPane dividerPositions="0.13839285714285715" layoutX="14.0" layoutY="51.0" orientation="VERTICAL" prefHeight="222.0" prefWidth="138.0" AnchorPane.leftAnchor="14.0">
-                     <effect>
-                        <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
-                     </effect>
-                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
-                           <children>
-                              <Label layoutX="35.0" layoutY="5.0" text="Flashing" />
-                              <ImageView fx:id="img_head_flash" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="5.0">
-                                 <image>
-                                    <Image url="@../img/file_extension_bat.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="188.0" prefWidth="136.0">
-                           <children>
-                              <Button fx:id="tab_fastboot_btn_flash_recovery" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="flash-recovery" />
-                              <Button fx:id="tab_fastboot_btn_flash_boot" layoutX="5.0" layoutY="35.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="flash-boot (kernel)" />
-                              <Button fx:id="tab_fastboot_btn_flash_cache" layoutX="5.0" layoutY="65.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="flash-cache" />
-                              <Button fx:id="tab_fastboot_btn_flash_userdata" layoutX="4.0" layoutY="95.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="flash-userdata" />
-                              <Button fx:id="tab_fastboot_btn_flash_system" layoutX="4.0" layoutY="125.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="flash-system" />
-                              <Button fx:id="tab_fastboot_btn_flash_radio" layoutX="4.0" layoutY="155.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="flash-radio" />
-                           </children>
-                        </AnchorPane>
-                     </items>
-                  </SplitPane>
-                  <Button fx:id="tab_fastboot_btn_console" alignment="CENTER_RIGHT" layoutX="453.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="133.0" text="fastboot console" textAlignment="RIGHT" AnchorPane.rightAnchor="14.0" />
-                  <ImageView fx:id="img_console_fastboot" fitHeight="16.0" fitWidth="16.0" layoutX="458.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="126.0">
-                     <image>
-                        <Image url="@../img/terminal-pencil.png" />
-                     </image>
-                  </ImageView>
-                  <SplitPane dividerPositions="0.31683168316831684" layoutX="391.0" layoutY="188.0" orientation="VERTICAL" prefHeight="103.0" prefWidth="196.0" AnchorPane.rightAnchor="13.0">
-                     <effect>
-                        <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
-                     </effect>
-                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
-                           <children>
-                              <Label layoutX="38.0" layoutY="6.0" text="Other" />
-                              <ImageView fx:id="img_head_other" layoutX="12.0" layoutY="6.0">
-                                 <image>
-                                    <Image url="@../../../../../Pictures/icons/faience-icon-theme_0.5/Faience/categories/16/applications-other.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="131.0">
-                           <children>
-                              <Button fx:id="tab_fastboot_btn_boot_img" layoutX="4.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="185.0" text="boot *.img" />
-                              <Button fx:id="tab_fastboot_btn_flash_mfastboot_system" layoutX="4.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="185.0" text="mfastboot flash-system" />
-                           </children>
-                        </AnchorPane>
-                     </items>
-                  </SplitPane>
-                  <Button fx:id="tab_fastboot_btn_run_dfs" layoutX="219.0" layoutY="9.0" mnemonicParsing="false" text="run *.dfs script" />
-               </children>
-            </AnchorPane>
-      </content>
-    </Tab>
-      <Tab text="recovery">
-         <content>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <Separator layoutY="37.0" prefHeight="11.0" prefWidth="617.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-17.0" />
-                  <ProgressBar fx:id="tab_recovery_progressbar" layoutX="14.0" layoutY="299.0" prefHeight="20.0" prefWidth="573.0" progress="0.0" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0" />
-                  <SplitPane layoutX="14.0" layoutY="51.0" orientation="VERTICAL" prefHeight="111.0" prefWidth="108.0" AnchorPane.leftAnchor="14.0">
-                     <effect>
-                        <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
-                     </effect>
-                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="188.0" prefWidth="136.0">
-                           <children>
-                              <Button fx:id="tab_recovery_btn_wipe" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="wipe" />
-                              <CheckBox fx:id="tab_recovery_chk_wipe_cache" layoutX="5.0" layoutY="38.0" mnemonicParsing="false" text="cache" />
-                              <CheckBox fx:id="tab_recovery_chk_wipe_data" layoutX="5.0" layoutY="61.0" mnemonicParsing="false" text="data" />
-                              <CheckBox fx:id="tab_recovery_chk_wipe_dalvik" layoutX="5.0" layoutY="84.0" mnemonicParsing="false" text="dalvik" />
-                              <ImageView fx:id="img_head_wipe" fitHeight="16.0" fitWidth="16.0" layoutX="15.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="84.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="10.0">
-                                 <image>
-                                    <Image url="@../img/eraser.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </AnchorPane>
-                     </items>
-                  </SplitPane>
-                  <Button fx:id="tab_recovery_btn_run_dfs" layoutX="268.0" layoutY="9.0" mnemonicParsing="false" text="run *.dfs script" />
-                  <Button fx:id="tab_recovery_btn_console" alignment="CENTER_RIGHT" layoutX="479.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="107.0" text="adb console" AnchorPane.rightAnchor="14.0" />
-                  <MenuButton layoutX="14.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="108.0" text="adb control">
-                     <items>
-                        <MenuItem fx:id="tab_recovery_btn_server_start" mnemonicParsing="false" text="start-server" />
-                        <MenuItem fx:id="tab_recovery_btn_server_kill" mnemonicParsing="false" text="kill-server" />
-                     </items>
-                  </MenuButton>
-                  <MenuButton layoutX="129.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="reboot device">
-                     <items>
-                        <MenuItem fx:id="tab_recovery_btn_reboot_device" mnemonicParsing="false" text="normal" />
-                        <MenuItem fx:id="tab_recovery_btn_reboot_recovery" mnemonicParsing="false" text="to recovery" />
-                        <MenuItem fx:id="tab_recovery_btn_reboot_bootloader" mnemonicParsing="false" text="to bootloader" />
-                     </items>
-                  </MenuButton>
-                  <ImageView fx:id="img_console_recovery" fitHeight="16.0" fitWidth="16.0" layoutX="484.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="100.0">
-                     <image>
-                        <Image url="@../img/terminal-pencil.png" />
-                     </image>
-                  </ImageView>
-                  <SplitPane dividerPositions="0.18633540372670807" layoutX="129.0" layoutY="51.0" orientation="VERTICAL" prefHeight="162.0" prefWidth="108.0">
-                     <effect>
-                        <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
-                     </effect>
-                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
-                           <children>
-                              <Label layoutX="35.0" layoutY="5.0" text="Flash" />
-                              <ImageView fx:id="img_head_flash_from_recovery" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="5.0">
-                                 <image>
-                                    <Image url="@../img/file_extension_bat.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="188.0" prefWidth="136.0">
-                           <children>
-                              <Button fx:id="tab_recovery_btn_flash_zip" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="single *.zip" />
-                              <Button fx:id="tab_recovery_btn_adb_sideload" layoutX="5.0" layoutY="95.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="adb sideload" />
-                              <Button fx:id="tab_recovery_btn_flash_zip_from_sd" layoutX="5.0" layoutY="65.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="from sdcard" />
-                              <Button fx:id="tab_recovery_btn_flash_multizip" layoutX="5.0" layoutY="35.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="multiple *.zip" />
-                           </children>
-                        </AnchorPane>
-                     </items>
-                  </SplitPane>
-                  <SplitPane layoutX="244.0" layoutY="51.0" orientation="VERTICAL" prefHeight="269.0" prefWidth="108.0">
-                     <effect>
-                        <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
-                     </effect>
-                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="188.0" prefWidth="136.0">
-                           <children>
-                              <Button fx:id="tab_recovery_btn_backup" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="Backup" />
-                              <Button fx:id="tab_recovery_btn_restore" layoutX="5.0" layoutY="236.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="Restore" />
-                              <CheckBox fx:id="tab_recovery_chk_backup_system" layoutX="5.0" layoutY="36.0" mnemonicParsing="false" selected="true" text="System" />
-                              <CheckBox fx:id="tab_recovery_chk_backup_data" layoutX="5.0" layoutY="58.0" mnemonicParsing="false" selected="true" text="Data" />
-                              <CheckBox fx:id="tab_recovery_chk_backup_cache" layoutX="5.0" layoutY="80.0" mnemonicParsing="false" selected="true" text="Cache" />
-                              <CheckBox fx:id="tab_recovery_chk_backup_recovery" layoutX="5.0" layoutY="102.0" mnemonicParsing="false" selected="true" text="Recovery" />
-                              <CheckBox fx:id="tab_recovery_chk_backup_boot" layoutX="5.0" layoutY="125.0" mnemonicParsing="false" selected="true" text="Boot" />
-                              <CheckBox fx:id="tab_recovery_chk_backup_asec" layoutX="5.0" layoutY="147.0" mnemonicParsing="false" text="asec" />
-                              <CheckBox fx:id="tab_recovery_chk_backup_sdext" layoutX="5.0" layoutY="169.0" mnemonicParsing="false" text="SD-ext" />
-                              <ImageView fx:id="img_head_backup_from_recovery" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="240.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="11.0">
-                                 <image>
-                                    <Image url="@../img/backups.png" />
-                                 </image>
-                              </ImageView>
-                              <CheckBox fx:id="tab_recovery_chk_backup_compression" layoutX="5.0" layoutY="191.0" mnemonicParsing="false" text="Compress" />
-                              <CheckBox fx:id="tab_recovery_chk_backup_nomd5" layoutX="5.0" layoutY="213.0" mnemonicParsing="false" text="noMD5" />
-                              <ImageView fx:id="img_head_backup_from_recovery_restore" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="242.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/site_backup_and_restore.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </AnchorPane>
-                     </items>
-                  </SplitPane>
-                  <SplitPane dividerPositions="0.23255813953488372" layoutX="408.0" layoutY="188.0" orientation="VERTICAL" prefHeight="131.0" prefWidth="174.0" AnchorPane.rightAnchor="13.0">
-                     <effect>
-                        <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
-                     </effect>
-                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
-                           <children>
-                              <Label layoutX="35.0" layoutY="5.0" text="Other" />
-                              <ImageView fx:id="img_head_recovery_other" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="5.0">
-                                 <image>
-                                    <Image url="@../img/applications-other.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="113.0" prefWidth="171.0">
-                           <children>
-                              <Button fx:id="tab_recovery_btn_mount" disable="true" layoutX="6.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="78.0" text="mount" />
-                              <Button fx:id="tab_recovery_btn_mkdir" disable="true" layoutX="6.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="78.0" text="mkdir" />
-                              <Button fx:id="tab_recovery_btn_chmod" disable="true" layoutX="89.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="77.0" text="chmod" />
-                              <Button fx:id="tab_recovery_btn_off_zip_verify" disable="true" layoutX="6.0" layoutY="63.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="160.0" text="turn off zip verification" />
-                              <Button fx:id="tab_recovery_btn_mount1" disable="true" layoutX="89.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="77.0" text="umount" />
-                           </children>
-                        </AnchorPane>
-                     </items>
-                  </SplitPane>
-                  <ImageView fx:id="img_recovery_status" fitHeight="32.0" fitWidth="32.0" layoutX="113.0" layoutY="324.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="11.0">
-                     <image>
-                        <Image url="@../img/bullet_red.png" />
-                     </image>
-                  </ImageView>
-                  <Label fx:id="tab_recovery_device_status_txt" layoutX="144.0" layoutY="332.0" text="No device detected." AnchorPane.bottomAnchor="19.0" />
-                  <Button fx:id="tab_recovery_btn_check_device" layoutX="14.0" layoutY="327.0" mnemonicParsing="false" text="Check device" AnchorPane.bottomAnchor="14.0" />
-                  <SplitPane dividerPositions="0.23255813953488372" layoutX="449.0" layoutY="51.0" orientation="VERTICAL" prefHeight="131.0" prefWidth="133.0" AnchorPane.rightAnchor="13.0">
-                     <effect>
-                        <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
-                     </effect>
-                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
-                           <children>
-                              <Label layoutX="35.0" layoutY="5.0" text="File operation" />
-                              <ImageView fx:id="img_head_fileoperation_recovery" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="5.0">
-                                 <image>
-                                    <Image url="@../img/file_extension_bin.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="131.0">
-                           <children>
-                              <Button fx:id="tab_recovery_btn_file_push" layoutX="6.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="push to device" />
-                              <Button fx:id="tab_recovery_btn_file_pull" layoutX="6.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="pull from device" />
-                              <Button disable="true" layoutX="6.0" layoutY="63.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="File Manager" />
-                           </children>
-                        </AnchorPane>
-                     </items>
-                  </SplitPane>
-               </children>
-            </AnchorPane>
-         </content>
-      </Tab>
-    <Tab text="settings">
-      <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <Accordion fx:id="tab_settings_accord" layoutX="9.0" layoutY="10.0" prefHeight="380.0" prefWidth="577.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="10.0">
-                    <panes>
-                      <TitledPane fx:id="tab_settings_tool_set_group" animated="false" text="Tools settings">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                 <children>
-                                    <TextField fx:id="tab_settings_tool_set_txt_tool_directory_browse" layoutX="112.0" layoutY="14.0" prefHeight="26.0" prefWidth="383.0" text="/Users/zorg/Разработка/SDK/android-sdk/platform-tools" AnchorPane.leftAnchor="101.60000000000002" AnchorPane.rightAnchor="80.0" />
-                                    <Button fx:id="tab_settings_tool_set_btn_tool_directory_browse" layoutX="504.0" layoutY="14.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="70.0" text="Browse" AnchorPane.rightAnchor="7.0" />
-                                    <Label layoutX="14.0" layoutY="19.0" text="Tools directory:" />
-                                 </children>
-                              </AnchorPane>
-                        </content>
-                      </TitledPane>
-                      <TitledPane animated="false" text="Override">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                 <children>
-                                    <Label layoutX="23.0" layoutY="19.0" text="fastboot:" />
-                                    <TextField fx:id="tab_settings_override_txt_fastboot_path" layoutX="83.0" layoutY="14.0" prefHeight="26.0" prefWidth="328.0" />
-                                    <ToggleButton fx:id="tab_settings_override_btn_fastboot_override" layoutX="498.0" layoutY="14.0" mnemonicParsing="false" text="Override" />
-                                    <ToggleButton fx:id="tab_settings_override_btn_adb_override" layoutX="498.0" layoutY="45.0" mnemonicParsing="false" text="Override" />
-                                    <Label layoutX="49.0" layoutY="50.0" text="adb:" />
-                                    <TextField fx:id="tab_settings_override_txt_adb_path" layoutX="83.0" layoutY="45.0" prefHeight="26.0" prefWidth="328.0" />
-                                    <Button fx:id="tab_settings_override_btn_fastboot_browse" layoutX="417.0" layoutY="14.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="Browse" />
-                                    <Button fx:id="tab_settings_override_btn_adb_browse" layoutX="417.0" layoutY="45.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="Browse" />
-                                    <Button fx:id="tab_settings_override_btn_unpack_binaries" layoutX="83.0" layoutY="110.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="484.0" text="Unpack built-in binaries" />
-                                    <ImageView fx:id="img_settings_unpack_binaries" fitHeight="16.0" fitWidth="16.0" layoutX="60.0" layoutY="115.0" pickOnBounds="true" preserveRatio="true">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TabPane fx:id="top_tab_pane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="894.0" rotateGraphic="true" side="LEFT" stylesheets="@../css/tabpane.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="58.0" tabMaxWidth="24.0" tabMinHeight="58.0" tabMinWidth="24.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <tabs>
+            <Tab styleClass="toptab">
+                <graphic>
+                    <ImageView fitHeight="32.0" fitWidth="32.0">
+                        <image>
+                            <Image url="@../img/ui/tabicons/adb.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+               <content>
+                  <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                     <children>
+                        <TabPane side="LEFT" stylesheets="@../css/sub_tabpane.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <tabs>
+                              <Tab text="File operation">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Button fx:id="tab_adb_btn_file_push" layoutX="12.0" layoutY="338.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="305.0" text="push to device" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="12.0">
+                                             <font>
+                                                <Font name="Lucida Grande" size="24.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="tab_adb_btn_file_pull" layoutX="324.0" layoutY="338.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="305.0" text="pull from device" AnchorPane.bottomAnchor="67.0" AnchorPane.rightAnchor="13.0">
+                                             <font>
+                                                <Font name="Lucida Grande" size="24.0" />
+                                             </font>
+                                          </Button>
+                                          <Button defaultButton="true" disable="true" layoutX="169.0" layoutY="154.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="305.0" text="Drag&amp;Drop" AnchorPane.bottomAnchor="251.0" AnchorPane.leftAnchor="169.0" AnchorPane.rightAnchor="168.0" AnchorPane.topAnchor="154.0">
+                                             <font>
+                                                <Font name="Lucida Grande" size="24.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                                 <graphic>
+                                    <ImageView fx:id="img_head_fileoperation" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" styleClass="subtabicon">
                                        <image>
-                                          <Image url="@../img/file_extension_zip.png" />
+                                          <Image url="@../img/file_extension_bin.png" />
                                        </image>
                                     </ImageView>
-                                    <Button fx:id="tab_settings_override_btn_mfastboot_browse" layoutX="417.0" layoutY="76.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="Browse" />
-                                    <TextField fx:id="tab_settings_override_txt_mfastboot_path" layoutX="83.0" layoutY="76.0" prefHeight="26.0" prefWidth="328.0" />
-                                    <Label layoutX="12.0" layoutY="81.0" text="mfastboot:" />
-                                    <ToggleButton fx:id="tab_settings_override_btn_mfastboot_override" layoutX="498.0" layoutY="76.0" mnemonicParsing="false" text="Override" />
-                                 </children>
-                              </AnchorPane>
-                        </content>
-                      </TitledPane>
-                      <TitledPane animated="false" text="Others">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 </graphic>
+                              </Tab>
+                              <Tab text="Application">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <MenuButton layoutX="14.0" layoutY="61.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="618.0" text="Install" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="10.0">
+                                            <items>
+                                              <MenuItem fx:id="tab_adb_btn_install" mnemonicParsing="false" text="Single *.APK" />
+                                              <MenuItem fx:id="tab_adb_btn_install_multiple" mnemonicParsing="false" text="Multiple *.APK" />
+                                            </items>
+                                             <font>
+                                                <Font name="Menlo Bold" size="18.0" />
+                                             </font>
+                                          </MenuButton>
+                                          <CheckBox fx:id="tab_adb_btn_install_flock" layoutX="24.0" layoutY="144.0" mnemonicParsing="false" text="forward lock">
+                                             <font>
+                                                <Font name="Menlo Regular" size="18.0" />
+                                             </font>
+                                          </CheckBox>
+                                          <CheckBox fx:id="tab_adb_btn_install_replace" layoutX="24.0" layoutY="175.0" mnemonicParsing="false" text="replace existing">
+                                             <font>
+                                                <Font name="Menlo Regular" size="18.0" />
+                                             </font>
+                                          </CheckBox>
+                                          <CheckBox fx:id="tab_adb_btn_install_test" layoutX="24.0" layoutY="206.0" mnemonicParsing="false" text="allow test package">
+                                             <font>
+                                                <Font name="Menlo Regular" size="18.0" />
+                                             </font>
+                                          </CheckBox>
+                                          <CheckBox fx:id="tab_adb_btn_install_sdcard" layoutX="24.0" layoutY="237.0" mnemonicParsing="false" text="install on sdcard">
+                                             <font>
+                                                <Font name="Menlo Regular" size="18.0" />
+                                             </font>
+                                          </CheckBox>
+                                          <CheckBox fx:id="tab_adb_btn_install_downgrade" layoutX="24.0" layoutY="268.0" mnemonicParsing="false" text="allow downgrade">
+                                             <font>
+                                                <Font name="Menlo Regular" size="18.0" />
+                                             </font>
+                                          </CheckBox>
+                                          <CheckBox fx:id="tab_adb_btn_install_partial" layoutX="24.0" layoutY="299.0" mnemonicParsing="false" text="partial install">
+                                             <font>
+                                                <Font name="Menlo Regular" size="18.0" />
+                                             </font>
+                                          </CheckBox>
+                                          <MenuButton layoutX="13.0" layoutY="351.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="618.0" text="Uninstall" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="10.0">
+                                            <items>
+                                              <MenuItem fx:id="tab_adb_btn_uninstall" mnemonicParsing="false" text="With data and cache" />
+                                              <MenuItem fx:id="tab_adb_btn_uninstall_keep_data" mnemonicParsing="false" text="Keep data and cache" />
+                                            </items>
+                                             <font>
+                                                <Font name="Menlo Bold" size="18.0" />
+                                             </font>
+                                          </MenuButton>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                                 <graphic>
+                                    <ImageView fx:id="img_head_application" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" styleClass="subtabicon">
+                                       <image>
+                                          <Image url="@../img/application_view_icons.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Tab>
+                              <Tab text="Backup">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Button fx:id="tab_adb_btn_backup" layoutX="12.0" layoutY="338.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="305.0" text="Backup" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="12.0">
+                                             <font>
+                                                <Font name="Lucida Grande" size="24.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="tab_adb_btn_restore" layoutX="323.0" layoutY="338.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="305.0" text="Restore" AnchorPane.bottomAnchor="67.0" AnchorPane.rightAnchor="14.0">
+                                             <font>
+                                                <Font name="Lucida Grande" size="24.0" />
+                                             </font>
+                                          </Button>
+                                          <CheckBox fx:id="tab_adb_chk_backup_apk" layoutX="66.0" layoutY="116.0" mnemonicParsing="false" selected="true" text="apk">
+                                             <font>
+                                                <Font name="Menlo Regular" size="18.0" />
+                                             </font>
+                                          </CheckBox>
+                                          <CheckBox fx:id="tab_adb_chk_backup_obb" layoutX="66.0" layoutY="161.0" mnemonicParsing="false" selected="true" text="obb">
+                                             <font>
+                                                <Font name="Menlo Regular" size="18.0" />
+                                             </font>
+                                          </CheckBox>
+                                          <CheckBox fx:id="tab_adb_chk_backup_shared" layoutX="66.0" layoutY="206.0" mnemonicParsing="false" text="shared">
+                                             <font>
+                                                <Font name="Menlo Regular" size="18.0" />
+                                             </font>
+                                          </CheckBox>
+                                          <CheckBox fx:id="tab_adb_chk_backup_system" layoutX="66.0" layoutY="248.0" mnemonicParsing="false" text="system">
+                                             <font>
+                                                <Font name="Menlo Regular" size="18.0" />
+                                             </font>
+                                          </CheckBox>
+                                          <CheckBox fx:id="tab_adb_chk_backup_all" layoutX="202.0" layoutY="116.0" mnemonicParsing="false" selected="true" text="all">
+                                             <font>
+                                                <Font name="Menlo Regular" size="18.0" />
+                                             </font>
+                                          </CheckBox>
+                                          <Label layoutX="42.0" layoutY="63.0" text="Select partition:">
+                                             <font>
+                                                <Font name="Menlo Regular" size="24.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                                 <graphic>
+                                    <ImageView fx:id="img_head_backup" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" styleClass="subtabicon">
+                                       <image>
+                                          <Image url="@../img/backups.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Tab>
+                           </tabs>
+                        </TabPane>
+                        <MenuButton layoutX="180.0" layoutY="7.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="reboot device">
+                          <items>
+                            <MenuItem fx:id="tab_adb_btn_reboot_device" mnemonicParsing="false" text="normal" />
+                            <MenuItem fx:id="tab_adb_btn_reboot_recovery" mnemonicParsing="false" text="to recovery" />
+                              <MenuItem fx:id="tab_adb_btn_reboot_bootloader" mnemonicParsing="false" text="to bootloader" />
+                          </items>
+                        </MenuButton>
+                        <Separator layoutX="170.0" layoutY="36.0" prefHeight="11.0" prefWidth="654.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="-12.0" />
+                        <Button fx:id="tab_adb_btn_check_device" layoutX="182.0" layoutY="448.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="117.0" text="Check device" AnchorPane.bottomAnchor="6.0" />
+                        <ImageView fx:id="img_adb_status" fitHeight="32.0" fitWidth="32.0" layoutX="300.0" layoutY="445.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="3.0">
+                           <image>
+                              <Image url="@../img/bullet_red.png" />
+                           </image>
+                        </ImageView>
+                        <Label fx:id="tab_adb_device_status_txt" layoutX="340.0" layoutY="453.0" text="No device detected." AnchorPane.bottomAnchor="11.0" />
+                        <Button fx:id="tab_adb_btn_console" alignment="CENTER" layoutX="691.0" layoutY="7.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="115.0" text="adb console" AnchorPane.rightAnchor="6.0">
+                           <graphic>
+                              <ImageView fx:id="img_console_adb" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/terminal-pencil.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="tab_adb_btn_run_dfs" layoutX="458.0" layoutY="7.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="106.0" text="run *.dfs script" />
+                        <MenuButton layoutX="319.0" layoutY="7.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="adb control">
+                          <items>
+                            <MenuItem fx:id="tab_adb_btn_server_start" mnemonicParsing="false" text="start-server" />
+                            <MenuItem fx:id="tab_adb_btn_server_kill" mnemonicParsing="false" text="kill-server" />
+                          </items>
+                        </MenuButton>
+                        <ProgressBar fx:id="tab_adb_progressbar" layoutX="182.0" layoutY="422.0" prefHeight="20.0" prefWidth="617.0" progress="0.0" AnchorPane.bottomAnchor="38.0" AnchorPane.leftAnchor="182.0" AnchorPane.rightAnchor="13.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+          <Tab styleClass="toptab">
+              <graphic>
+                  <ImageView fitHeight="32.0" fitWidth="32.0">
+                      <image>
+                          <Image url="@../img/ui/tabicons/fastboot.png" />
+                      </image>
+                  </ImageView>
+              </graphic>
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="img_fastboot_status" fitHeight="32.0" fitWidth="32.0" layoutX="113.0" layoutY="324.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="11.0">
+                           <image>
+                              <Image url="@../img/bullet_red.png" />
+                           </image>
+                        </ImageView>
+                        <ProgressBar fx:id="tab_fastboot_progressbar" layoutX="14.0" layoutY="299.0" prefHeight="20.0" prefWidth="573.0" progress="0.0" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0" />
+                        <Label fx:id="tab_fastboot_device_status_txt" layoutX="144.0" layoutY="332.0" text="No device detected." AnchorPane.bottomAnchor="19.0" />
+                        <Button fx:id="tab_fastboot_btn_check_device" layoutX="14.0" layoutY="327.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="98.0" text="Check device" AnchorPane.bottomAnchor="14.0" />
+                        <Separator layoutY="37.0" prefHeight="11.0" prefWidth="617.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-17.0" />
+                        <Button fx:id="tab_fastboot_btn_reboot_bootloader" layoutX="14.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="reboot-bootloader" />
+                        <Button fx:id="tab_fastboot_btn_reboot" layoutX="154.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="58.0" text="reboot" />
+                        <SplitPane dividerPositions="0.22900763358778625" layoutX="391.0" layoutY="51.0" orientation="VERTICAL" prefHeight="131.0" prefWidth="196.0" AnchorPane.rightAnchor="13.0">
+                           <effect>
+                              <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
+                           </effect>
+                           <items>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
                                  <children>
-                                    <Button fx:id="tab_settings_others_btn_reinitialize" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Reinitialize inventory" />
-                                    <CheckBox fx:id="tab_settings_others_chk_simplemode" layoutX="14.0" layoutY="52.0" mnemonicParsing="false" selected="true" text="Simple mode" />
+                                    <Label layoutX="38.0" layoutY="6.0" text="Unlocking bootloader" />
+                                    <ImageView fx:id="img_head_unlocking" fitHeight="16.0" fitWidth="16.0" layoutX="12.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="166.0" AnchorPane.topAnchor="6.0">
+                                       <image>
+                                          <Image url="@../img/lock-unlock.png" />
+                                       </image>
+                                    </ImageView>
                                  </children>
                               </AnchorPane>
-                        </content>
-                      </TitledPane>
-                    </panes>
-                  </Accordion>
-                  <Label alignment="CENTER" layoutX="601.0" layoutY="12.0" prefHeight="23.0" prefWidth="34.0" text="r105" AnchorPane.rightAnchor="14.0">
-                     <font>
-                        <Font name="Menlo Regular" size="12.0" />
-                     </font>
-                  </Label>
-               </children>
-            </AnchorPane>
-      </content>
-    </Tab>
-      <Tab text="console">
-         <content>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <TextArea fx:id="tab_main_txt_area_log" layoutX="7.0" layoutY="6.0" prefHeight="384.0" prefWidth="581.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="6.0" />
-               </children>
-            </AnchorPane>
-         </content>
-      </Tab>
-  </tabs>
-</TabPane>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="131.0">
+                                 <children>
+                                    <Button fx:id="tab_fastboot_btn_oem_unlock" layoutX="3.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="89.0" text="oem unlock" />
+                                    <Button fx:id="tab_fastboot_btn_oem_lock" layoutX="98.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="92.0" text="oem lock" />
+                                    <Button fx:id="tab_fastboot_btn_oem_get_unlock_data" layoutX="3.0" layoutY="65.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="187.0" text="oem get_unlock_data" />
+                                    <Button fx:id="tab_fastboot_btn_oem_lock_begin" layoutX="3.0" layoutY="35.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="186.0" text="oem lock begin" />
+                                 </children>
+                              </AnchorPane>
+                           </items>
+                        </SplitPane>
+                        <SplitPane dividerPositions="0.13839285714285715" layoutX="14.0" layoutY="51.0" orientation="VERTICAL" prefHeight="222.0" prefWidth="138.0" AnchorPane.leftAnchor="14.0">
+                           <effect>
+                              <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
+                           </effect>
+                           <items>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
+                                 <children>
+                                    <Label layoutX="35.0" layoutY="5.0" text="Flashing" />
+                                    <ImageView fx:id="img_head_flash" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="5.0">
+                                       <image>
+                                          <Image url="@../img/file_extension_bat.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="188.0" prefWidth="136.0">
+                                 <children>
+                                    <Button fx:id="tab_fastboot_btn_flash_recovery" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="flash-recovery" />
+                                    <Button fx:id="tab_fastboot_btn_flash_boot" layoutX="5.0" layoutY="35.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="flash-boot (kernel)" />
+                                    <Button fx:id="tab_fastboot_btn_flash_cache" layoutX="5.0" layoutY="65.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="flash-cache" />
+                                    <Button fx:id="tab_fastboot_btn_flash_userdata" layoutX="4.0" layoutY="95.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="flash-userdata" />
+                                    <Button fx:id="tab_fastboot_btn_flash_system" layoutX="4.0" layoutY="125.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="flash-system" />
+                                    <Button fx:id="tab_fastboot_btn_flash_radio" layoutX="4.0" layoutY="155.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="flash-radio" />
+                                 </children>
+                              </AnchorPane>
+                           </items>
+                        </SplitPane>
+                        <Button fx:id="tab_fastboot_btn_console" alignment="CENTER" layoutX="453.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="144.0" text="fastboot console" AnchorPane.rightAnchor="14.0">
+                           <graphic>
+                              <ImageView fx:id="img_console_fastboot" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/terminal-pencil.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                        <SplitPane dividerPositions="0.31683168316831684" layoutX="391.0" layoutY="188.0" orientation="VERTICAL" prefHeight="103.0" prefWidth="196.0" AnchorPane.rightAnchor="13.0">
+                           <effect>
+                              <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
+                           </effect>
+                           <items>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
+                                 <children>
+                                    <Label layoutX="38.0" layoutY="6.0" text="Other" />
+                                    <ImageView fx:id="img_head_other" layoutX="12.0" layoutY="6.0">
+                                       <image>
+                                          <Image url="@../../../../../Pictures/icons/faience-icon-theme_0.5/Faience/categories/16/applications-other.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="131.0">
+                                 <children>
+                                    <Button fx:id="tab_fastboot_btn_boot_img" layoutX="4.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="185.0" text="boot *.img" />
+                                    <Button fx:id="tab_fastboot_btn_flash_mfastboot_system" layoutX="4.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="185.0" text="mfastboot flash-system" />
+                                 </children>
+                              </AnchorPane>
+                           </items>
+                        </SplitPane>
+                        <Button fx:id="tab_fastboot_btn_run_dfs" layoutX="219.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="112.0" text="run *.dfs script" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab styleClass="toptab">
+                <graphic>
+                    <ImageView fitHeight="32.0" fitWidth="32.0">
+                        <image>
+                            <Image url="@../img/ui/tabicons/recovery.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Separator layoutY="37.0" prefHeight="11.0" prefWidth="617.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-17.0" />
+                        <ProgressBar fx:id="tab_recovery_progressbar" layoutX="14.0" layoutY="299.0" prefHeight="20.0" prefWidth="573.0" progress="0.0" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0" />
+                        <SplitPane layoutX="14.0" layoutY="51.0" orientation="VERTICAL" prefHeight="111.0" prefWidth="108.0" AnchorPane.leftAnchor="14.0">
+                           <effect>
+                              <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
+                           </effect>
+                           <items>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="188.0" prefWidth="136.0">
+                                 <children>
+                                    <Button fx:id="tab_recovery_btn_wipe" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="wipe" />
+                                    <CheckBox fx:id="tab_recovery_chk_wipe_cache" layoutX="5.0" layoutY="38.0" mnemonicParsing="false" text="cache" />
+                                    <CheckBox fx:id="tab_recovery_chk_wipe_data" layoutX="5.0" layoutY="61.0" mnemonicParsing="false" text="data" />
+                                    <CheckBox fx:id="tab_recovery_chk_wipe_dalvik" layoutX="5.0" layoutY="84.0" mnemonicParsing="false" text="dalvik" />
+                                    <ImageView fx:id="img_head_wipe" fitHeight="16.0" fitWidth="16.0" layoutX="15.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="84.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="10.0">
+                                       <image>
+                                          <Image url="@../img/eraser.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
+                           </items>
+                        </SplitPane>
+                        <Button fx:id="tab_recovery_btn_run_dfs" layoutX="268.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="114.0" text="run *.dfs script" />
+                        <Button fx:id="tab_recovery_btn_console" alignment="CENTER" layoutX="479.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="118.0" text="adb console" AnchorPane.rightAnchor="14.0">
+                           <graphic>
+                              <ImageView fx:id="img_console_recovery" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/terminal-pencil.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                        <MenuButton layoutX="14.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="108.0" text="adb control">
+                           <items>
+                              <MenuItem fx:id="tab_recovery_btn_server_start" mnemonicParsing="false" text="start-server" />
+                              <MenuItem fx:id="tab_recovery_btn_server_kill" mnemonicParsing="false" text="kill-server" />
+                           </items>
+                        </MenuButton>
+                        <MenuButton layoutX="129.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="reboot device">
+                           <items>
+                              <MenuItem fx:id="tab_recovery_btn_reboot_device" mnemonicParsing="false" text="normal" />
+                              <MenuItem fx:id="tab_recovery_btn_reboot_recovery" mnemonicParsing="false" text="to recovery" />
+                              <MenuItem fx:id="tab_recovery_btn_reboot_bootloader" mnemonicParsing="false" text="to bootloader" />
+                           </items>
+                        </MenuButton>
+                        <SplitPane dividerPositions="0.18633540372670807" layoutX="129.0" layoutY="51.0" orientation="VERTICAL" prefHeight="162.0" prefWidth="108.0">
+                           <effect>
+                              <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
+                           </effect>
+                           <items>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
+                                 <children>
+                                    <Label layoutX="35.0" layoutY="5.0" text="Flash" />
+                                    <ImageView fx:id="img_head_flash_from_recovery" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="5.0">
+                                       <image>
+                                          <Image url="@../img/file_extension_bat.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="188.0" prefWidth="136.0">
+                                 <children>
+                                    <Button fx:id="tab_recovery_btn_flash_zip" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="single *.zip" />
+                                    <Button fx:id="tab_recovery_btn_adb_sideload" layoutX="5.0" layoutY="95.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="adb sideload" />
+                                    <Button fx:id="tab_recovery_btn_flash_zip_from_sd" layoutX="5.0" layoutY="65.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="from sdcard" />
+                                    <Button fx:id="tab_recovery_btn_flash_multizip" layoutX="5.0" layoutY="35.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="multiple *.zip" />
+                                 </children>
+                              </AnchorPane>
+                           </items>
+                        </SplitPane>
+                        <SplitPane layoutX="244.0" layoutY="51.0" orientation="VERTICAL" prefHeight="269.0" prefWidth="108.0">
+                           <effect>
+                              <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
+                           </effect>
+                           <items>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="188.0" prefWidth="136.0">
+                                 <children>
+                                    <Button fx:id="tab_recovery_btn_backup" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="Backup" />
+                                    <Button fx:id="tab_recovery_btn_restore" layoutX="5.0" layoutY="236.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="Restore" />
+                                    <CheckBox fx:id="tab_recovery_chk_backup_system" layoutX="5.0" layoutY="36.0" mnemonicParsing="false" selected="true" text="System" />
+                                    <CheckBox fx:id="tab_recovery_chk_backup_data" layoutX="5.0" layoutY="58.0" mnemonicParsing="false" selected="true" text="Data" />
+                                    <CheckBox fx:id="tab_recovery_chk_backup_cache" layoutX="5.0" layoutY="80.0" mnemonicParsing="false" selected="true" text="Cache" />
+                                    <CheckBox fx:id="tab_recovery_chk_backup_recovery" layoutX="5.0" layoutY="102.0" mnemonicParsing="false" selected="true" text="Recovery" />
+                                    <CheckBox fx:id="tab_recovery_chk_backup_boot" layoutX="5.0" layoutY="125.0" mnemonicParsing="false" selected="true" text="Boot" />
+                                    <CheckBox fx:id="tab_recovery_chk_backup_asec" layoutX="5.0" layoutY="147.0" mnemonicParsing="false" text="asec" />
+                                    <CheckBox fx:id="tab_recovery_chk_backup_sdext" layoutX="5.0" layoutY="169.0" mnemonicParsing="false" text="SD-ext" />
+                                    <ImageView fx:id="img_head_backup_from_recovery" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="240.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="11.0">
+                                       <image>
+                                          <Image url="@../img/backups.png" />
+                                       </image>
+                                    </ImageView>
+                                    <CheckBox fx:id="tab_recovery_chk_backup_compression" layoutX="5.0" layoutY="191.0" mnemonicParsing="false" text="Compress" />
+                                    <CheckBox fx:id="tab_recovery_chk_backup_nomd5" layoutX="5.0" layoutY="213.0" mnemonicParsing="false" text="noMD5" />
+                                    <ImageView fx:id="img_head_backup_from_recovery_restore" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="242.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../img/site_backup_and_restore.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
+                           </items>
+                        </SplitPane>
+                        <SplitPane dividerPositions="0.23255813953488372" layoutX="408.0" layoutY="188.0" orientation="VERTICAL" prefHeight="131.0" prefWidth="174.0" AnchorPane.rightAnchor="13.0">
+                           <effect>
+                              <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
+                           </effect>
+                           <items>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
+                                 <children>
+                                    <Label layoutX="35.0" layoutY="5.0" text="Other" />
+                                    <ImageView fx:id="img_head_recovery_other" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="5.0">
+                                       <image>
+                                          <Image url="@../img/applications-other.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="113.0" prefWidth="171.0">
+                                 <children>
+                                    <Button fx:id="tab_recovery_btn_mount" disable="true" layoutX="6.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="78.0" text="mount" />
+                                    <Button fx:id="tab_recovery_btn_mkdir" disable="true" layoutX="6.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="78.0" text="mkdir" />
+                                    <Button fx:id="tab_recovery_btn_chmod" disable="true" layoutX="89.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="77.0" text="chmod" />
+                                    <Button fx:id="tab_recovery_btn_off_zip_verify" disable="true" layoutX="6.0" layoutY="63.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="160.0" text="turn off zip verification" />
+                                    <Button fx:id="tab_recovery_btn_mount1" disable="true" layoutX="89.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="77.0" text="umount" />
+                                 </children>
+                              </AnchorPane>
+                           </items>
+                        </SplitPane>
+                        <ImageView fx:id="img_recovery_status" fitHeight="32.0" fitWidth="32.0" layoutX="113.0" layoutY="324.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="11.0">
+                           <image>
+                              <Image url="@../img/bullet_red.png" />
+                           </image>
+                        </ImageView>
+                        <Label fx:id="tab_recovery_device_status_txt" layoutX="144.0" layoutY="332.0" text="No device detected." AnchorPane.bottomAnchor="19.0" />
+                        <Button fx:id="tab_recovery_btn_check_device" layoutX="14.0" layoutY="327.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="99.0" text="Check device" AnchorPane.bottomAnchor="14.0" />
+                        <SplitPane dividerPositions="0.23255813953488372" layoutX="449.0" layoutY="51.0" orientation="VERTICAL" prefHeight="131.0" prefWidth="133.0" AnchorPane.rightAnchor="13.0">
+                           <effect>
+                              <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
+                           </effect>
+                           <items>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
+                                 <children>
+                                    <Label layoutX="35.0" layoutY="5.0" text="File operation" />
+                                    <ImageView fx:id="img_head_fileoperation_recovery" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="5.0">
+                                       <image>
+                                          <Image url="@../img/file_extension_bin.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="131.0">
+                                 <children>
+                                    <Button fx:id="tab_recovery_btn_file_push" layoutX="6.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="push to device" />
+                                    <Button fx:id="tab_recovery_btn_file_pull" layoutX="6.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="pull from device" />
+                                    <Button disable="true" layoutX="6.0" layoutY="63.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="File Manager" />
+                                 </children>
+                              </AnchorPane>
+                           </items>
+                        </SplitPane>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+          <Tab styleClass="toptab">
+              <graphic>
+                  <ImageView fitHeight="32.0" fitWidth="32.0">
+                      <image>
+                          <Image url="@../img/ui/tabicons/settings.png" />
+                      </image>
+                  </ImageView>
+              </graphic>
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Accordion fx:id="tab_settings_accord" layoutX="9.0" layoutY="10.0" prefHeight="380.0" prefWidth="577.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="10.0">
+                          <panes>
+                            <TitledPane fx:id="tab_settings_tool_set_group" animated="false" text="Tools settings">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <TextField fx:id="tab_settings_tool_set_txt_tool_directory_browse" layoutX="112.0" layoutY="14.0" prefHeight="26.0" prefWidth="383.0" text="/Users/zorg/Разработка/SDK/android-sdk/platform-tools" AnchorPane.leftAnchor="101.60000000000002" AnchorPane.rightAnchor="80.0" />
+                                          <Button fx:id="tab_settings_tool_set_btn_tool_directory_browse" layoutX="504.0" layoutY="14.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="70.0" text="Browse" AnchorPane.rightAnchor="7.0" />
+                                          <Label layoutX="14.0" layoutY="19.0" text="Tools directory:" />
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </TitledPane>
+                            <TitledPane animated="false" text="Override">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Label layoutX="23.0" layoutY="19.0" text="fastboot:" />
+                                          <TextField fx:id="tab_settings_override_txt_fastboot_path" layoutX="83.0" layoutY="14.0" prefHeight="26.0" prefWidth="328.0" />
+                                          <ToggleButton fx:id="tab_settings_override_btn_fastboot_override" layoutX="498.0" layoutY="14.0" mnemonicParsing="false" text="Override" />
+                                          <ToggleButton fx:id="tab_settings_override_btn_adb_override" layoutX="498.0" layoutY="45.0" mnemonicParsing="false" text="Override" />
+                                          <Label layoutX="49.0" layoutY="50.0" text="adb:" />
+                                          <TextField fx:id="tab_settings_override_txt_adb_path" layoutX="83.0" layoutY="45.0" prefHeight="26.0" prefWidth="328.0" />
+                                          <Button fx:id="tab_settings_override_btn_fastboot_browse" layoutX="417.0" layoutY="14.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="Browse" />
+                                          <Button fx:id="tab_settings_override_btn_adb_browse" layoutX="417.0" layoutY="45.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="Browse" />
+                                          <Button fx:id="tab_settings_override_btn_unpack_binaries" layoutX="83.0" layoutY="110.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="484.0" text="Unpack built-in binaries" />
+                                          <ImageView fx:id="img_settings_unpack_binaries" fitHeight="16.0" fitWidth="16.0" layoutX="60.0" layoutY="115.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../img/file_extension_zip.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Button fx:id="tab_settings_override_btn_mfastboot_browse" layoutX="417.0" layoutY="76.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="Browse" />
+                                          <TextField fx:id="tab_settings_override_txt_mfastboot_path" layoutX="83.0" layoutY="76.0" prefHeight="26.0" prefWidth="328.0" />
+                                          <Label layoutX="12.0" layoutY="81.0" text="mfastboot:" />
+                                          <ToggleButton fx:id="tab_settings_override_btn_mfastboot_override" layoutX="498.0" layoutY="76.0" mnemonicParsing="false" text="Override" />
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </TitledPane>
+                            <TitledPane animated="false" text="Others">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Button fx:id="tab_settings_others_btn_reinitialize" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Reinitialize inventory" />
+                                          <CheckBox fx:id="tab_settings_others_chk_simplemode" layoutX="14.0" layoutY="52.0" mnemonicParsing="false" selected="true" text="Simple mode" />
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </TitledPane>
+                          </panes>
+                        </Accordion>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab styleClass="toptab">
+                <graphic>
+                    <ImageView fitHeight="32.0" fitWidth="32.0">
+                        <image>
+                            <Image url="@../img/ui/tabicons/console.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextArea fx:id="tab_main_txt_area_log" layoutX="7.0" layoutY="6.0" prefHeight="384.0" prefWidth="581.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="6.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+      <Label alignment="CENTER" layoutX="10.0" layoutY="443.0" prefHeight="38.0" prefWidth="81.0" stylesheets="@../css/version_label.css" text="r105" textFill="WHITE" translateX="-10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0">
+         <font>
+            <Font name="Menlo Bold" size="12.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
