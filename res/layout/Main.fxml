@@ -48,7 +48,7 @@
                                           </Button>
                                           <Button defaultButton="true" disable="true" layoutX="12.0" layoutY="53.0" mnemonicParsing="false" opacity="0.32" prefHeight="297.0" prefWidth="617.0" text="Drag&amp;Drop" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="53.0">
                                              <font>
-                                                <Font name="Lucida Grande" size="24.0" />
+                                                <Font name="PT Sans" size="24.0" />
                                              </font>
                                           </Button>
                                        </children>

@@ -220,11 +220,10 @@ public class Controller implements Initializable {
         img_head_backup_from_recovery_restore.setImage(new Image(getClass().getResourceAsStream("/img/site_backup_and_restore.png")));
 
 
-        /**
          holdSplitPaneDivider(img_head_fileoperation, img_head_application, img_head_backup, img_head_flash, img_head_unlocking,
          img_head_other,img_head_flash_from_recovery, img_head_backup_from_recovery,img_head_recovery_other,img_head_fileoperation_recovery);
          //img_head_wipe
-         */
+
 
 
         /** Set simple mode **/
@@ -240,7 +239,7 @@ public class Controller implements Initializable {
         setBinaries();
 
         if(!checkAdbBin(new File(ADB_BINARY)) || !checkFastbootBin(new File(FASTBOOT_BINARY))) {
-            if (showConfirmDialogs("Binaries", "ADB and FASTBOOT", "Can't locate adb or fastboot binaries, unpack built-in?")) {
+            if (showDialogConfirmation("Binaries", "ADB and FASTBOOT", "Can't locate adb or fastboot binaries, unpack built-in?")) {
                 unpackBuildInBinaryDialog();
             }
         }
@@ -384,7 +383,7 @@ public class Controller implements Initializable {
                                                 }
                                             }
                                             if (dld.getStatus() == Download.ERROR) {
-                                                Platform.runLater(() -> showDialogError("Ooops!", "Download error.", "Try later."));
+                                                Platform.runLater(() -> showDialog(Alert.AlertType.ERROR,"Ooops!", "Download error.", "Try later."));
                                                 break;
                                             } else if (dld.getStatus() == Download.COMPLETE) {
                                                 Platform.runLater(() -> tab_adb_progressbar.setProgress(dld.getProgress()));
@@ -410,68 +409,45 @@ public class Controller implements Initializable {
                     }
                 }).start();}
         } catch (Exception e) {
-            showDialogErrorNoDirectorySelected();
+            logToConsole(e.getMessage());
+            logToGlobalAlert(e.getMessage());
         }
     }
     /** ADB Commands **/
     private void dfsAdbCheckStatus(ImageView status_image, Label status_label){
-        try {
             String adb_devices_output = runCmd(ADB_BINARY, "devices", "-l");
             String[] finder = adb_devices_output.split("\n");
             if (!finder[finder.length - 1].equals("List of devices attached ")) {
                 status_image.setImage(new Image(getClass().getResourceAsStream("/img/bullet_green.png")));
                 String[] device_info = finder[finder.length - 1].split("\\s+");
-                showDialogInformation("Success!", "Adb device detected.", "Device information is: " + device_info[0]);
+                showDialog(Alert.AlertType.INFORMATION,"Success!", "Adb device detected.", "Device information is: " + device_info[0]);
 
                 status_label.setText(device_info[device_info.length-2] + " " + device_info[device_info.length-1] + " " + device_info[device_info.length-3]);
             } else {
                 status_image.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
-                showDialogError("Ooops!", "Adb device not detected.", "Try to reconnect.");
+                showDialog(Alert.AlertType.ERROR,"Ooops!", "Adb device not detected.", "Try to reconnect.");
                 status_label.setText("No device detected.");
             }
-        } catch (IOException e) {
-            showDialogError("Ooops!", "Adb binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings.");
-        }
     }
     private void dfsAdbKillServer(){
-        try {
-            runCmd(ADB_BINARY, "kill-server");
-            showDialogInformation("adb", "Operation complete", "Command kill-server sended to adb.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        runCmd(ADB_BINARY,"kill-server");
+        showDialog(Alert.AlertType.INFORMATION,"Adb","Operation complete","Command kill-server sended to adb.");
     }
     private void dfsAdbStartServer(){
-        try {
-            runCmd(ADB_BINARY, "start-server");
-            showDialogInformation("adb", "Operation complete", "Command start-server sended to adb.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        runCmd(ADB_BINARY,"start-server");
+        showDialog(Alert.AlertType.INFORMATION,"Adb","Operation complete","Command start-server sended to adb.");
     }
     private void dfsAdbRebootDeviceNormal(){
-        try {
             runCmd(ADB_BINARY, "reboot");
-            showDialogInformation("adb", "Operation complete", "Reboot command sended to device.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "Reboot command sended to device.");
     }
     private void dfsAdbRebootDeviceToRecovery(){
-        try {
             runCmd(ADB_BINARY, "reboot", "recovery");
-            showDialogInformation("adb", "Operation complete", "Command \"reboot to recovery\" sended to device.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "Command \"reboot to recovery\" sended to device.");
     }
     private void dfsAdbRebootDeviceToBootloader(){
-        try {
             runCmd(ADB_BINARY, "reboot", "bootloader");
-            showDialogInformation("adb", "Operation complete", "Command \"reboot to bootlader\" sended to device.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "Command \"reboot to bootlader\" sended to device.");
     }
     private void dfsAdbFilePush(){
         try {
@@ -480,17 +456,13 @@ public class Controller implements Initializable {
 
             if (!remotefile.equals("")) {
                 new Thread(() -> {
-                    try {
                         runCmdAdbPushPull(tab_adb_progressbar,ADB_BINARY, "push", "-p", localfile.getPath(), remotefile);
 
-                        Platform.runLater(() -> showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " pushed to remote path " + remotefile));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                        Platform.runLater(() -> showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "File " + localfile.getName() + " pushed to remote path " + remotefile));
                 }).start();
             }
         } catch (Exception e) {
-            showDialogErrorNoDirectorySelected();
+            logToConsole(e.getMessage());
         }
     }
     private void dfsAdbFilePull(){
@@ -500,16 +472,12 @@ public class Controller implements Initializable {
                 File localfile = fileSaver();
                 if(localfile!=null){
                     new Thread(() -> {
-                        try {
                             runCmdAdbPushPull(tab_adb_progressbar, ADB_BINARY, "pull", "-p", remotefile, localfile.getPath());
-                            Platform.runLater(() -> showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " pulled from remote path " + remotefile));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                            Platform.runLater(() -> showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "File " + localfile.getName() + " pulled from remote path " + remotefile));
                     }).start();}
             }
         } catch (Exception e) {
-            showDialogErrorNoDirectorySelected();
+            logToConsole(e.getMessage());
         }
     }
     private void dfsAdbInstallApp(){
@@ -517,7 +485,6 @@ public class Controller implements Initializable {
             File localfile = fileChooser();
             if(localfile!=null){
                 new Thread(() -> {
-                    try {
                         String log;
                         if(getInstallArgs(false)==null) {
                             log=runCmd(ADB_BINARY, "install", localfile.getPath());
@@ -528,21 +495,18 @@ public class Controller implements Initializable {
 
                         Platform.runLater(() -> {
                             if(log.contains("INSTALL_PARSE_FAILED_NO_CERTIFICATES")){
-                                showDialogError("Error","Installation FAIL!","Selected apk is not signed!");
+                                showDialog(Alert.AlertType.ERROR,"Error", "Installation FAIL!", "Selected apk is not signed!");
                             } else if (log.contains("INSTALL_FAILED_ALREADY_EXISTS")) {
-                                showDialogError("Error","Installation FAIL!","Application exist! Use replace option to overwrite.");
+                                showDialog(Alert.AlertType.ERROR,"Error", "Installation FAIL!", "Application exist! Use replace option to overwrite.");
                             } else if (log.contains("Failure")) {
-                                showDialogError("Error","Installation FAIL!","Can't install APK, see console for detail.");
+                                showDialog(Alert.AlertType.ERROR,"Error", "Installation FAIL!", "Can't install APK, see console for detail.");
                             } else {
-                                showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " installed on device.");
+                                showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "File " + localfile.getName() + " installed on device.");
                             }
                         });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }).start();}
         } catch (Exception e) {
-            showDialogErrorNoDirectorySelected();
+            logToConsole(e.getMessage());
         }
     }
     private void dfsAdbInstallMultipleApp(){
@@ -550,7 +514,6 @@ public class Controller implements Initializable {
             List<File> localfiles = fileChooserMultiple();
             if(localfiles!=null){
                 new Thread(() -> {
-                    try {
                         String log="";
                         Double percentile=0.0;
                         int maxpercentile=localfiles.size();
@@ -578,18 +541,15 @@ public class Controller implements Initializable {
                             int failure = (finalLog.length() - finalLog.substring(0).replaceAll("Failure", "").length())/7;
                             int success = (finalLog.length() - finalLog.substring(0).replaceAll("Success","").length())/7;
 
-                            showDialogInformation("adb", "Operation complete",
-                                    "Success: "+success
-                                            +"\nFailure: "+failure+"\n"
-                                            +"\nSee Console for detail."+"\n"
-                                            +"\nFile list:\n"+Arrays.asList(localfiles).toString().replace(", ","\n").replace("[","").replace("]",""));
+                            showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete",
+                                    "Success: " + success
+                                            + "\nFailure: " + failure + "\n"
+                                            + "\nSee Console for detail." + "\n"
+                                            + "\nFile list:\n" + Arrays.asList(localfiles).toString().replace(", ", "\n").replace("[", "").replace("]", ""));
                         });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }).start();}
         } catch (Exception e) {
-            showDialogErrorNoDirectorySelected();
+            logToConsole(e.getMessage());
         }
     }
     private void dfsAdbUninstallApp(){
@@ -597,16 +557,15 @@ public class Controller implements Initializable {
             String packagename = setUninstallPackage("com.zlab.datFM");
             if(!packagename.equals("")){
                 new Thread(() -> {
-                    try {
                         final String finalLog = runCmd(ADB_BINARY, "uninstall", packagename);
                         Platform.runLater(() -> {
                             //int failure = (finalLog.length() - finalLog.substring(0).replaceAll("Failure", "").length())/7;
                             int success = (finalLog.length() - finalLog.substring(0).replaceAll("Success","").length())/7;
 
                             if(success==1){
-                                showDialogInformation("adb", "Operation complete", "Package " + packagename + " uninstalled from device,");
+                                showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "Package " + packagename + " uninstalled from device,");
                             } else {
-                                showDialogInformation("adb", "Operation not complete", "Can't uninstall " + packagename + ", see Console for detail.");
+                                showDialog(Alert.AlertType.INFORMATION,"adb", "Operation not complete", "Can't uninstall " + packagename + ", see Console for detail.");
                             }
                             /** FOR THE NEXT RELEASE (MULTIPLE UNINSTALLER)
                              showDialogInformation("adb", "Operation complete",
@@ -614,17 +573,14 @@ public class Controller implements Initializable {
                              +"\nFailure: "+failure+"\n"
                              +"\nSee Console for detail."+"\n");*/
                         });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }).start();}
         } catch (Exception e) {
-            showDialogErrorNoDirectorySelected();
+            logToConsole(e.getMessage());
         }
     }
     private void dfsAdbUninstallAppKeepData(){
 
-        boolean keep = showConfirmDialogs("WARNING!", "PLEASE READ CAREFULLY!", "The -k option uninstalls the application while retaining the data/cache.\n" +
+        boolean keep = showDialogConfirmation("WARNING!", "PLEASE READ CAREFULLY!", "The -k option uninstalls the application while retaining the data/cache.\n" +
                 "\" +\n" +
                 "                        \"At the moment, there is no way to remove the remaining data.\\n\" +\n" +
                 "                        \"You will have to reinstall the application with the same signature, and fully uninstall it.\\n\" +\n" +
@@ -634,16 +590,15 @@ public class Controller implements Initializable {
             String packagename = setUninstallPackage("com.zlab.datFM");
             if(!packagename.equals("")){
                 new Thread(() -> {
-                    try {
                         final String finalLog = runCmd(ADB_BINARY, "shell", "pm", "uninstall", "-k", packagename);
                         Platform.runLater(() -> {
                             //int failure = (finalLog.length() - finalLog.substring(0).replaceAll("Failure", "").length())/7;
                             int success = (finalLog.length() - finalLog.substring(0).replaceAll("Success","").length())/7;
 
                             if(success==1){
-                                showDialogInformation("adb", "Operation complete", "Package " + packagename + " uninstalled from device,");
+                                showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "Package " + packagename + " uninstalled from device,");
                             } else {
-                                showDialogInformation("adb", "Operation not complete", "Can't uninstall " + packagename + ", see Console for detail.");
+                                showDialog(Alert.AlertType.INFORMATION,"adb", "Operation not complete", "Can't uninstall " + packagename + ", see Console for detail.");
                             }
                             /** FOR THE NEXT RELEASE (MULTIPLE UNINSTALLER)
                              showDialogInformation("adb", "Operation complete",
@@ -651,9 +606,6 @@ public class Controller implements Initializable {
                              +"\nFailure: "+failure+"\n"
                              +"\nSee Console for detail."+"\n");*/
                         });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }).start();}
         }// else {}
     }
@@ -677,37 +629,33 @@ public class Controller implements Initializable {
                 if (tab_adb_chk_backup_system.isSelected()) {commands[7]="-system";} else {commands[7]="-nosystem";}
                 if (tab_adb_chk_backup_all.isSelected())    {commands[8]="-all";}
 
-                showDialogInformation("Backup", "Attention", "Now:\n-unlock your device\n-press OK in this window\n-confirm the backup operation on the phone.\n\n"
-                        +"Please don't close window on the phone.");
+                showDialog(Alert.AlertType.INFORMATION,"Backup", "Attention", "Now:\n-unlock your device\n-press OK in this window\n-confirm the backup operation on the phone.\n\n"
+                        + "Please don't close window on the phone.");
                 new Thread(() -> {
                     try {
                         runCmd(commands);
-                        Platform.runLater(() -> showDialogInformation("Backup", "Operation complete", "All done. Backup file stored at "+localfile.getPath()+"."));
+                        Platform.runLater(() -> showDialog(Alert.AlertType.INFORMATION,"Backup", "Operation complete", "All done. Backup file stored at " + localfile.getPath() + "."));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }).start();}
         } else {
-            Platform.runLater(() -> showDialogInformation("Backup", "Incorrect operation", "SHARED or ALL must be selected."));
+            Platform.runLater(() -> showDialog(Alert.AlertType.INFORMATION,"Backup", "Incorrect operation", "SHARED or ALL must be selected."));
         }
     }
     private void dfsAdbRestore(){
         try {
             File localfile = fileChooser();
             if (localfile !=null) {
-                showDialogInformation("Restore", "Attention", "Now:\n-unlock your device\n-press OK in this window\n-confirm restore operation on the phone.\n\n"
-                        +"Please don't close window on the phone.");
+                showDialog(Alert.AlertType.INFORMATION,"Restore", "Attention", "Now:\n-unlock your device\n-press OK in this window\n-confirm restore operation on the phone.\n\n"
+                        + "Please don't close window on the phone.");
                 new Thread(() -> {
-                    try {
                         runCmd(ADB_BINARY, "restore", localfile.getPath());
-                        Platform.runLater(() -> showDialogInformation("Restore", "Operation complete", "File " + localfile.getName() + " restored. See Console for detail."));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                        Platform.runLater(() -> showDialog(Alert.AlertType.INFORMATION,"Restore", "Operation complete", "File " + localfile.getName() + " restored. See Console for detail."));
                 }).start();
             }
         } catch (Exception e) {
-            showDialogErrorNoDirectorySelected();
+            logToConsole(e.getMessage());
         }
     }
     private void dfsAdbCheckBackupAll(){
@@ -755,121 +703,81 @@ public class Controller implements Initializable {
         /**************/
         /** FASTBOOT **/
         tab_fastboot_btn_check_device.setOnAction((event) -> {
-            try {
                 String fastboot_devices_output = runCmd(FASTBOOT_BINARY, "devices");
                 if (!fastboot_devices_output.equals("")) {
                     String[] device_info = fastboot_devices_output.split("\t");
                     img_fastboot_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_green.png")));
-                    showDialogInformation("Success!", "Fastboot device detected.", "Device information is: " + device_info[0]+" "+device_info[1]);
+                    showDialog(Alert.AlertType.INFORMATION,"Success!", "Fastboot device detected.", "Device information is: " + device_info[0] + " " + device_info[1]);
                     tab_fastboot_device_status_txt.setText(device_info[0]+" "+device_info[1]);
                 } else {
                     img_fastboot_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
-                    showDialogError("Ooops!", "Fastboot device not detected.", "Try to reconnect.");
+                    showDialog(Alert.AlertType.ERROR,"Ooops!", "Fastboot device not detected.", "Try to reconnect.");
                     tab_fastboot_device_status_txt.setText("No device detected.");
                 }
-            } catch (IOException e) {
-                showDialogError("Ooops!", "Fastboot binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings.");
-            }
         });
         tab_fastboot_btn_reboot.setOnAction((event) -> {
-            try {
                 runCmd(FASTBOOT_BINARY, "reboot");
-                showDialogInformation("fastboot", "Operation complete", "Command \"reboot\" sended to device.");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                showDialog(Alert.AlertType.INFORMATION,"fastboot", "Operation complete", "Command \"reboot\" sended to device.");
         });
         tab_fastboot_btn_reboot_bootloader.setOnAction((event) -> {
-            try {
                 runCmd(FASTBOOT_BINARY, "reboot-bootloader");
-                showDialogInformation("fastboot", "Operation complete", "Command \"reboot-bootloader\" sended to device.");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                showDialog(Alert.AlertType.INFORMATION,"fastboot", "Operation complete", "Command \"reboot-bootloader\" sended to device.");
         });
         tab_fastboot_btn_run_dfs.setOnAction((event) -> runDfs(null));
         tab_fastboot_btn_flash_recovery.setOnAction((event) -> {
             File localfile = fileChooser();
             if(localfile!=null){
                 new Thread(() -> {
-                    try {
                         Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to flash recovery " + localfile.getName() + "\n\nPlease wait...\n"));
                         runCmdToGlobalAlert(FASTBOOT_BINARY, "flash", "recovery", localfile.getPath());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }).start();
         }});
         tab_fastboot_btn_flash_boot.setOnAction((event) -> {
             File localfile = fileChooser();
             if(localfile!=null){
                 new Thread(() -> {
-                    try {
                         Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to flash boot " + localfile.getName() + "\n\nPlease wait...\n"));
                         runCmdToGlobalAlert(FASTBOOT_BINARY, "flash", "boot", localfile.getPath());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }).start();
             }});
         tab_fastboot_btn_flash_cache.setOnAction((event) -> {
             File localfile = fileChooser();
             if(localfile!=null){
                 new Thread(() -> {
-                    try {
                         Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to flash cache " + localfile.getName() + "\n\nPlease wait...\n"));
                         runCmdToGlobalAlert(FASTBOOT_BINARY, "flash", "cache", localfile.getPath());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }).start();
             }});
         tab_fastboot_btn_flash_userdata.setOnAction((event) -> {
             File localfile = fileChooser();
             if(localfile!=null){
                 new Thread(() -> {
-                    try {
                         Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to flash userdata " + localfile.getName() + "\n\nPlease wait...\n"));
                         runCmdToGlobalAlert(FASTBOOT_BINARY, "flash", "userdata", localfile.getPath());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }).start();
             }});
         tab_fastboot_btn_flash_system.setOnAction((event) -> {
             File localfile = fileChooser();
             if(localfile!=null){
                 new Thread(() -> {
-                    try {
                         Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to flash system " + localfile.getName() + "\n\nPlease wait...\n"));
                         runCmdToGlobalAlert(FASTBOOT_BINARY, "flash", "system", localfile.getPath());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }).start();
             }});
         tab_fastboot_btn_flash_radio.setOnAction((event) -> {
             File localfile = fileChooser();
             if(localfile!=null){
                 new Thread(() -> {
-                    try {
                         Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to flash radio " + localfile.getName() + "\n\nPlease wait...\n"));
                         runCmdToGlobalAlert(FASTBOOT_BINARY, "flash", "radio", localfile.getPath());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }).start();
             }});
         tab_fastboot_btn_boot_img.setOnAction((event) -> {
             File localfile = fileChooser();
             if (localfile != null) {
                 new Thread(() -> {
-                    try {
                         Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to boot " + localfile.getName() + "\n\nPlease wait...\n"));
                         runCmdToGlobalAlert(FASTBOOT_BINARY, "boot", localfile.getPath());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }).start();
             }
         });
@@ -877,45 +785,25 @@ public class Controller implements Initializable {
             File localfile = fileChooser();
             if(localfile!=null){
                 new Thread(() -> {
-                    try {
                         Platform.runLater(() -> showDialogInformationGlobal("mfastboot", "Operation in progress", "Try to flash system " + localfile.getName() + "\n\nPlease wait...\n"));
                         runCmdToGlobalAlert(MFASTBOOT_BINARY, "flash", "system", localfile.getPath());
-                    } catch (IOException e) {
-                        Platform.runLater(() -> showDialogError("mfastboot", "Operation fail", "mfastboot binaries not found. Use built-in or select proper platform-tools directory in settings."));
-                    }
                 }).start();
             }});
         tab_fastboot_btn_oem_unlock.setOnAction((event) -> new Thread(() -> {
-            try {
                 Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to oem unlock." + "\n\nPlease wait...\n"));
                 runCmdToGlobalAlert(FASTBOOT_BINARY, "oem", "unlock");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }).start());
         tab_fastboot_btn_oem_lock.setOnAction((event) -> new Thread(() -> {
-            try {
                 Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to oem lock." + "\n\nPlease wait...\n"));
                 runCmdToGlobalAlert(FASTBOOT_BINARY, "oem", "lock");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }).start());
         tab_fastboot_btn_oem_get_unlock_data.setOnAction((event) -> new Thread(() -> {
-            try {
                 Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to oem get_unlock_data." + "\n\nPlease wait...\n"));
                 runCmdToGlobalAlert(FASTBOOT_BINARY, "oem", "get_unlock_data");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }).start());
         tab_fastboot_btn_oem_lock_begin.setOnAction((event) -> new Thread(() -> {
-            try {
                 Platform.runLater(() -> showDialogInformationGlobal("fastboot", "Operation in progress", "Try to oem lock begin." + "\n\nPlease wait...\n"));
                 runCmdToGlobalAlert(FASTBOOT_BINARY, "oem", "lock", "begin");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }).start());
         /** Console **/
         tab_fastboot_btn_console.setOnAction((event) -> openConsole(FASTBOOT_BINARY, "Fastboot"));
@@ -923,38 +811,29 @@ public class Controller implements Initializable {
         /**************/
         /** RECOVERY **/
         tab_recovery_btn_check_device.setOnAction((event) -> {
-            try {
                 String adb_devices_output = runCmd(ADB_BINARY, "devices", "-l");
                 String[] finder = adb_devices_output.split("\n");
                 if (!finder[finder.length - 1].equals("List of devices attached ")) {
                     img_recovery_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_green.png")));
                     String[] device_info = finder[finder.length - 1].split("\\s+");
-                    showDialogInformation("Success!", "Adb device detected.", "Device information is: " + device_info[0]);
+                    showDialog(Alert.AlertType.INFORMATION,"Success!", "Adb device detected.", "Device information is: " + device_info[0]);
 
                     tab_recovery_device_status_txt.setText(device_info[device_info.length-2] + " " + device_info[device_info.length-1] + " " + device_info[device_info.length-3]);
                 } else {
                     img_recovery_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
-                    showDialogError("Ooops!", "Adb device not detected.", "Try to reconnect.");
+                    showDialog(Alert.AlertType.ERROR,"Ooops!", "Adb device not detected.", "Try to reconnect.");
                     tab_recovery_device_status_txt.setText("No device detected.");
                 }
-            } catch (IOException e) {
-                showDialogError("Ooops!", "Adb binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings.");
-            }
         });
         tab_recovery_btn_adb_sideload.setOnAction((event) -> {
             try {
                 File localfile = fileChooser();
-                if (localfile!=null){
                     new Thread(() -> {
-                        try {
                             Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "Try to sideload " + localfile.getName() + "\n\nPlease wait...\n"));
                             runCmdToGlobalAlert(ADB_BINARY, "sideload", localfile.getPath());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }).start();} else {showDialogErrorNoDirectorySelected();}
+                    }).start();
             } catch (Exception e) {
-                e.printStackTrace();
+                logToConsole(e.getMessage());
             }
         });
         tab_recovery_btn_flash_zip.setOnAction((event) -> {
@@ -962,24 +841,18 @@ public class Controller implements Initializable {
                 File localfile = fileChooser();
                 String remotefile = remotePushSetPath(localfile.getName());
                 new Thread(() -> {
-                    try {
                         runCmdAdbPushPull(tab_recovery_progressbar, ADB_BINARY, "push", "-p", localfile.getPath(), remotefile);
                         Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "Try to flash " + localfile.getName() + "\n\nPlease wait...\n"));
                         runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "install", remotefile);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }).start();
             } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
+                logToConsole(e.getMessage());
             }
         });
         tab_recovery_btn_flash_multizip.setOnAction((event) -> {
             try{
                 List<File> localfiles = fileChooserMultiple();
-                if(localfiles!=null){
                     new Thread(() -> {
-                        try {
                                 for(File f:localfiles){
                                     Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "Try to flash multiple *.zip" + "\n\nPlease wait...\n"));
                                     Platform.runLater(() -> {if(global_alert!=null){global_alert_text_area.appendText("exec: push -p "+f.getPath()+" /sdcard/" + f.getName()+"\n");}});
@@ -987,29 +860,18 @@ public class Controller implements Initializable {
                                     Platform.runLater(() -> {if(global_alert!=null){global_alert_text_area.appendText("exec: shell twrp install"+" /sdcard/" + f.getName()+"\n");}});
                                     runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "install", "/sdcard/" + f.getName());
                                 }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }).start();} else {showDialogErrorNoDirectorySelected();}
+                    }).start();
             } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
+                logToConsole(e.getMessage());
             }
         });
         tab_recovery_btn_flash_zip_from_sd.setOnAction((event) -> {
-            try {
                 String remotefile = remotePushSetPath("/sdcard/flash.zip");
                 if(!remotefile.equals("")){
                     new Thread(() -> {
-                    try {
                         Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "Try to flash " + remotefile + "\n\nPlease wait...\n"));
                         runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "install", remotefile);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }).start();} else {showDialogErrorNoDirectorySelected();}
-            } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
-            }
+                }).start();} else {logToConsole("No remote path selected.");}
         });
         tab_recovery_btn_file_push.setOnAction((event) -> {
             try {
@@ -1018,17 +880,12 @@ public class Controller implements Initializable {
 
                 if (!remotefile.equals("")) {
                     new Thread(() -> {
-                        try {
                             runCmdAdbPushPull(tab_adb_progressbar, ADB_BINARY, "push", "-p", localfile.getPath(), remotefile);
-
-                            Platform.runLater(() -> showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " pushed to remote path " + remotefile));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                            Platform.runLater(() -> showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "File " + localfile.getName() + " pushed to remote path " + remotefile));
                     }).start();
                 }
             } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
+                logToConsole(e.getMessage());
             }
         });
         tab_recovery_btn_file_pull.setOnAction((event) -> {
@@ -1038,23 +895,17 @@ public class Controller implements Initializable {
                     File localfile = fileSaver();
                     if(localfile!=null){
                         new Thread(() -> {
-                            try {
                                 runCmdAdbPushPull(tab_adb_progressbar, ADB_BINARY, "pull", "-p", remotefile, localfile.getPath());
-                                Platform.runLater(() -> showDialogInformation("adb", "Operation complete", "File " + localfile.getName() + " pulled from remote path " + remotefile));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                                Platform.runLater(() -> showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "File " + localfile.getName() + " pulled from remote path " + remotefile));
                         }).start();}
                 }
             } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
+                logToConsole(e.getMessage());
             }
         });
         tab_recovery_btn_wipe.setOnAction((event) -> {
             if(tab_recovery_chk_wipe_cache.isSelected() || tab_recovery_chk_wipe_data.isSelected() || tab_recovery_chk_wipe_dalvik.isSelected()){
-            try {
                 new Thread(() -> {
-                    try {
                         Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "wipe\n\nPlease wait...\n"));
                         if(tab_recovery_chk_wipe_cache.isSelected()){
                             Platform.runLater(() -> {if(global_alert!=null){global_alert_text_area.appendText("exec: wipe cache\n");}});
@@ -1065,55 +916,30 @@ public class Controller implements Initializable {
                         if(tab_recovery_chk_wipe_dalvik.isSelected()){
                             Platform.runLater(() -> {if(global_alert!=null){global_alert_text_area.appendText("exec: wipe dalvik\n");}});
                             runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "wipe", "dalvik");}
-                    } catch (IOException e) {
-                        showDialogError("Ooops!", "Adb binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings.");
-                    }
                 }).start();
-            } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
-            }}
+            }
         });
         tab_recovery_btn_run_dfs.setOnAction((event) -> runDfs(null));
         tab_recovery_btn_console.setOnAction((event) -> openConsole(ADB_BINARY, "Recovery"));
         tab_recovery_btn_reboot_device.setOnAction((event) -> {
-            try {
                 runCmd(ADB_BINARY, "reboot");
-                showDialogInformation("adb", "Operation complete", "Reboot command sended to device.");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "Reboot command sended to device.");
         });
         tab_recovery_btn_reboot_recovery.setOnAction((event) -> {
-            try {
                 runCmd(ADB_BINARY, "reboot", "recovery");
-                showDialogInformation("adb", "Operation complete", "Command \"reboot to recovery\" sended to device.");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "Command \"reboot to recovery\" sended to device.");
         });
         tab_recovery_btn_reboot_bootloader.setOnAction((event) -> {
-            try {
                 runCmd(ADB_BINARY, "reboot", "bootloader");
-                showDialogInformation("adb", "Operation complete", "Command \"reboot to bootlader\" sended to device.");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "Command \"reboot to bootlader\" sended to device.");
         });
         tab_recovery_btn_server_kill.setOnAction((event) -> {
-            try {
                 runCmd(ADB_BINARY, "kill-server");
-                showDialogInformation("adb", "Operation complete", "Command kill-server sended to adb.");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "Command kill-server sended to adb.");
         });
         tab_recovery_btn_server_start.setOnAction((event) -> {
-            try {
                 runCmd(ADB_BINARY, "kill-server");
-                showDialogInformation("adb", "Operation complete", "Command kill-server sended to adb.");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "Command kill-server sended to adb.");
         });
         tab_recovery_btn_backup.setOnAction((event) -> {
             String args="";
@@ -1134,7 +960,6 @@ public class Controller implements Initializable {
                 if(!backupname.equals("")) {
                         final String finalArgs = args;
                         new Thread(() -> {
-                            try {
                                     Platform.runLater(() -> {
                                         showDialogInformationGlobal("recovery", "Operation in progress", "Backup " + finalArgs + " "+ backupname+ "\n\nPlease wait...\n");
                                         if (global_alert != null) {
@@ -1142,11 +967,9 @@ public class Controller implements Initializable {
                                         }
                                     });
                                     runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "backup", finalArgs, backupname);
-                            } catch (IOException e) {Platform.runLater(() -> showDialogError("Ooops!", "Adb binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings."));
-                            }
                         }).start();
-                } else{
-                    showDialogErrorNoDirectorySelected();
+                } else {
+                    logToConsole("No remote path selected.");
                 }}
         });
         tab_recovery_btn_restore.setOnAction((event) -> {
@@ -1164,10 +987,8 @@ public class Controller implements Initializable {
                 Date date = new Date();
                 String backuppath = remoteRestoreSetName(dateFormat.format(date));
                 if(!backuppath.equals("")){
-                    try {
                         final String finalArgs = args;
                         new Thread(() -> {
-                            try {
                                     Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "Restore " + backuppath + " "+ finalArgs + "\n\nPlease wait...\n"));
                                     Platform.runLater(() -> {
                                         if (global_alert != null) {
@@ -1175,13 +996,8 @@ public class Controller implements Initializable {
                                         }
                                     });
                                     runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "restore", backuppath, finalArgs);
-                            } catch (IOException e) {
-                                showDialogError("Ooops!", "Adb binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings.");
-                            }
                         }).start();
-                    } catch (Exception e) {
-                        showDialogErrorNoDirectorySelected();
-                }}
+                }
             }
          });
 
@@ -1210,10 +1026,10 @@ public class Controller implements Initializable {
                     } else {
                         binaries = "fastboot";
                     }
-                    showDialogErrorIsNotValidToolsDirectorySelected(binaries);
+                    showDialog(Alert.AlertType.ERROR,"DroidFlasher","Can't find binaries.",binaries+" binary not found.");
                 }
             } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
+                logToConsole(e.getMessage());
             }
         });
         /** Tools bin override **/
@@ -1223,10 +1039,10 @@ public class Controller implements Initializable {
                 if (checkFastbootBin(fastboot)) {
                     tab_settings_override_txt_fastboot_path.setText(fastboot.getPath());
                 } else {
-                    showDialogErrorIsNotValidToolsDirectorySelected("fastboot");
+                    showDialog(Alert.AlertType.ERROR, "DroidFlasher", "Can't find binaries.", "fastboot binary not found.");
                 }
             } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
+                logToConsole(e.getMessage());
             }
         });
         tab_settings_override_btn_adb_browse.setOnAction((event) -> {
@@ -1235,10 +1051,10 @@ public class Controller implements Initializable {
                 if (checkAdbBin(adb)) {
                     tab_settings_override_txt_adb_path.setText(adb.getPath());
                 } else {
-                    showDialogErrorIsNotValidToolsDirectorySelected("adb");
+                    showDialog(Alert.AlertType.ERROR, "DroidFlasher", "Can't find binaries.", "adb binary not found.");
                 }
             } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
+                logToConsole(e.getMessage());
             }
         });
         tab_settings_override_btn_mfastboot_browse.setOnAction((event) -> {
@@ -1247,10 +1063,10 @@ public class Controller implements Initializable {
                 if (checkMFastbootBin(mfastboot)) {
                     tab_settings_override_txt_mfastboot_path.setText(mfastboot.getPath());
                 } else {
-                    showDialogErrorIsNotValidToolsDirectorySelected("mfastboot");
+                    showDialog(Alert.AlertType.ERROR, "DroidFlasher", "Can't find binaries.", "mfastboot binary not found.");
                 }
             } catch (Exception e) {
-                showDialogErrorNoDirectorySelected();
+                logToConsole(e.getMessage());
             }
         });
         /** Reinitialize **/
@@ -1402,27 +1218,6 @@ public class Controller implements Initializable {
     }
 
     /** Show Dialog **/
-    private void showDialogErrorNoDirectorySelected() {/*
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Oops..");
-        alert.setHeaderText("Operation rejected by user!");
-        alert.setContentText("Please try again.");
-        alert.showAndWait();*/
-    }
-    private void showDialogErrorIsNotValidToolsDirectorySelected(String binaries) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Oops..");
-        alert.setHeaderText("No " + binaries + " binaries in this directory!");
-        alert.setContentText("Please try again.");
-        alert.showAndWait();
-    }
-    private void showDialogInformation(String title, String header, String text) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(text);
-        alert.showAndWait();
-    }
     private void showDialogInformationGlobal(String title, String header, String text) {
         global_alert = new Alert(Alert.AlertType.INFORMATION);
         global_alert.setResizable(true);
@@ -1454,14 +1249,14 @@ public class Controller implements Initializable {
         global_alert.getDialogPane().setExpanded(true);
         global_alert.show();
     }
-    private void showDialogError(String title, String header, String text) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+    private void showDialog(Alert.AlertType alertType, String title, String header, String text) {
+        Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(text);
         alert.showAndWait();
     }
-    private boolean showConfirmDialogs(String title, String header, String text){
+    private boolean showDialogConfirmation(String title, String header, String text){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(title);
         alert.setHeaderText(header);
@@ -1482,34 +1277,50 @@ public class Controller implements Initializable {
     }
 
     /** Console **/
-    private String runCmd(String... args) throws IOException {
+    private String runCmd(String... args) {
         String locallog = "";
-        Runtime rt = Runtime.getRuntime();
-        Process proc = rt.exec(args);
+        try {
+            Process proc = Runtime.getRuntime().exec(args);
 
-        BufferedReader stdInput = new BufferedReader(new
-                InputStreamReader(proc.getInputStream()));
+            logToConsole(Arrays.toString(args));
+            logToGlobalAlert(Arrays.toString(args));
 
-        BufferedReader stdError = new BufferedReader(new
-                InputStreamReader(proc.getErrorStream()));
+            InputStream errStream = proc.getErrorStream();
+            InputStreamReader errStreamReader = new InputStreamReader(errStream);
+            BufferedReader errBufferedReader = new BufferedReader(errStreamReader);
 
-        logToConsole("===\nrun cmd: " +/*bin+*/" " + Arrays.toString(args) + "\n\n");
+            InputStream stdStream = proc.getInputStream();
+            InputStreamReader stdStreamReader = new InputStreamReader(stdStream);
+            BufferedReader stdBufferedReader = new BufferedReader(stdStreamReader);
 
-        String s;
-        while ((s = stdInput.readLine()) != null) {
-            //System.out.println(s);
-            logToConsole(s + "\n");
-            locallog = locallog + s + "\n";
+            String err;
+            String std;
+
+            while ((err = errBufferedReader.readLine()) != null) {
+                logToGlobalAlert(err);
+                locallog = locallog + err + "\n";
+                logToConsole(err);
+            }
+
+            while ((std = stdBufferedReader.readLine()) != null) {
+                logToGlobalAlert(std);
+                locallog = locallog + std + "\n";
+                logToConsole(std);
+            }
+            try {
+                proc.waitFor();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e){
+            logToGlobalAlert(e.getMessage());
+            locallog = locallog + e.getMessage() + "\n";
+            logToConsole(e.getMessage());
         }
-
-        while ((s = stdError.readLine()) != null) {
-            logToConsole("err:" + s + "\n");
-            locallog = locallog + "err:" + s + "\n";
-            //System.out.println(s);
-        }//}
         return locallog;
     }
-    private void runCmdToGlobalAlert(String... args) throws IOException {
+    private void runCmdToGlobalAlert(String... args) {
+        try {
         Process proc = Runtime.getRuntime().exec(args);
 
         InputStream errStream = proc.getErrorStream();
@@ -1524,29 +1335,20 @@ public class Controller implements Initializable {
         String std;
 
         while ((err = errBufferedReader.readLine()) !=null) {
-            final String finalErr = err;
-            Platform.runLater(() -> {
-                if(global_alert!=null){
-                    global_alert_text_area.appendText(finalErr + "\n");
-                }
-            });
+            logToGlobalAlert(err);
         }
 
         while ((std = stdBufferedReader.readLine()) !=null) {
-            final String finalStd = std;
-            Platform.runLater(() -> {
-                if(global_alert!=null){
-                    global_alert_text_area.appendText(finalStd + "\n");
-                }
-            });
+            logToGlobalAlert(std);
         }
-        try {
             proc.waitFor();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logToGlobalAlert(e.getMessage());
+            logToConsole(e.getMessage());
         }
     }
-    private void runCmdAdbPushPull(ProgressBar progressbar, String... args) throws IOException {
+    private void runCmdAdbPushPull(ProgressBar progressbar, String... args) {
+        try {
         Process proc = Runtime.getRuntime().exec(args);
         InputStream inputStream = proc.getErrorStream();
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -1558,27 +1360,29 @@ public class Controller implements Initializable {
                 Double progress = Double.parseDouble(s.split("\\(")[1].split("%")[0]) / 100;
                 Platform.runLater(() -> progressbar.setProgress(progress));
             } else {
-                logToConsole("err:" + s + "\n");
+                logToConsole("err:" + s);
             }
         }
-        try {
             proc.waitFor();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logToGlobalAlert(e.getMessage());
+            logToConsole(e.getMessage());
         }
     }
+    private void logToGlobalAlert(String msg){
+        Platform.runLater(() -> {
+            if (global_alert != null) {
+                global_alert_text_area.appendText(msg + "\n");
+            }
+        });
+    }
     private String getDeviceID(){
-        try{
             String adb_devices_output = runCmd(ADB_BINARY, "devices", "-l");
             String[] finder = adb_devices_output.split("\n");
             if (!finder[finder.length - 1].equals("List of devices attached ")) {
                 String[] device_info = finder[finder.length - 1].split("\\s+");
                 return device_info[0];
             } else {return null;}
-        } catch (IOException e) {
-            showDialogError("Ooops!", "Adb binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings.");
-            return null;
-        }
     }
     private void openConsole(String binary, String type){
 
@@ -1610,11 +1414,7 @@ public class Controller implements Initializable {
                 args[0] = binary;
                 System.arraycopy(input, 0, args, 1, input.length);
                 new Thread(() -> {
-                    try {
                         runCmdToConsoleOutput(console_text_output, args);
-                    } catch (IOException e) {
-                        Platform.runLater(() -> showDialogError("Ooops!", "Fastboot or adb binaries not found.", "Use built-in or select Android SDK platform-tools folder in settings."));
-                    }
                 }).start();
                 //}
             });
@@ -1625,7 +1425,8 @@ public class Controller implements Initializable {
 
         consoleStage.show();
     }
-    private void runCmdToConsoleOutput(TextArea output, String... args) throws IOException {
+    private void runCmdToConsoleOutput(TextArea output, String... args) {
+        try {
         Process proc = Runtime.getRuntime().exec(args);
 
         InputStream errStream = proc.getErrorStream();
@@ -1657,10 +1458,11 @@ public class Controller implements Initializable {
             });
         }
 
-        try {
             proc.waitFor();
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            Platform.runLater(() -> output.appendText(e.getMessage() + "\n"));
+            logToConsole(e.getMessage());
         }
     }
     String readFileToString(String path, Charset encoding) throws IOException {
@@ -1670,7 +1472,7 @@ public class Controller implements Initializable {
 
     /** LOG **/
     public void logToConsole(String appendString) {
-        tab_main_txt_area_log.appendText(appendString);
+        tab_main_txt_area_log.appendText(appendString+"\n");
     }
 
     /** Platfrom detection **/
@@ -1736,7 +1538,7 @@ public class Controller implements Initializable {
             tab_settings_override_txt_fastboot_path.setText(unpack_directory.getPath()+"/"+FASTBOOT);
             tab_settings_override_txt_mfastboot_path.setText(unpack_directory.getPath()+"/"+MFASTBOOT);
 
-            if(showConfirmDialogs("Unpack binaries", "Operation complete", "Binaries unpacked in  "+unpack_directory.getPath()+".\n\nOverride adb and fastboot to this binary?")){
+            if(showDialogConfirmation("Unpack binaries", "Operation complete", "Binaries unpacked in  " + unpack_directory.getPath() + ".\n\nOverride adb and fastboot to this binary?")){
                 ADB_BINARY=tab_settings_override_txt_adb_path.getText();
                 FASTBOOT_BINARY=tab_settings_override_txt_fastboot_path.getText();
                 MFASTBOOT_BINARY=tab_settings_override_txt_mfastboot_path.getText();
@@ -1751,7 +1553,7 @@ public class Controller implements Initializable {
                 tab_settings_override_txt_mfastboot_path.setDisable(true);
                 tab_settings_override_btn_mfastboot_browse.setDisable(true);
             }
-            if(showConfirmDialogs("Tools directory path", "Configuration", "Use built-in binary path as tools directory?")){
+            if(showDialogConfirmation("Tools directory path", "Configuration", "Use built-in binary path as tools directory?")){
                 PLATFORM_TOOLS_DIRECTORY=unpack_directory.getPath();
                 tab_settings_tool_set_txt_tool_directory_browse.setText(PLATFORM_TOOLS_DIRECTORY);
             }
@@ -1780,20 +1582,24 @@ public class Controller implements Initializable {
             }
             outStream.close();
             resource.close();
+            logToConsole("Successfully extracted "+dstFile.getAbsolutePath());
         } catch (IOException e) {
-            //System.exit(-1);
+            logToConsole("Error on extracting "+dstFile.getAbsolutePath());
         }
-        System.out.println("Successfully extracted "+dstFile.getAbsolutePath());
-        if (dstFile.setExecutable(true)){System.out.println("Set executable "+dstFile.getAbsolutePath());}
+        if (dstFile.setExecutable(true)){logToConsole("Set executable "+dstFile.getAbsolutePath());}
         return dstFile.getAbsolutePath();
     }
 
     /** UI reconfigure **/
     private void holdSplitPaneDivider(Node... objects){
         for (Node obj : objects) {
-            SplitPane splitpane = (SplitPane) obj.getParent().getParent().getParent();
-            splitpane.lookupAll(".split-pane-divider").stream()
-                    .forEach(div -> div.setMouseTransparent(true));
+            try {
+                SplitPane splitpane = (SplitPane) obj.getParent().getParent().getParent();
+                splitpane.lookupAll(".split-pane-divider").stream()
+                        .forEach(div -> div.setMouseTransparent(true));
+            } catch (Exception e) {
+                logToConsole("Info: Can't set SplitPane properties.");
+            }
         }
     }
 
