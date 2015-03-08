@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.shape.*?>
@@ -12,9 +14,9 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 
-<TabPane fx:id="top_tab_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="595.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<TabPane fx:id="top_tab_pane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="708.0" rotateGraphic="true" side="LEFT" stylesheets="@../css/tabpane.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="58.0" tabMaxWidth="24.0" tabMinHeight="58.0" tabMinWidth="24.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <tabs>
-      <Tab text="Adb">
+      <Tab text="adb">
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
@@ -146,10 +148,11 @@
                      </image>
                   </ImageView>
                   <Button fx:id="tab_adb_btn_run_dfs" layoutX="295.0" layoutY="9.0" mnemonicParsing="false" text="run *.dfs script" />
-               </children></AnchorPane>
+               </children>
+            </AnchorPane>
          </content>
       </Tab>
-    <Tab text="Fastboot">
+    <Tab text="fastboot">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
@@ -246,10 +249,11 @@
                      </items>
                   </SplitPane>
                   <Button fx:id="tab_fastboot_btn_run_dfs" layoutX="219.0" layoutY="9.0" mnemonicParsing="false" text="run *.dfs script" />
-               </children></AnchorPane>
+               </children>
+            </AnchorPane>
       </content>
     </Tab>
-      <Tab text="Recovery">
+      <Tab text="recovery">
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
@@ -409,10 +413,11 @@
                         </AnchorPane>
                      </items>
                   </SplitPane>
-               </children></AnchorPane>
+               </children>
+            </AnchorPane>
          </content>
       </Tab>
-    <Tab text="Settings">
+    <Tab text="settings">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
@@ -422,8 +427,8 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <TextField fx:id="tab_settings_tool_set_txt_tool_directory_browse" layoutX="112.0" layoutY="14.0" prefHeight="26.0" prefWidth="383.0" text="/Users/zorg/Разработка/SDK/android-sdk/platform-tools" />
-                                    <Button fx:id="tab_settings_tool_set_btn_tool_directory_browse" layoutX="504.0" layoutY="14.0" mnemonicParsing="false" text="Browse" />
+                                    <TextField fx:id="tab_settings_tool_set_txt_tool_directory_browse" layoutX="112.0" layoutY="14.0" prefHeight="26.0" prefWidth="383.0" text="/Users/zorg/Разработка/SDK/android-sdk/platform-tools" AnchorPane.leftAnchor="101.60000000000002" AnchorPane.rightAnchor="80.0" />
+                                    <Button fx:id="tab_settings_tool_set_btn_tool_directory_browse" layoutX="504.0" layoutY="14.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="70.0" text="Browse" AnchorPane.rightAnchor="7.0" />
                                     <Label layoutX="14.0" layoutY="19.0" text="Tools directory:" />
                                  </children>
                               </AnchorPane>
@@ -460,21 +465,29 @@
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
                                     <Button fx:id="tab_settings_others_btn_reinitialize" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Reinitialize inventory" />
-                                    <CheckBox fx:id="tab_settings_others_chk_simplemode" layoutX="14.0" layoutY="52.0" mnemonicParsing="false" text="Simple mode" />
-                                 </children></AnchorPane>
+                                    <CheckBox fx:id="tab_settings_others_chk_simplemode" layoutX="14.0" layoutY="52.0" mnemonicParsing="false" selected="true" text="Simple mode" />
+                                 </children>
+                              </AnchorPane>
                         </content>
                       </TitledPane>
                     </panes>
                   </Accordion>
-               </children></AnchorPane>
+                  <Label alignment="CENTER" layoutX="601.0" layoutY="12.0" prefHeight="23.0" prefWidth="34.0" text="r105" AnchorPane.rightAnchor="14.0">
+                     <font>
+                        <Font name="Menlo Regular" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
       </content>
     </Tab>
-      <Tab text="Console">
+      <Tab text="console">
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
                   <TextArea fx:id="tab_main_txt_area_log" layoutX="7.0" layoutY="6.0" prefHeight="384.0" prefWidth="581.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="6.0" />
-               </children></AnchorPane>
+               </children>
+            </AnchorPane>
          </content>
       </Tab>
   </tabs>

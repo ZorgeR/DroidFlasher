@@ -1,0 +1,84 @@
+.tab-pane .tab-header-area .tab-header-background {
+    /*-fx-opacity: 0;*/
+	-fx-background-color: #282828;
+/*    -fx-background-color: -fx-outer-border, -fx-inner-border, derive(-fx-color, -20%);*/
+    -fx-effect: innershadow(two-pass-box , rgba(0,0,0,0.6) , 4, 0.0 , 0 , 0);
+}
+
+.tab-pane
+{
+	-fx-tab-min-width: 50px;
+	-fx-tab-min-height: 82px;
+	-fx-tab-max-width: 50px;
+	-fx-tab-max-height: 82px;
+	-fx-padding: 0 0 0 -6;
+}
+
+.tab{
+	-fx-padding: 0 0 0 0;
+	-fx-background-image: url("../img/ui/tab_bckgr_2.png");
+	-fx-focus-color: transparent;
+/*		-fx-focus: none;*/
+}
+.tab-pane .tab
+{
+	/*-fx-focus: none;*/
+}
+.tab-pane .tab:hover
+{
+	-fx-background-image: url("../img/ui/tab_bckgr_2_hover.png");
+}
+.tab-pane .tab:selected
+{
+	-fx-background-image: url("../img/ui/tab_bckgr_2_selected.png");
+}
+
+.tab .tab-label { 
+    -fx-alignment: CENTER;
+    -fx-text-fill: #d2d2d2;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+	-fx-padding: 0 -5 0 -5;
+}
+
+.tab:selected .tab-label { 
+    -fx-alignment: CENTER;
+}
+.tab *.tab-label {
+    -fx-rotate: 90;
+}
+
+.tab-pane:top *.tab-header-area {
+/*    -fx-background-insets: 0, 0 0 1 0;*/
+ /* -fx-padding: 0.416667em 0.166667em 0.0em 0.833em; /* 5 2 0 10 */
+   /* -fx-padding: 0.416667em 0.166667em 0.0em 0.0em; /* overriden as 5 2 0 0 */
+}
+/*
+.button {
+    -fx-padding: 5 5 5 5;
+    -fx-background-insets: 0,0 0 2 0, 0 0 3 0, 0 0 4 0;
+    -fx-background-radius: 3;
+    -fx-background-color: 
+        linear-gradient(from 0% 93% to 0% 100%, #ababab 0%, #bdbdbd 100%),
+        #cdcdcd,
+        #dadada,
+        radial-gradient(center 50% 50%, radius 100%, #aeaeae, #dadada);
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.75) , 3,0,0,1 );
+    -fx-font-weight: bold;
+    -fx-font-size: 13;
+}
+.button:hover {
+    -fx-background-color: 
+        linear-gradient(from 0% 93% to 0% 100%, #9b9b9b 0%, #adadad 100%),
+        #bdbdbd,
+        #cacaca,
+        radial-gradient(center 50% 50%, radius 100%, #9e9e9e, #cacaca);
+}
+.button:pressed {
+    -fx-padding: 1 1 2 1;
+    -fx-background-insets: 1 0 0 0,1 0 2 0, 1 0 3 0, 1 0 3 0;
+}
+.button Text {
+    -fx-fill: white;
+    -fx-effect: dropshadow( gaussian , #a30000 , 0,0,0,2 );
+}*/

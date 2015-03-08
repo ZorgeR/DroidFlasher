@@ -228,6 +228,7 @@ public class Controller implements Initializable {
         /** Set default bin directory **/
         tab_settings_tool_set_txt_tool_directory_browse.setText(PLATFORM_TOOLS_DIRECTORY+"/bin");
 
+        mScene = top_tab_pane.getScene();
         initDragAndDrop();
 
         setPlatform();
@@ -240,8 +241,6 @@ public class Controller implements Initializable {
         }
     }
     private void initDragAndDrop(){
-        mScene = top_tab_pane.getScene();
-
         mScene.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
@@ -262,7 +261,7 @@ public class Controller implements Initializable {
                 boolean success = false;
                 if (db.hasFiles()) {
                     success = true;
-                    String filePath = null;
+                    String filePath;
                     for (File file : db.getFiles()) {
                         filePath = file.getAbsolutePath();
                         System.out.println("drag and drop: " + filePath);
@@ -301,8 +300,8 @@ public class Controller implements Initializable {
                 Date now = new Date();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("YY.MM.DD-hh-mm-ss");
                 String time = dateFormat.format(now);
-                dir = new File(System.getProperty("user.home")+File.separator+"Downloads"+File.separator+time);
-                dir.mkdir();
+                dir = new File(System.getProperty("user.home")+File.separator+"Downloads"+File.separator+"DroidFlasher"+File.separator+dfsFile.getName()+"_"+time);
+                if(!dir.mkdirs()){throw new NullPointerException("Can't make dir: "+dir.getPath());}
             }
 
             if(dir!=null){
@@ -317,81 +316,82 @@ public class Controller implements Initializable {
                             String[] commands = list.toArray(new String[list.size()]);
 
                             int last = commands.length-1;
+                            if(last>=0) {
+                                if (commands[0].matches("fastboot|adb|mfastboot")) {
 
-                            if(!commands[0].equals("dfs")){
+                                    final String cmdToConsole = Arrays.toString(commands).replaceAll("[,]", "");
+                                    Platform.runLater(() -> {
+                                        if (global_alert != null) {
+                                            global_alert_text_area.appendText("exec: " + cmdToConsole + ":\n");
+                                        }
+                                    });
 
-                                final String cmdToConsole = Arrays.toString(commands).replaceAll("[,]", "");
-                                Platform.runLater(() -> {
-                                    if(global_alert!=null){
-                                        global_alert_text_area.appendText("exec: " + cmdToConsole + ":\n");
+                                    switch (commands[0]) {
+                                        case "fastboot":
+                                            commands[0] = FASTBOOT_BINARY;
+                                            break;
+                                        case "adb":
+                                            commands[0] = ADB_BINARY;
+                                            break;
+                                        case "mfastboot":
+                                            commands[0] = MFASTBOOT_BINARY;
+                                            break;
                                     }
-                                });
-
-                                switch (commands[0]) {
-                                    case "fastboot":
-                                        commands[0] = FASTBOOT_BINARY;
-                                        break;
-                                    case "adb":
-                                        commands[0] = ADB_BINARY;
-                                        break;
-                                    case "mfastboot":
-                                        commands[0] = MFASTBOOT_BINARY;
-                                        break;
-                                }
-                                if(commands[1].equals("flash") || commands[1].equals("boot") || commands[1].equals("sideload")){
-                                    if(!new File(commands[last]).exists()){
-                                        commands[last]=dir.getPath()+"/"+commands[last];
+                                    if (commands[1].equals("flash") || commands[1].equals("boot") || commands[1].equals("sideload")) {
+                                        if (!new File(commands[last]).exists()) {
+                                            commands[last] = dir.getPath() + "/" + commands[last];
+                                        }
                                     }
-                                }
-                                if(commands[1].equals("push")){
-                                    if(!new File(commands[2]).exists()){
-                                        commands[2]=dir.getPath()+"/"+commands[2];
+                                    if (commands[1].equals("push")) {
+                                        if (!new File(commands[2]).exists()) {
+                                            commands[2] = dir.getPath() + "/" + commands[2];
+                                        }
                                     }
-                                }
-                                if(commands[1].equals("pull")){
-                                    if(!new File(commands[3]).exists()){
-                                        commands[3]=dir.getPath()+"/"+commands[3];
+                                    if (commands[1].equals("pull")) {
+                                        if (!new File(commands[3]).exists()) {
+                                            commands[3] = dir.getPath() + "/" + commands[3];
+                                        }
                                     }
-                                }
-                                runCmdToGlobalAlert(commands);
-                            } else if (commands[0].equals("dfs")){
-                                /** TODO: DFS commands fabric, need to implement more commands **/
-                                switch (commands[1]) {
-                                    case "download":
-                                        /** dfs download http://images.org/moto/boot.img **/
-                                        URL remotefile = new URL(commands[2]);
+                                    runCmdToGlobalAlert(commands);
+                                } else if (commands[0].equals("dfs")) {
+                                    /** TODO: DFS commands fabric, need to implement more commands **/
+                                    switch (commands[1]) {
+                                        case "download":
+                                            /** dfs download http://images.org/moto/boot.img **/
+                                            URL remotefile = new URL(commands[2]);
 
-                                        String fileName = remotefile.getFile();
-                                        fileName = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.length());
+                                            String fileName = remotefile.getFile();
+                                            fileName = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.length());
 
-                                        Download dld = new Download(remotefile, dir.getPath());
-                                        new Thread(dld::run);
+                                            Download dld = new Download(remotefile, dir.getPath());
+                                            new Thread(dld::run);
                                         /*
                                         ReadableByteChannel rbc = Channels.newChannel(remotefile.openStream());
                                         FileOutputStream fos = new FileOutputStream(dir + "/" + fileName);
                                         fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);*/
-                                        while (dld.getStatus()==Download.DOWNLOADING){
-                                            double dl = Double.parseDouble(String.valueOf(dld.getProgress()));
-                                            Platform.runLater(() -> tab_adb_progressbar.setProgress(dl));
-                                            try {
-                                                Thread.sleep(100);
-                                            } catch (InterruptedException e) {
-                                                e.printStackTrace();
+                                            while (dld.getStatus() == Download.DOWNLOADING) {
+                                                double dl = Double.parseDouble(String.valueOf(dld.getProgress()));
+                                                Platform.runLater(() -> tab_adb_progressbar.setProgress(dl));
+                                                try {
+                                                    Thread.sleep(100);
+                                                } catch (InterruptedException e) {
+                                                    e.printStackTrace();
+                                                }
                                             }
-                                        }
-                                        if (dld.getStatus()==Download.ERROR){
-                                            Platform.runLater(() -> showDialogError("Ooops!", "Download error.", "Try later."));
+                                            if (dld.getStatus() == Download.ERROR) {
+                                                Platform.runLater(() -> showDialogError("Ooops!", "Download error.", "Try later."));
+                                                break;
+                                            } else if (dld.getStatus() == Download.COMPLETE) {
+                                                Platform.runLater(() -> tab_adb_progressbar.setProgress(dld.getProgress()));
+                                            }
                                             break;
-                                        } else if (dld.getStatus()==Download.COMPLETE){
-                                            Platform.runLater(() -> tab_adb_progressbar.setProgress(dld.getProgress()));
-                                        }
-                                        break;
-                                    case "radio":
-                                        /** dfs radiobox TWRP-2.8.5.0|PhilZ-Touch-6.58.7 **/
-                                        break;
-                                    case "checkbox":
-                                        /** dfs checkbox TWRP-2.8.5.0|PhilZ-Touch-6.58.7 **/
-                                        break;
+                                        case "radio":
+                                            /** dfs radiobox TWRP-2.8.5.0|PhilZ-Touch-6.58.7 **/
+                                            break;
+                                        case "checkbox":
+                                            /** dfs checkbox TWRP-2.8.5.0|PhilZ-Touch-6.58.7 **/
+                                            break;
+                                    }
                                 }
                             }
                         }
