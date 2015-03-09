@@ -43,7 +43,7 @@
                                           </Button>
                                           <Button fx:id="tab_adb_btn_file_pull" layoutX="324.0" layoutY="338.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="305.0" text="pull from device" AnchorPane.bottomAnchor="67.0" AnchorPane.rightAnchor="12.0">
                                              <font>
-                                                <Font name="PT Sans Narrow" size="24.0" />
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
                                           <Button defaultButton="true" disable="true" layoutX="12.0" layoutY="53.0" mnemonicParsing="false" opacity="0.32" prefHeight="297.0" prefWidth="617.0" text="Drag&amp;Drop" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="53.0">
@@ -268,9 +268,15 @@
                         <Label fx:id="tab_fastboot_device_status_txt" layoutX="144.0" layoutY="332.0" text="No device detected." AnchorPane.bottomAnchor="19.0" />
                         <Button fx:id="tab_fastboot_btn_check_device" layoutX="14.0" layoutY="327.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="98.0" text="Check device" AnchorPane.bottomAnchor="14.0" />
                         <Separator layoutY="37.0" prefHeight="11.0" prefWidth="617.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-17.0" />
-                        <Button fx:id="tab_fastboot_btn_reboot_bootloader" layoutX="14.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="reboot-bootloader" />
-                        <Button fx:id="tab_fastboot_btn_reboot" layoutX="154.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="58.0" text="reboot" />
-                        <SplitPane dividerPositions="0.22900763358778625" layoutX="391.0" layoutY="51.0" orientation="VERTICAL" prefHeight="131.0" prefWidth="196.0" AnchorPane.rightAnchor="13.0">
+                        <Button fx:id="tab_fastboot_btn_reboot_bootloader" layoutX="14.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="reboot-bootloader">
+                           <font>
+                              <Font name="PT Sans" size="14.0" />
+                           </font></Button>
+                        <Button fx:id="tab_fastboot_btn_reboot" layoutX="154.0" layoutY="9.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="61.0" text="reboot">
+                           <font>
+                              <Font name="PT Sans" size="14.0" />
+                           </font></Button>
+                        <SplitPane dividerPositions="0.22900763358778625" layoutX="391.0" layoutY="51.0" orientation="VERTICAL" prefHeight="131.0" prefWidth="218.0" AnchorPane.rightAnchor="13.0">
                            <effect>
                               <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
                            </effect>
@@ -287,10 +293,22 @@
                               </AnchorPane>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="131.0">
                                  <children>
-                                    <Button fx:id="tab_fastboot_btn_oem_unlock" layoutX="3.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="89.0" text="oem unlock" />
-                                    <Button fx:id="tab_fastboot_btn_oem_lock" layoutX="98.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="92.0" text="oem lock" />
-                                    <Button fx:id="tab_fastboot_btn_oem_get_unlock_data" layoutX="3.0" layoutY="65.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="187.0" text="oem get_unlock_data" />
-                                    <Button fx:id="tab_fastboot_btn_oem_lock_begin" layoutX="3.0" layoutY="35.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="186.0" text="oem lock begin" />
+                                    <Button fx:id="tab_fastboot_btn_oem_unlock" layoutX="3.0" layoutY="4.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="104.0" text="oem unlock">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <Button fx:id="tab_fastboot_btn_oem_lock" layoutX="112.0" layoutY="4.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="100.0" text="oem lock">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <Button fx:id="tab_fastboot_btn_oem_get_unlock_data" layoutX="3.0" layoutY="65.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="209.0" text="oem get_unlock_data">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <Button fx:id="tab_fastboot_btn_oem_lock_begin" layoutX="3.0" layoutY="35.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="209.0" text="oem lock begin">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
                                  </children>
                               </AnchorPane>
                            </items>
@@ -312,12 +330,30 @@
                               </AnchorPane>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="188.0" prefWidth="136.0">
                                  <children>
-                                    <Button fx:id="tab_fastboot_btn_flash_recovery" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="flash-recovery" />
-                                    <Button fx:id="tab_fastboot_btn_flash_boot" layoutX="5.0" layoutY="35.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="flash-boot (kernel)" />
-                                    <Button fx:id="tab_fastboot_btn_flash_cache" layoutX="5.0" layoutY="65.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="flash-cache" />
-                                    <Button fx:id="tab_fastboot_btn_flash_userdata" layoutX="4.0" layoutY="95.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="flash-userdata" />
-                                    <Button fx:id="tab_fastboot_btn_flash_system" layoutX="4.0" layoutY="125.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="flash-system" />
-                                    <Button fx:id="tab_fastboot_btn_flash_radio" layoutX="4.0" layoutY="155.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="flash-radio" />
+                                    <Button fx:id="tab_fastboot_btn_flash_recovery" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="flash-recovery">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <Button fx:id="tab_fastboot_btn_flash_boot" layoutX="5.0" layoutY="35.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="flash-boot (kernel)">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <Button fx:id="tab_fastboot_btn_flash_cache" layoutX="5.0" layoutY="65.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="flash-cache">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <Button fx:id="tab_fastboot_btn_flash_userdata" layoutX="4.0" layoutY="95.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="flash-userdata">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <Button fx:id="tab_fastboot_btn_flash_system" layoutX="4.0" layoutY="125.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="flash-system">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <Button fx:id="tab_fastboot_btn_flash_radio" layoutX="4.0" layoutY="155.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="flash-radio">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
                                  </children>
                               </AnchorPane>
                            </items>
@@ -329,7 +365,10 @@
                                     <Image url="@../img/terminal-pencil.png" />
                                  </image>
                               </ImageView>
-                           </graphic></Button>
+                           </graphic>
+                           <font>
+                              <Font name="PT Sans" size="14.0" />
+                           </font></Button>
                         <SplitPane dividerPositions="0.31683168316831684" layoutX="391.0" layoutY="188.0" orientation="VERTICAL" prefHeight="103.0" prefWidth="196.0" AnchorPane.rightAnchor="13.0">
                            <effect>
                               <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
@@ -347,13 +386,22 @@
                               </AnchorPane>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="131.0">
                                  <children>
-                                    <Button fx:id="tab_fastboot_btn_boot_img" layoutX="4.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="185.0" text="boot *.img" />
-                                    <Button fx:id="tab_fastboot_btn_flash_mfastboot_system" layoutX="4.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="185.0" text="mfastboot flash-system" />
+                                    <Button fx:id="tab_fastboot_btn_boot_img" layoutX="4.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="185.0" text="boot *.img">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <Button fx:id="tab_fastboot_btn_flash_mfastboot_system" layoutX="4.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="185.0" text="mfastboot flash-system">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
                                  </children>
                               </AnchorPane>
                            </items>
                         </SplitPane>
-                        <Button fx:id="tab_fastboot_btn_run_dfs" defaultButton="true" layoutX="219.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="112.0" text="run *.dfs script" />
+                        <Button fx:id="tab_fastboot_btn_run_dfs" defaultButton="true" layoutX="222.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="112.0" text="run *.dfs script">
+                           <font>
+                              <Font name="PT Sans" size="14.0" />
+                           </font></Button>
                      </children>
                   </AnchorPane>
             </content>
@@ -378,10 +426,22 @@
                            <items>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="188.0" prefWidth="136.0">
                                  <children>
-                                    <Button fx:id="tab_recovery_btn_wipe" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="wipe" />
-                                    <CheckBox fx:id="tab_recovery_chk_wipe_cache" layoutX="5.0" layoutY="38.0" mnemonicParsing="false" text="cache" />
-                                    <CheckBox fx:id="tab_recovery_chk_wipe_data" layoutX="5.0" layoutY="61.0" mnemonicParsing="false" text="data" />
-                                    <CheckBox fx:id="tab_recovery_chk_wipe_dalvik" layoutX="5.0" layoutY="84.0" mnemonicParsing="false" text="dalvik" />
+                                    <Button fx:id="tab_recovery_btn_wipe" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="wipe">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <CheckBox fx:id="tab_recovery_chk_wipe_cache" layoutX="5.0" layoutY="38.0" mnemonicParsing="false" text="cache">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></CheckBox>
+                                    <CheckBox fx:id="tab_recovery_chk_wipe_data" layoutX="5.0" layoutY="61.0" mnemonicParsing="false" text="data">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></CheckBox>
+                                    <CheckBox fx:id="tab_recovery_chk_wipe_dalvik" layoutX="5.0" layoutY="84.0" mnemonicParsing="false" text="dalvik">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></CheckBox>
                                     <ImageView fx:id="img_head_wipe" fitHeight="16.0" fitWidth="16.0" layoutX="15.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="84.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="10.0">
                                        <image>
                                           <Image url="@../img/eraser.png" />
@@ -391,7 +451,10 @@
                               </AnchorPane>
                            </items>
                         </SplitPane>
-                        <Button fx:id="tab_recovery_btn_run_dfs" defaultButton="true" layoutX="268.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="114.0" text="run *.dfs script" />
+                        <Button fx:id="tab_recovery_btn_run_dfs" defaultButton="true" layoutX="278.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="114.0" text="run *.dfs script">
+                           <font>
+                              <Font name="PT Sans" size="14.0" />
+                           </font></Button>
                         <Button fx:id="tab_recovery_btn_console" alignment="CENTER" layoutX="479.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="118.0" text="adb console" AnchorPane.rightAnchor="14.0">
                            <graphic>
                               <ImageView fx:id="img_console_recovery" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
@@ -399,21 +462,30 @@
                                     <Image url="@../img/terminal-pencil.png" />
                                  </image>
                               </ImageView>
-                           </graphic></Button>
-                        <MenuButton layoutX="14.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="108.0" text="adb control">
+                           </graphic>
+                           <font>
+                              <Font name="PT Sans" size="14.0" />
+                           </font></Button>
+                        <MenuButton layoutX="14.0" layoutY="9.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="120.0" text="adb control">
                            <items>
                               <MenuItem fx:id="tab_recovery_btn_server_start" mnemonicParsing="false" text="start-server" />
                               <MenuItem fx:id="tab_recovery_btn_server_kill" mnemonicParsing="false" text="kill-server" />
                            </items>
+                           <font>
+                              <Font name="PT Sans" size="14.0" />
+                           </font>
                         </MenuButton>
-                        <MenuButton layoutX="129.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="reboot device">
+                        <MenuButton layoutX="140.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="reboot device">
                            <items>
                               <MenuItem fx:id="tab_recovery_btn_reboot_device" mnemonicParsing="false" text="normal" />
                               <MenuItem fx:id="tab_recovery_btn_reboot_recovery" mnemonicParsing="false" text="to recovery" />
                               <MenuItem fx:id="tab_recovery_btn_reboot_bootloader" mnemonicParsing="false" text="to bootloader" />
                            </items>
+                           <font>
+                              <Font name="PT Sans" size="14.0" />
+                           </font>
                         </MenuButton>
-                        <SplitPane dividerPositions="0.18633540372670807" layoutX="129.0" layoutY="51.0" orientation="VERTICAL" prefHeight="162.0" prefWidth="108.0">
+                        <SplitPane dividerPositions="0.18633540372670807" layoutX="129.0" layoutY="51.0" orientation="VERTICAL" prefHeight="162.0" prefWidth="118.0">
                            <effect>
                               <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
                            </effect>
@@ -430,37 +502,82 @@
                               </AnchorPane>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="188.0" prefWidth="136.0">
                                  <children>
-                                    <Button fx:id="tab_recovery_btn_flash_zip" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="single *.zip" />
-                                    <Button fx:id="tab_recovery_btn_adb_sideload" layoutX="5.0" layoutY="95.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="adb sideload" />
-                                    <Button fx:id="tab_recovery_btn_flash_zip_from_sd" layoutX="5.0" layoutY="65.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="from sdcard" />
-                                    <Button fx:id="tab_recovery_btn_flash_multizip" layoutX="5.0" layoutY="35.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="multiple *.zip" />
+                                    <Button fx:id="tab_recovery_btn_flash_zip" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="106.0" text="single *.zip">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <Button fx:id="tab_recovery_btn_adb_sideload" layoutX="5.0" layoutY="95.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="106.0" text="adb sideload">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <Button fx:id="tab_recovery_btn_flash_zip_from_sd" layoutX="5.0" layoutY="65.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="106.0" text="from sdcard">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <Button fx:id="tab_recovery_btn_flash_multizip" layoutX="5.0" layoutY="35.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="106.0" text="multiple *.zip">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
                                  </children>
                               </AnchorPane>
                            </items>
                         </SplitPane>
-                        <SplitPane layoutX="244.0" layoutY="51.0" orientation="VERTICAL" prefHeight="269.0" prefWidth="108.0">
+                        <SplitPane layoutX="255.0" layoutY="51.0" orientation="VERTICAL" prefHeight="269.0" prefWidth="108.0">
                            <effect>
                               <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
                            </effect>
                            <items>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="188.0" prefWidth="136.0">
                                  <children>
-                                    <Button fx:id="tab_recovery_btn_backup" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="Backup" />
-                                    <Button fx:id="tab_recovery_btn_restore" layoutX="5.0" layoutY="236.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="Restore" />
-                                    <CheckBox fx:id="tab_recovery_chk_backup_system" layoutX="5.0" layoutY="36.0" mnemonicParsing="false" selected="true" text="System" />
-                                    <CheckBox fx:id="tab_recovery_chk_backup_data" layoutX="5.0" layoutY="58.0" mnemonicParsing="false" selected="true" text="Data" />
-                                    <CheckBox fx:id="tab_recovery_chk_backup_cache" layoutX="5.0" layoutY="80.0" mnemonicParsing="false" selected="true" text="Cache" />
-                                    <CheckBox fx:id="tab_recovery_chk_backup_recovery" layoutX="5.0" layoutY="102.0" mnemonicParsing="false" selected="true" text="Recovery" />
-                                    <CheckBox fx:id="tab_recovery_chk_backup_boot" layoutX="5.0" layoutY="125.0" mnemonicParsing="false" selected="true" text="Boot" />
-                                    <CheckBox fx:id="tab_recovery_chk_backup_asec" layoutX="5.0" layoutY="147.0" mnemonicParsing="false" text="asec" />
-                                    <CheckBox fx:id="tab_recovery_chk_backup_sdext" layoutX="5.0" layoutY="169.0" mnemonicParsing="false" text="SD-ext" />
+                                    <Button fx:id="tab_recovery_btn_backup" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="Backup">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <Button fx:id="tab_recovery_btn_restore" layoutX="5.0" layoutY="236.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="Restore">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <CheckBox fx:id="tab_recovery_chk_backup_system" layoutX="5.0" layoutY="36.0" mnemonicParsing="false" selected="true" text="System">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></CheckBox>
+                                    <CheckBox fx:id="tab_recovery_chk_backup_data" layoutX="5.0" layoutY="58.0" mnemonicParsing="false" selected="true" text="Data">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></CheckBox>
+                                    <CheckBox fx:id="tab_recovery_chk_backup_cache" layoutX="5.0" layoutY="80.0" mnemonicParsing="false" selected="true" text="Cache">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></CheckBox>
+                                    <CheckBox fx:id="tab_recovery_chk_backup_recovery" layoutX="5.0" layoutY="102.0" mnemonicParsing="false" selected="true" text="Recovery">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></CheckBox>
+                                    <CheckBox fx:id="tab_recovery_chk_backup_boot" layoutX="5.0" layoutY="125.0" mnemonicParsing="false" selected="true" text="Boot">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></CheckBox>
+                                    <CheckBox fx:id="tab_recovery_chk_backup_asec" layoutX="5.0" layoutY="147.0" mnemonicParsing="false" text="asec">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></CheckBox>
+                                    <CheckBox fx:id="tab_recovery_chk_backup_sdext" layoutX="5.0" layoutY="169.0" mnemonicParsing="false" text="SD-ext">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></CheckBox>
                                     <ImageView fx:id="img_head_backup_from_recovery" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="240.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="11.0">
                                        <image>
                                           <Image url="@../img/backups.png" />
                                        </image>
                                     </ImageView>
-                                    <CheckBox fx:id="tab_recovery_chk_backup_compression" layoutX="5.0" layoutY="191.0" mnemonicParsing="false" text="Compress" />
-                                    <CheckBox fx:id="tab_recovery_chk_backup_nomd5" layoutX="5.0" layoutY="213.0" mnemonicParsing="false" text="noMD5" />
+                                    <CheckBox fx:id="tab_recovery_chk_backup_compression" layoutX="5.0" layoutY="191.0" mnemonicParsing="false" text="Compress">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></CheckBox>
+                                    <CheckBox fx:id="tab_recovery_chk_backup_nomd5" layoutX="5.0" layoutY="213.0" mnemonicParsing="false" text="noMD5">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></CheckBox>
                                     <ImageView fx:id="img_head_backup_from_recovery_restore" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="242.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../img/site_backup_and_restore.png" />
@@ -487,11 +604,26 @@
                               </AnchorPane>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="113.0" prefWidth="171.0">
                                  <children>
-                                    <Button fx:id="tab_recovery_btn_mount" disable="true" layoutX="6.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="78.0" text="mount" />
-                                    <Button fx:id="tab_recovery_btn_mkdir" disable="true" layoutX="6.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="78.0" text="mkdir" />
-                                    <Button fx:id="tab_recovery_btn_chmod" disable="true" layoutX="89.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="77.0" text="chmod" />
-                                    <Button fx:id="tab_recovery_btn_off_zip_verify" disable="true" layoutX="6.0" layoutY="63.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="160.0" text="turn off zip verification" />
-                                    <Button fx:id="tab_recovery_btn_mount1" disable="true" layoutX="89.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="77.0" text="umount" />
+                                    <Button fx:id="tab_recovery_btn_mount" disable="true" layoutX="6.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="78.0" text="mount">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <Button fx:id="tab_recovery_btn_mkdir" disable="true" layoutX="6.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="78.0" text="mkdir">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <Button fx:id="tab_recovery_btn_chmod" disable="true" layoutX="89.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="77.0" text="chmod">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <Button fx:id="tab_recovery_btn_off_zip_verify" disable="true" layoutX="6.0" layoutY="63.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="160.0" text="turn off zip verification">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <Button fx:id="tab_recovery_btn_mount1" disable="true" layoutX="89.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="77.0" text="umount">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
                                  </children>
                               </AnchorPane>
                            </items>
@@ -520,9 +652,18 @@
                               </AnchorPane>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="131.0">
                                  <children>
-                                    <Button fx:id="tab_recovery_btn_file_push" layoutX="6.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="push to device" />
-                                    <Button fx:id="tab_recovery_btn_file_pull" layoutX="6.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="pull from device" />
-                                    <Button disable="true" layoutX="6.0" layoutY="63.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="File Manager" />
+                                    <Button fx:id="tab_recovery_btn_file_push" layoutX="6.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="push to device">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <Button fx:id="tab_recovery_btn_file_pull" layoutX="6.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="pull from device">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
+                                    <Button disable="true" layoutX="6.0" layoutY="63.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="File Manager">
+                                       <font>
+                                          <Font name="PT Sans" size="14.0" />
+                                       </font></Button>
                                  </children>
                               </AnchorPane>
                            </items>
