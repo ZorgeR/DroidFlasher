@@ -46,9 +46,9 @@
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
-                                          <AnchorPane layoutX="14.0" layoutY="50.0" opacity="0.45" prefHeight="149.0" prefWidth="229.0" styleClass="dnd_pane" stylesheets="@../css/style.css" AnchorPane.bottomAnchor="121.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="53.0">
+                                          <AnchorPane fx:id="tab_adb_sendfile" layoutX="14.0" layoutY="50.0" opacity="0.45" prefHeight="149.0" prefWidth="229.0" styleClass="dnd_pane" stylesheets="@../css/style.css" AnchorPane.bottomAnchor="121.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="53.0">
                                              <children>
-                                                <Label fx:id="tab_adb_sendfile" alignment="CENTER" contentDisplay="TOP" minHeight="-Infinity" minWidth="-Infinity" text="Drag &amp; Drop" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <Label alignment="CENTER" contentDisplay="TOP" minHeight="-Infinity" minWidth="-Infinity" text="Drag &amp; Drop" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                    <font>
                                                       <Font name="PT Sans" size="24.0" />
                                                    </font>
@@ -629,9 +629,9 @@
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
-                                          <AnchorPane layoutX="62.0" layoutY="75.0" opacity="0.45" prefHeight="149.0" prefWidth="229.0" styleClass="dnd_pane" stylesheets="@../css/style.css" AnchorPane.bottomAnchor="121.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="53.0">
+                                          <AnchorPane fx:id="tab_recovery_sendfile" layoutX="62.0" layoutY="75.0" opacity="0.45" prefHeight="149.0" prefWidth="229.0" styleClass="dnd_pane" stylesheets="@../css/style.css" AnchorPane.bottomAnchor="121.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="53.0">
                                              <children>
-                                                <Label fx:id="tab_recovery_sendfile" alignment="CENTER" contentDisplay="TOP" minHeight="-Infinity" minWidth="-Infinity" text="Drag &amp; Drop" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <Label alignment="CENTER" contentDisplay="TOP" minHeight="-Infinity" minWidth="-Infinity" text="Drag &amp; Drop" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                    <font>
                                                       <Font name="PT Sans" size="24.0" />
                                                    </font>
