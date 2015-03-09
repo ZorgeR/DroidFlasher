@@ -47,6 +47,8 @@ public class Controller implements Initializable {
     public static String ADB_BINARY="";
     public static String FASTBOOT_BINARY="";
     public static String MFASTBOOT_BINARY="";
+    public static int DNDTYPE_OPEN_DFS=0;
+    public static int DNDTYPE_SEND_FILE=1;
     public static boolean SIMPLEMODE;
     private static Alert global_alert;
     private static TextArea global_alert_text_area;
@@ -64,6 +66,7 @@ public class Controller implements Initializable {
     @FXML private Button tab_settings_override_btn_unpack_binaries;
     @FXML private Button tab_adb_btn_console;
     @FXML private Button tab_adb_btn_run_dfs;
+    @FXML private AnchorPane tab_adb_sendfile;
     @FXML private CheckBox tab_adb_chk_backup_apk;
     @FXML private CheckBox tab_adb_chk_backup_obb;
     @FXML private CheckBox tab_adb_chk_backup_shared;
@@ -136,6 +139,7 @@ public class Controller implements Initializable {
     @FXML private Button tab_recovery_btn_console;
     @FXML private Button tab_recovery_btn_file_push;
     @FXML private Button tab_recovery_btn_file_pull;
+    @FXML private AnchorPane tab_recovery_sendfile;
     @FXML private CheckBox tab_recovery_chk_wipe_cache;
     @FXML private CheckBox tab_recovery_chk_wipe_data;
     @FXML private CheckBox tab_recovery_chk_wipe_dalvik;
@@ -244,8 +248,8 @@ public class Controller implements Initializable {
             }
         }
     }
-    private void initDragAndDrop(){
-        mScene.setOnDragOver(new EventHandler<DragEvent>() {
+    private void initSetOnDragOver(Node node, int dndType) {
+        node.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
                 Dragboard db = event.getDragboard();
@@ -256,9 +260,7 @@ public class Controller implements Initializable {
                 }
             }
         });
-
-        // Dropping over surface
-        mScene.setOnDragDropped(new EventHandler<DragEvent>() {
+        node.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
                 Dragboard db = event.getDragboard();
@@ -268,14 +270,23 @@ public class Controller implements Initializable {
                     String filePath;
                     for (File file : db.getFiles()) {
                         filePath = file.getAbsolutePath();
-                        System.out.println("drag and drop: " + filePath);
-                        runDfs(filePath);
+                        logToConsole("drag and drop: " + filePath);
+                        if (dndType == DNDTYPE_OPEN_DFS) {
+                            runDfs(filePath);
+                        } else if (dndType == DNDTYPE_SEND_FILE){
+                            dfsAdbFilePush(filePath);
+                        }
                     }
                 }
                 event.setDropCompleted(success);
                 event.consume();
             }
         });
+    }
+    private void initDragAndDrop() {
+        initSetOnDragOver(mScene.getRoot(),DNDTYPE_OPEN_DFS);
+        initSetOnDragOver(tab_adb_sendfile,DNDTYPE_SEND_FILE);
+        initSetOnDragOver(tab_recovery_sendfile,DNDTYPE_SEND_FILE);
     }
     /** Buttons initialize **/
     public void initToggleBtn() {
@@ -449,10 +460,19 @@ public class Controller implements Initializable {
             runCmd(ADB_BINARY, "reboot", "bootloader");
             showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "Command \"reboot to bootlader\" sended to device.");
     }
-    private void dfsAdbFilePush(){
+    private void dfsAdbFilePush(String localfilepath){
         try {
-            File localfile = fileChooser();
-            String remotefile = remotePushSetPath(localfile.getName());
+            File localfile;
+            String remotefile;
+
+            if(localfilepath==null){
+                localfile = fileChooser();
+                remotefile = remotePushSetPath(localfile.getName());
+            } else {
+                localfile = new File(localfilepath);
+                remotefile = remotePushSetPath(localfile.getName());
+                //remotefile = "/sdcard/" + localfile.getName();
+            }
 
             if (!remotefile.equals("")) {
                 new Thread(() -> {
@@ -688,7 +708,7 @@ public class Controller implements Initializable {
         tab_adb_btn_reboot_bootloader.setOnAction((event) -> dfsAdbRebootDeviceToBootloader());
         tab_adb_btn_run_dfs.setOnAction((event) -> runDfs(null));
         /** File control **/
-        tab_adb_btn_file_push.setOnAction((event) -> dfsAdbFilePush());
+        tab_adb_btn_file_push.setOnAction((event) -> dfsAdbFilePush(null));
         tab_adb_btn_file_pull.setOnAction((event) -> dfsAdbFilePull());
         /** Application **/
         tab_adb_btn_install.setOnAction((event) -> dfsAdbInstallApp());
