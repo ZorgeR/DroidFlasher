@@ -38,7 +38,7 @@
                                        <children>
                                           <Button fx:id="tab_adb_btn_file_push" layoutX="12.0" layoutY="338.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="305.0" text="push to device" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="12.0">
                                              <font>
-                                                <Font name="PT Sans Narrow" size="24.0" />
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
                                           <Button fx:id="tab_adb_btn_file_pull" layoutX="324.0" layoutY="338.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="305.0" text="pull from device" AnchorPane.bottomAnchor="67.0" AnchorPane.rightAnchor="12.0">
