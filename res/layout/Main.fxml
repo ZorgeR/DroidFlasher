@@ -36,17 +36,17 @@
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Button fx:id="tab_adb_btn_file_push" layoutX="12.0" layoutY="338.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="305.0" text="push to device" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="12.0">
+                                          <Button fx:id="tab_adb_btn_file_push" layoutX="12.0" layoutY="338.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="push to device" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="12.0">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="tab_adb_btn_file_pull" layoutX="324.0" layoutY="338.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="305.0" text="pull from device" AnchorPane.bottomAnchor="67.0" AnchorPane.rightAnchor="12.0">
+                                          <Button fx:id="tab_adb_btn_file_pull" layoutX="324.0" layoutY="338.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="pull from device" AnchorPane.bottomAnchor="67.0" AnchorPane.rightAnchor="12.0">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
-                                          <Button defaultButton="true" disable="true" layoutX="12.0" layoutY="53.0" mnemonicParsing="false" opacity="0.32" prefHeight="297.0" prefWidth="617.0" text="Drag&amp;Drop" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="53.0">
+                                          <Button defaultButton="true" disable="true" layoutX="12.0" layoutY="53.0" mnemonicParsing="false" opacity="0.32" prefHeight="306.0" prefWidth="618.0" text="Drag&amp;Drop" AnchorPane.bottomAnchor="121.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="53.0">
                                              <font>
                                                 <Font name="PT Sans" size="24.0" />
                                              </font>
@@ -214,7 +214,7 @@
                               <Image url="@../img/bullet_red.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="tab_adb_device_status_txt" layoutX="333.0" layoutY="451.0" text="No device detected." AnchorPane.bottomAnchor="11.0">
+                        <Label fx:id="tab_adb_device_status_txt" layoutX="332.0" layoutY="450.0" text="No device detected." AnchorPane.bottomAnchor="12.0">
                            <font>
                               <Font name="PT Sans" size="14.0" />
                            </font></Label>
@@ -259,106 +259,159 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ImageView fx:id="img_fastboot_status" fitHeight="32.0" fitWidth="32.0" layoutX="113.0" layoutY="324.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="11.0">
-                           <image>
-                              <Image url="@../img/bullet_red.png" />
-                           </image>
-                        </ImageView>
-                        <ProgressBar fx:id="tab_fastboot_progressbar" layoutX="14.0" layoutY="299.0" prefHeight="20.0" prefWidth="573.0" progress="0.0" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0" />
-                        <Label fx:id="tab_fastboot_device_status_txt" layoutX="144.0" layoutY="332.0" text="No device detected." AnchorPane.bottomAnchor="19.0" />
-                        <Button fx:id="tab_fastboot_btn_check_device" layoutX="14.0" layoutY="327.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="98.0" text="Check device" AnchorPane.bottomAnchor="14.0" />
-                        <Separator layoutY="37.0" prefHeight="11.0" prefWidth="617.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-17.0" />
-                        <Button fx:id="tab_fastboot_btn_reboot_bootloader" layoutX="14.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="reboot-bootloader">
-                           <font>
-                              <Font name="PT Sans" size="14.0" />
-                           </font></Button>
-                        <Button fx:id="tab_fastboot_btn_reboot" layoutX="154.0" layoutY="9.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="61.0" text="reboot">
-                           <font>
-                              <Font name="PT Sans" size="14.0" />
-                           </font></Button>
-                        <SplitPane dividerPositions="0.22900763358778625" layoutX="391.0" layoutY="51.0" orientation="VERTICAL" prefHeight="131.0" prefWidth="218.0" AnchorPane.rightAnchor="13.0">
-                           <effect>
-                              <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
-                           </effect>
-                           <items>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
-                                 <children>
-                                    <Label layoutX="38.0" layoutY="6.0" text="Unlocking bootloader" />
-                                    <ImageView fx:id="img_head_unlocking" fitHeight="16.0" fitWidth="16.0" layoutX="12.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="166.0" AnchorPane.topAnchor="6.0">
-                                       <image>
-                                          <Image url="@../img/lock-unlock.png" />
-                                       </image>
-                                    </ImageView>
-                                 </children>
-                              </AnchorPane>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="131.0">
-                                 <children>
-                                    <Button fx:id="tab_fastboot_btn_oem_unlock" layoutX="3.0" layoutY="4.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="104.0" text="oem unlock">
-                                       <font>
-                                          <Font name="PT Sans" size="14.0" />
-                                       </font></Button>
-                                    <Button fx:id="tab_fastboot_btn_oem_lock" layoutX="112.0" layoutY="4.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="100.0" text="oem lock">
-                                       <font>
-                                          <Font name="PT Sans" size="14.0" />
-                                       </font></Button>
-                                    <Button fx:id="tab_fastboot_btn_oem_get_unlock_data" layoutX="3.0" layoutY="65.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="209.0" text="oem get_unlock_data">
-                                       <font>
-                                          <Font name="PT Sans" size="14.0" />
-                                       </font></Button>
-                                    <Button fx:id="tab_fastboot_btn_oem_lock_begin" layoutX="3.0" layoutY="35.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="209.0" text="oem lock begin">
-                                       <font>
-                                          <Font name="PT Sans" size="14.0" />
-                                       </font></Button>
-                                 </children>
-                              </AnchorPane>
-                           </items>
-                        </SplitPane>
-                        <SplitPane dividerPositions="0.13839285714285715" layoutX="14.0" layoutY="51.0" orientation="VERTICAL" prefHeight="222.0" prefWidth="138.0" AnchorPane.leftAnchor="14.0">
-                           <effect>
-                              <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
-                           </effect>
-                           <items>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
-                                 <children>
-                                    <Label layoutX="35.0" layoutY="5.0" text="Flashing" />
-                                    <ImageView fx:id="img_head_flash" fitHeight="16.0" fitWidth="16.0" layoutX="10.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="5.0">
+                        <TabPane side="LEFT" stylesheets="@../css/sub_tabpane.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <tabs>
+                              <Tab text="Flashing">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Button fx:id="tab_fastboot_btn_flash_recovery" layoutX="12.0" layoutY="92.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="flash-recovery">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="tab_fastboot_btn_flash_boot" layoutX="12.0" layoutY="149.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="flash-boot (kernel)">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="tab_fastboot_btn_flash_cache" layoutX="12.0" layoutY="206.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="flash-cache">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="tab_fastboot_btn_flash_userdata" layoutX="331.0" layoutY="92.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="flash-userdata" AnchorPane.rightAnchor="12.0">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="tab_fastboot_btn_flash_system" layoutX="331.0" layoutY="149.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="flash-system" AnchorPane.rightAnchor="12.0">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="tab_fastboot_btn_flash_radio" layoutX="331.0" layoutY="206.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="flash-radio" AnchorPane.rightAnchor="12.0">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Button>
+                                          <Label layoutX="11.0" layoutY="51.0" text="Select partition:">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <Button fx:id="tab_fastboot_btn_flash_mfastboot_system" layoutX="12.0" layoutY="366.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="mfastboot flash-system">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Button>
+                                          <Label layoutX="11.0" layoutY="325.0" text="Custom:">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                                 <graphic>
+                                    <ImageView fx:id="img_head_flash" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" styleClass="subtabicon">
                                        <image>
                                           <Image url="@../img/file_extension_bat.png" />
                                        </image>
                                     </ImageView>
-                                 </children>
-                              </AnchorPane>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="188.0" prefWidth="136.0">
-                                 <children>
-                                    <Button fx:id="tab_fastboot_btn_flash_recovery" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="flash-recovery">
-                                       <font>
-                                          <Font name="PT Sans" size="14.0" />
-                                       </font></Button>
-                                    <Button fx:id="tab_fastboot_btn_flash_boot" layoutX="5.0" layoutY="35.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="flash-boot (kernel)">
-                                       <font>
-                                          <Font name="PT Sans" size="14.0" />
-                                       </font></Button>
-                                    <Button fx:id="tab_fastboot_btn_flash_cache" layoutX="5.0" layoutY="65.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="flash-cache">
-                                       <font>
-                                          <Font name="PT Sans" size="14.0" />
-                                       </font></Button>
-                                    <Button fx:id="tab_fastboot_btn_flash_userdata" layoutX="4.0" layoutY="95.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="flash-userdata">
-                                       <font>
-                                          <Font name="PT Sans" size="14.0" />
-                                       </font></Button>
-                                    <Button fx:id="tab_fastboot_btn_flash_system" layoutX="4.0" layoutY="125.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="flash-system">
-                                       <font>
-                                          <Font name="PT Sans" size="14.0" />
-                                       </font></Button>
-                                    <Button fx:id="tab_fastboot_btn_flash_radio" layoutX="4.0" layoutY="155.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" text="flash-radio">
-                                       <font>
-                                          <Font name="PT Sans" size="14.0" />
-                                       </font></Button>
-                                 </children>
-                              </AnchorPane>
-                           </items>
-                        </SplitPane>
-                        <Button fx:id="tab_fastboot_btn_console" alignment="CENTER" layoutX="453.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="144.0" text="fastboot console" AnchorPane.rightAnchor="14.0">
+                                 </graphic>
+                              </Tab>
+                              <Tab text="Bootloader">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Label layoutX="11.0" layoutY="51.0" text="Unlock:">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <Button fx:id="tab_fastboot_btn_oem_unlock" layoutX="12.0" layoutY="92.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="oem unlock">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="tab_fastboot_btn_oem_lock" layoutX="325.0" layoutY="92.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="oem lock" AnchorPane.rightAnchor="12.0">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="tab_fastboot_btn_oem_get_unlock_data" layoutX="325.0" layoutY="149.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="oem get_unlock_data" AnchorPane.rightAnchor="12.0">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="tab_fastboot_btn_oem_lock_begin" layoutX="12.0" layoutY="149.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="oem lock begin">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                                 <graphic>
+                                    <ImageView fx:id="img_head_unlocking" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" styleClass="subtabicon">
+                                       <image>
+                                          <Image url="@../img/lock-unlock.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Tab>
+                              <Tab text="Other">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Label layoutX="10.0" layoutY="51.0" text="Additional:">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <Button fx:id="tab_fastboot_btn_boot_img" layoutX="12.0" layoutY="92.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="load boot.img (no-flash)">
+                                             <font>
+                                                <Font name="PT Sans Narrow Bold" size="24.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                                 <graphic>
+                                    <ImageView fx:id="img_head_other" styleClass="subtabicon">
+                                       <image>
+                                          <Image url="@../../../../../Pictures/icons/faience-icon-theme_0.5/Faience/categories/16/applications-other.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Tab>
+                           </tabs>
+                        </TabPane>
+                        <ImageView fx:id="img_fastboot_status" fitHeight="32.0" fitWidth="32.0" layoutX="300.0" layoutY="443.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0">
+                           <image>
+                              <Image url="@../img/bullet_red.png" />
+                           </image>
+                        </ImageView>
+                        <ProgressBar fx:id="tab_fastboot_progressbar" layoutX="182.0" layoutY="420.0" prefHeight="20.0" prefWidth="615.0" progress="0.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="182.0" AnchorPane.rightAnchor="13.0" />
+                        <Label fx:id="tab_fastboot_device_status_txt" layoutX="332.0" layoutY="452.0" text="No device detected." AnchorPane.bottomAnchor="12.0">
+                           <font>
+                              <Font name="PT Sans" size="14.0" />
+                           </font></Label>
+                        <Button fx:id="tab_fastboot_btn_check_device" layoutX="182.0" layoutY="440.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="117.0" text="Check device" AnchorPane.bottomAnchor="7.0">
+                           <font>
+                              <Font name="PT Sans" size="14.0" />
+                           </font></Button>
+                        <Separator layoutX="170.0" layoutY="36.0" prefHeight="11.0" prefWidth="617.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="-17.0" />
+                        <Button fx:id="tab_fastboot_btn_reboot_bootloader" layoutX="180.0" layoutY="7.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="132.0" text="reboot-bootloader">
+                           <font>
+                              <Font name="PT Sans" size="14.0" />
+                           </font></Button>
+                        <Button fx:id="tab_fastboot_btn_reboot" layoutX="319.0" layoutY="7.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="61.0" text="reboot">
+                           <font>
+                              <Font name="PT Sans" size="14.0" />
+                           </font></Button>
+                        <Button fx:id="tab_fastboot_btn_console" alignment="CENTER" layoutX="654.0" layoutY="7.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="144.0" text="fastboot console" AnchorPane.rightAnchor="12.0">
                            <graphic>
                               <ImageView fx:id="img_console_fastboot" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -369,36 +422,7 @@
                            <font>
                               <Font name="PT Sans" size="14.0" />
                            </font></Button>
-                        <SplitPane dividerPositions="0.31683168316831684" layoutX="391.0" layoutY="188.0" orientation="VERTICAL" prefHeight="103.0" prefWidth="196.0" AnchorPane.rightAnchor="13.0">
-                           <effect>
-                              <DropShadow color="#dadada" height="14.93" radius="6.965" width="14.93" />
-                           </effect>
-                           <items>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="44.0" prefWidth="158.0">
-                                 <children>
-                                    <Label layoutX="38.0" layoutY="6.0" text="Other" />
-                                    <ImageView fx:id="img_head_other" layoutX="12.0" layoutY="6.0">
-                                       <image>
-                                          <Image url="@../../../../../Pictures/icons/faience-icon-theme_0.5/Faience/categories/16/applications-other.png" />
-                                       </image>
-                                    </ImageView>
-                                 </children>
-                              </AnchorPane>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="131.0">
-                                 <children>
-                                    <Button fx:id="tab_fastboot_btn_boot_img" layoutX="4.0" layoutY="4.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="185.0" text="boot *.img">
-                                       <font>
-                                          <Font name="PT Sans" size="14.0" />
-                                       </font></Button>
-                                    <Button fx:id="tab_fastboot_btn_flash_mfastboot_system" layoutX="4.0" layoutY="34.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="185.0" text="mfastboot flash-system">
-                                       <font>
-                                          <Font name="PT Sans" size="14.0" />
-                                       </font></Button>
-                                 </children>
-                              </AnchorPane>
-                           </items>
-                        </SplitPane>
-                        <Button fx:id="tab_fastboot_btn_run_dfs" defaultButton="true" layoutX="222.0" layoutY="9.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="112.0" text="run *.dfs script">
+                        <Button fx:id="tab_fastboot_btn_run_dfs" defaultButton="true" layoutX="387.0" layoutY="7.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="112.0" text="run *.dfs script">
                            <font>
                               <Font name="PT Sans" size="14.0" />
                            </font></Button>
