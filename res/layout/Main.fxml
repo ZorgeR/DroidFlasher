@@ -535,7 +535,7 @@
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Label>
-                                          <Button fx:id="tab_recovery_btn_backup" layoutX="12.0" layoutY="256.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Backup">
+                                          <Button fx:id="tab_recovery_btn_backup" layoutX="12.0" layoutY="366.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Backup">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
@@ -547,7 +547,7 @@
                                                 </ImageView>
                                              </graphic>
                                           </Button>
-                                          <Button fx:id="tab_recovery_btn_restore" layoutX="325.0" layoutY="256.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Restore">
+                                          <Button fx:id="tab_recovery_btn_restore" layoutX="325.0" layoutY="366.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Restore">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>

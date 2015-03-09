@@ -476,9 +476,8 @@ public class Controller implements Initializable {
 
             if (!remotefile.equals("")) {
                 new Thread(() -> {
-                        runCmdAdbPushPull(tab_adb_progressbar,ADB_BINARY, "push", "-p", localfile.getPath(), remotefile);
-
-                        Platform.runLater(() -> showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "File " + localfile.getName() + " pushed to remote path " + remotefile));
+                        runCmdAdbPushPull(tab_adb_progressbar, ADB_BINARY, "push", "-p", localfile.getPath(), remotefile);
+                        Platform.runLater(() -> logToConsole("File " + localfile.getName() + " pushed to remote path " + remotefile));
                 }).start();
             }
         } catch (Exception e) {
@@ -493,7 +492,7 @@ public class Controller implements Initializable {
                 if(localfile!=null){
                     new Thread(() -> {
                             runCmdAdbPushPull(tab_adb_progressbar, ADB_BINARY, "pull", "-p", remotefile, localfile.getPath());
-                            Platform.runLater(() -> showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "File " + localfile.getName() + " pulled from remote path " + remotefile));
+                            Platform.runLater(() -> logToConsole("File " + localfile.getName() + " pulled from remote path " + remotefile));
                     }).start();}
             }
         } catch (Exception e) {
