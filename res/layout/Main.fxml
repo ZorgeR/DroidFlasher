@@ -855,7 +855,7 @@
             </Tab>
         </tabs>
       </TabPane>
-      <Label alignment="CENTER" layoutX="10.0" layoutY="443.0" prefHeight="38.0" prefWidth="81.0" stylesheets="@../css/version_label.css" text="r105" textFill="WHITE" translateX="-10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0">
+      <Label alignment="CENTER" layoutX="10.0" layoutY="443.0" prefHeight="38.0" prefWidth="81.0" stylesheets="@../css/version_label.css" text="r106" textFill="WHITE" translateX="-10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0">
          <font>
             <Font name="Menlo Bold" size="12.0" />
          </font>
