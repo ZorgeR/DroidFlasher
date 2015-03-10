@@ -7,9 +7,9 @@
 
 .tab-pane
 {
-	-fx-tab-min-width: 35px;
+	-fx-tab-min-width: 34px;
 	-fx-tab-min-height: 170px;
-	-fx-tab-max-width: 35px;
+	-fx-tab-max-width: 34px;
 	-fx-tab-max-height: 170px;
 	-fx-padding: 0 0 0 -6;
 }
@@ -21,6 +21,13 @@
 	-fx-focus-color: transparent;
 /*		-fx-focus: none;*/
 }
+.firstsubtab{
+	-fx-padding: 0 50 0 0;
+	-fx-background-insets: 0 51 0 0;
+	-fx-focus-color: transparent;
+	-fx-faint-focus-color: transparent;
+}
+
 .tab-pane .tab
 {
 	/*-fx-focus: none;*/
@@ -33,9 +40,9 @@
 .tab .tab-label { 
     -fx-alignment: CENTER_LEFT;
     -fx-text-fill: #989dac;
-    -fx-font-size: 13px;
+    -fx-font-size: 14px;
     -fx-font-weight: normal;
-	-fx-font-family: "PT Mono";
+	-fx-font-family: "PT Sans";
 	-fx-padding: 0 -120 0 -70;
 }
 .tab-pane .tab:selected
@@ -46,9 +53,9 @@
 .tab:selected .tab-label { 
     -fx-alignment: CENTER_LEFT;
     -fx-text-fill: #e2e2e2;
-    -fx-font-size: 13px;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
-	-fx-font-family: "PT Mono";
+	-fx-font-family: "PT Sans";
 }
 .tab *.tab-label {
     -fx-rotate: 90;

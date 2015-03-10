@@ -32,7 +32,7 @@
                      <children>
                         <TabPane side="LEFT" stylesheets="@../css/sub_tabpane.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <tabs>
-                              <Tab text="File operation">
+                              <Tab styleClass="firstsubtab" text="File operation">
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
@@ -255,6 +255,11 @@
                            </font>
                         </MenuButton>
                         <ProgressBar fx:id="tab_adb_progressbar" layoutX="182.0" layoutY="420.0" prefHeight="20.0" prefWidth="617.0" progress="0.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="182.0" AnchorPane.rightAnchor="12.0" />
+                        <Label prefHeight="57.0" prefWidth="170.0" styleClass="tablabel" text="Adb" textFill="WHITE">
+                           <font>
+                              <Font name="PT Sans Narrow" size="24.0" />
+                           </font>
+                        </Label>
                      </children>
                   </AnchorPane>
                </content>
@@ -272,7 +277,7 @@
                      <children>
                         <TabPane side="LEFT" stylesheets="@../css/sub_tabpane.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <tabs>
-                              <Tab text="Flashing">
+                              <Tab styleClass="firstsubtab" text="Flashing">
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
@@ -437,6 +442,11 @@
                            <font>
                               <Font name="PT Sans" size="14.0" />
                            </font></Button>
+                        <Label prefHeight="57.0" prefWidth="170.0" styleClass="tablabel" text="Fastboot" textFill="WHITE">
+                           <font>
+                              <Font name="PT Sans Narrow" size="24.0" />
+                           </font>
+                        </Label>
                      </children>
                   </AnchorPane>
             </content>
@@ -454,7 +464,7 @@
                      <children>
                         <TabPane side="LEFT" stylesheets="@../css/sub_tabpane.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <tabs>
-                              <Tab text="Flash &amp; Wipe">
+                              <Tab styleClass="firstsubtab" text="Flash &amp; Wipe">
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
@@ -752,6 +762,11 @@
                            <font>
                               <Font name="PT Sans" size="14.0" />
                            </font></Button>
+                        <Label prefHeight="57.0" prefWidth="170.0" styleClass="tablabel" text="Recovery" textFill="WHITE">
+                           <font>
+                              <Font name="PT Sans Narrow" size="24.0" />
+                           </font>
+                        </Label>
                      </children>
                   </AnchorPane>
                </content>
@@ -785,23 +800,23 @@
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
                                           <Label layoutX="23.0" layoutY="19.0" text="fastboot:" />
-                                          <TextField fx:id="tab_settings_override_txt_fastboot_path" layoutX="83.0" layoutY="14.0" prefHeight="26.0" prefWidth="328.0" />
-                                          <ToggleButton fx:id="tab_settings_override_btn_fastboot_override" layoutX="498.0" layoutY="14.0" mnemonicParsing="false" text="Override" />
-                                          <ToggleButton fx:id="tab_settings_override_btn_adb_override" layoutX="498.0" layoutY="45.0" mnemonicParsing="false" text="Override" />
+                                          <TextField fx:id="tab_settings_override_txt_fastboot_path" layoutX="83.0" layoutY="14.0" prefHeight="26.0" prefWidth="328.0" AnchorPane.leftAnchor="73.0" AnchorPane.rightAnchor="165.0" />
+                                          <ToggleButton fx:id="tab_settings_override_btn_fastboot_override" layoutX="498.0" layoutY="14.0" mnemonicParsing="false" text="Override" AnchorPane.rightAnchor="7.0" />
+                                          <ToggleButton fx:id="tab_settings_override_btn_adb_override" layoutX="498.0" layoutY="45.0" mnemonicParsing="false" text="Override" AnchorPane.rightAnchor="7.0" />
                                           <Label layoutX="49.0" layoutY="50.0" text="adb:" />
-                                          <TextField fx:id="tab_settings_override_txt_adb_path" layoutX="83.0" layoutY="45.0" prefHeight="26.0" prefWidth="328.0" />
-                                          <Button fx:id="tab_settings_override_btn_fastboot_browse" layoutX="417.0" layoutY="14.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="Browse" />
-                                          <Button fx:id="tab_settings_override_btn_adb_browse" layoutX="417.0" layoutY="45.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="Browse" />
-                                          <Button fx:id="tab_settings_override_btn_unpack_binaries" layoutX="83.0" layoutY="110.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="484.0" text="Unpack built-in binaries" />
+                                          <TextField fx:id="tab_settings_override_txt_adb_path" layoutX="83.0" layoutY="45.0" prefHeight="26.0" prefWidth="328.0" AnchorPane.leftAnchor="73.0" AnchorPane.rightAnchor="165.0" />
+                                          <Button fx:id="tab_settings_override_btn_fastboot_browse" layoutX="623.0" layoutY="14.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="Browse" AnchorPane.rightAnchor="83.0" />
+                                          <Button fx:id="tab_settings_override_btn_adb_browse" layoutX="623.0" layoutY="45.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="Browse" AnchorPane.rightAnchor="83.0" />
+                                          <Button fx:id="tab_settings_override_btn_unpack_binaries" layoutX="83.0" layoutY="110.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="484.0" text="Unpack built-in binaries" AnchorPane.leftAnchor="73.0" AnchorPane.rightAnchor="7.0" />
                                           <ImageView fx:id="img_settings_unpack_binaries" fitHeight="16.0" fitWidth="16.0" layoutX="60.0" layoutY="115.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../img/file_extension_zip.png" />
                                              </image>
                                           </ImageView>
-                                          <Button fx:id="tab_settings_override_btn_mfastboot_browse" layoutX="417.0" layoutY="76.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="Browse" />
-                                          <TextField fx:id="tab_settings_override_txt_mfastboot_path" layoutX="83.0" layoutY="76.0" prefHeight="26.0" prefWidth="328.0" />
+                                          <Button fx:id="tab_settings_override_btn_mfastboot_browse" layoutX="623.0" layoutY="76.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="Browse" AnchorPane.rightAnchor="83.0" />
+                                          <TextField fx:id="tab_settings_override_txt_mfastboot_path" layoutX="83.0" layoutY="76.0" prefHeight="26.0" prefWidth="328.0" AnchorPane.leftAnchor="73.0" AnchorPane.rightAnchor="165.0" />
                                           <Label layoutX="12.0" layoutY="81.0" text="mfastboot:" />
-                                          <ToggleButton fx:id="tab_settings_override_btn_mfastboot_override" layoutX="498.0" layoutY="76.0" mnemonicParsing="false" text="Override" />
+                                          <ToggleButton fx:id="tab_settings_override_btn_mfastboot_override" layoutX="498.0" layoutY="76.0" mnemonicParsing="false" text="Override" AnchorPane.rightAnchor="7.0" />
                                        </children>
                                     </AnchorPane>
                               </content>
