@@ -17,11 +17,11 @@
 
 <AnchorPane prefHeight="204.0" prefWidth="295.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TabPane fx:id="top_tab_pane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="894.0" rotateGraphic="true" side="LEFT" stylesheets="@../css/tabpane.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="58.0" tabMaxWidth="24.0" tabMinHeight="58.0" tabMinWidth="24.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <TabPane fx:id="top_tab_pane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="894.0" rotateGraphic="true" side="LEFT" stylesheets="@../css/tabpane_style0.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="58.0" tabMaxWidth="24.0" tabMinHeight="58.0" tabMinWidth="24.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <tabs>
-            <Tab styleClass="toptab">
+            <Tab>
                 <graphic>
-                    <ImageView fitHeight="32.0" fitWidth="32.0">
+                    <ImageView fitHeight="16.0" fitWidth="16.0" styleClass="toptabicon">
                         <image>
                             <Image url="@../img/ui/tabicons/adb.png" />
                         </image>
@@ -263,10 +263,14 @@
                      </children>
                   </AnchorPane>
                </content>
+               <styleClass>
+                  <String fx:value="toptab" />
+                  <String fx:value="firsttab" />
+               </styleClass>
             </Tab>
           <Tab styleClass="toptab">
               <graphic>
-                  <ImageView fitHeight="32.0" fitWidth="32.0">
+                  <ImageView fitHeight="16.0" fitWidth="16.0" styleClass="toptabicon">
                       <image>
                           <Image url="@../img/ui/tabicons/fastboot.png" />
                       </image>
@@ -453,7 +457,7 @@
           </Tab>
             <Tab styleClass="toptab">
                 <graphic>
-                    <ImageView fitHeight="32.0" fitWidth="32.0">
+                    <ImageView fitHeight="16.0" fitWidth="16.0" styleClass="toptabicon">
                         <image>
                             <Image url="@../img/ui/tabicons/recovery.png" />
                         </image>
@@ -773,7 +777,7 @@
             </Tab>
           <Tab styleClass="toptab">
               <graphic>
-                  <ImageView fitHeight="32.0" fitWidth="32.0">
+                  <ImageView fitHeight="16.0" fitWidth="16.0" styleClass="toptabicon">
                       <image>
                           <Image url="@../img/ui/tabicons/settings.png" />
                       </image>
@@ -837,9 +841,9 @@
                   </AnchorPane>
             </content>
           </Tab>
-            <Tab styleClass="toptab">
+            <Tab>
                 <graphic>
-                    <ImageView fitHeight="32.0" fitWidth="32.0">
+                    <ImageView fitHeight="16.0" fitWidth="16.0" styleClass="toptabicon">
                         <image>
                             <Image url="@../img/ui/tabicons/console.png" />
                         </image>
@@ -852,10 +856,14 @@
                      </children>
                   </AnchorPane>
                </content>
+               <styleClass>
+                  <String fx:value="toptab" />
+                  <String fx:value="toptablast" />
+               </styleClass>
             </Tab>
         </tabs>
       </TabPane>
-      <Label alignment="CENTER" layoutX="10.0" layoutY="443.0" prefHeight="38.0" prefWidth="81.0" stylesheets="@../css/version_label.css" text="r106" textFill="WHITE" translateX="-10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0">
+      <Label alignment="CENTER" layoutX="10.0" layoutY="443.0" prefHeight="38.0" prefWidth="62.0" stylesheets="@../css/version_label.css" text="r107" textFill="#5b5b5b" translateX="-10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0">
          <font>
             <Font name="Menlo Bold" size="12.0" />
          </font>
