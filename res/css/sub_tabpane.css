@@ -1,6 +1,6 @@
 .tab-pane .tab-header-area .tab-header-background {
     /*-fx-opacity: 0;*/
-	-fx-background-color: #272a30;
+	-fx-background-color: #303030;
 /*    -fx-background-color: -fx-outer-border, -fx-inner-border, derive(-fx-color, -20%);*/
     -fx-effect: innershadow(two-pass-box , rgba(0,0,0,0.6) , 4, 0.0 , 0 , 0);
 }
@@ -34,7 +34,7 @@
 }
 .tab-pane .tab:hover
 {
-	-fx-background-color: #2e3035;
+	-fx-background-color: #353535;
 /*	-fx-background-image: url("../img/ui/tab_bckgr_2_hover.png");*/
 }
 .tab .tab-label { 
@@ -47,7 +47,7 @@
 }
 .tab-pane .tab:selected
 {
-	-fx-background-color: #1e2025;
+	-fx-background-color: #202020;
 /*	-fx-background-image: url("../img/ui/tab_bckgr_2_selected.png");*/
 }
 .tab:selected .tab-label { 
