@@ -775,7 +775,7 @@ public class Controller implements Initializable {
                                             /** dfs checkbox TWRP-2.8.5.0|PhilZ-Touch-6.58.7 **/
                                             break;
                                         case "unzip": /*TODO - make dfs unzip possible*/
-                                            /** dfs checkbox TWRP-2.8.5.0|PhilZ-Touch-6.58.7 **/
+                                            /** dfs unzip firmware.zip **/
                                             break;
                                     }
                                 }
