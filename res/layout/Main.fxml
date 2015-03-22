@@ -830,7 +830,7 @@
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
                                           <Button fx:id="tab_settings_others_btn_reinitialize" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Reinitialize inventory" />
-                                          <CheckBox fx:id="tab_settings_others_chk_simplemode" layoutX="14.0" layoutY="52.0" mnemonicParsing="false" text="Simple mode" />
+                                          <CheckBox fx:id="tab_settings_others_chk_simplemode" layoutX="14.0" layoutY="52.0" mnemonicParsing="false" selected="true" text="Simple mode" />
                                        </children>
                                     </AnchorPane>
                               </content>
@@ -863,7 +863,7 @@
             </Tab>
         </tabs>
       </TabPane>
-      <Label alignment="CENTER" layoutX="10.0" layoutY="443.0" prefHeight="38.0" prefWidth="62.0" stylesheets="@../css/label_appversion.css" text="r107" textFill="#5b5b5b" translateX="-10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0">
+      <Label fx:id="label_version" alignment="CENTER" layoutX="10.0" layoutY="443.0" prefHeight="38.0" prefWidth="62.0" stylesheets="@../css/label_appversion.css" text="VERS" textFill="#5b5b5b" translateX="-10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0">
          <font>
             <Font name="Menlo Bold" size="12.0" />
          </font>

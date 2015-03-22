@@ -54,10 +54,12 @@ public class Controller implements Initializable {
     public static boolean SIMPLEMODE;
     private static Alert global_alert;
     private static TextArea global_alert_text_area;
+    private static int APP_VERSION=108;
 
     /** Init UI **/
     private Scene mScene;
     @FXML private TabPane top_tab_pane;
+    @FXML private Label label_version;
 
     /** Adb Tab **/
     @FXML private Button tab_adb_btn_check_device;
@@ -206,6 +208,7 @@ public class Controller implements Initializable {
     }
     /** Initialize **/
     public void initConfiguration() {
+        label_version.setText("r"+APP_VERSION);
         tab_settings_accord.setExpandedPane(tab_settings_tool_set_group);
 
         /** Set simple mode **/
@@ -225,6 +228,11 @@ public class Controller implements Initializable {
                 unpackBuildInBinaryDialog();
             }
         }
+        new Thread(() -> {
+            if(isNewVersionAvailable()){
+                Platform.runLater(() -> showDialog(Alert.AlertType.INFORMATION,"Update manager", "New version available!", "Please check you preferred forum to get new version."));
+            }
+        }).start();
     }
     /** Drag-n-Drop**/
     private void initDragAndDrop() {
@@ -362,6 +370,23 @@ public class Controller implements Initializable {
         tab_settings_override_btn_unpack_binaries.setOnAction((event) -> unpackBuildInBinaryDialog());
         /** Simple mode **/
         tab_settings_others_chk_simplemode.setOnAction((event) -> SIMPLEMODE = tab_settings_others_chk_simplemode.isSelected());
+    }
+
+    /** Update manager **/
+    private boolean isNewVersionAvailable(){
+        try {
+            final URL url = new URL("http://files.z-lab.me/distr/DroidFlasher/version");
+            InputStream i = url.openStream();
+            Scanner scan = new Scanner(i);
+            if (APP_VERSION <= Integer.parseInt(scan.nextLine())) {
+                logToConsole("New version available: "+scan.nextLine());
+                return true;
+            }
+            return false;
+        } catch (Exception e){
+            logToConsole("Error while check new version.");
+            return false;
+        }
     }
 
     /** DFS Worker **/
