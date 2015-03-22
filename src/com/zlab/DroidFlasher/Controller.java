@@ -228,9 +228,7 @@ public class Controller implements Initializable {
                 unpackBuildInBinaryDialog();
             }
         }
-        new Thread(() -> {
-            isNewVersionAvailable();
-        }).start();
+        new Thread(this::isNewVersionAvailable).start();
     }
     /** Drag-n-Drop**/
     private void initDragAndDrop() {
