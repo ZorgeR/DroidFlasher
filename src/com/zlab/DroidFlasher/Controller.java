@@ -229,9 +229,7 @@ public class Controller implements Initializable {
             }
         }
         new Thread(() -> {
-            if(isNewVersionAvailable()){
-                Platform.runLater(() -> showDialog(Alert.AlertType.INFORMATION,"Update manager", "New version available!", "Please check you preferred forum to get new version."));
-            }
+            isNewVersionAvailable();
         }).start();
     }
     /** Drag-n-Drop**/
@@ -373,19 +371,20 @@ public class Controller implements Initializable {
     }
 
     /** Update manager **/
-    private boolean isNewVersionAvailable(){
+    private void isNewVersionAvailable(){
         try {
             final URL url = new URL("http://files.z-lab.me/distr/DroidFlasher/version");
             InputStream i = url.openStream();
             Scanner scan = new Scanner(i);
-            if (APP_VERSION <= Integer.parseInt(scan.nextLine())) {
-                logToConsole("New version available: "+scan.nextLine());
-                return true;
+            String version = scan.nextLine();
+            if (APP_VERSION < Integer.parseInt(version)) {
+                Platform.runLater(() -> showDialog(Alert.AlertType.INFORMATION,"Update manager", "New version available!", "Please check you preferred forum to get new version: r"+version));
+                logToConsole("New version available: "+version);
+            } else {
+                logToConsole("No updates available.");
             }
-            return false;
         } catch (Exception e){
             logToConsole("Error while check new version.");
-            return false;
         }
     }
 
