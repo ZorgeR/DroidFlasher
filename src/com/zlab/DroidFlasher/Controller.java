@@ -489,6 +489,7 @@ public class Controller implements Initializable {
                                                 }
                                             }
                                             break;
+                                        /*TODO - file selector for next operation*/
                                     }
                                 }
                             }
