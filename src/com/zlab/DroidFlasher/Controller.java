@@ -27,7 +27,6 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.regex.Matcher;
@@ -458,7 +457,8 @@ public class Controller implements Initializable {
                                                 try {
                                                     Thread.sleep(100);
                                                 } catch (InterruptedException e) {
-                                                    e.printStackTrace();
+                                                    logToConsole(e.getMessage());
+                                                    logToGlobalAlert(e.getMessage());
                                                 }
                                             }
                                             if (dld.getStatus() == Download.ERROR) {
@@ -479,14 +479,13 @@ public class Controller implements Initializable {
                                             break;
                                         case "set":
                                             if(commands[2].equals("workdir") && SIMPLEMODE){
-                                                FutureTask query = new FutureTask(() -> directoryChooserAdv("Select working directory (with images)"));
+                                                FutureTask query = new FutureTask<>(() -> directoryChooserAdv("Select working directory (with images)"));
                                                 Platform.runLater(query);
                                                 try {
                                                     dir[0] = (File) query.get();
-                                                } catch (InterruptedException e) {
-                                                    e.printStackTrace();
-                                                } catch (ExecutionException e) {
-                                                    e.printStackTrace();
+                                                } catch (InterruptedException | ExecutionException e) {
+                                                    logToConsole(e.getMessage());
+                                                    logToGlobalAlert(e.getMessage());
                                                 }
                                             }
                                             break;
@@ -500,7 +499,8 @@ public class Controller implements Initializable {
                             }
                         });
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        logToConsole(e.getMessage());
+                        logToGlobalAlert(e.getMessage());
                     }
                 }).start();}
         } catch (Exception e) {
@@ -776,10 +776,11 @@ public class Controller implements Initializable {
         }
     }
     /** FASTBOOT **/
-    private void dfsFastbootRunGeneralCommand(String... args){
+    /**  private void dfsFastbootRunGeneralCommand(String... args){
         runCmd(args);
         showDialog(Alert.AlertType.INFORMATION,"fastboot", "Operation complete", "Command \""+args[args.length-1]+"t\" sended to device.");
-    } /*TODO - Migrate to general command*/
+    }*/
+    /*TODO - Migrate to general command*/
     private void dfsFastbootCheckStatus(){
         String fastboot_devices_output = runCmd(FASTBOOT_BINARY, "devices");
         if (!fastboot_devices_output.equals("")) {
@@ -1023,7 +1024,7 @@ public class Controller implements Initializable {
                 tab_settings_tool_set_txt_tool_directory_browse.setText(dir.getPath());
                 setBinaries();
             } else {
-                String binaries = "";
+                String binaries;
                 if (!checkAdbBin(dir) && !checkFastbootBin(dir)) {
                     binaries = "adb and fastboot";
                 } else if (!checkAdbBin(dir)) {

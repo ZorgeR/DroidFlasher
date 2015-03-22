@@ -17,7 +17,7 @@
 
 <AnchorPane prefHeight="204.0" prefWidth="295.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TabPane fx:id="top_tab_pane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="894.0" rotateGraphic="true" side="LEFT" stylesheets="@../css/tab_main.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="58.0" tabMaxWidth="24.0" tabMinHeight="58.0" tabMinWidth="24.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <TabPane fx:id="top_tab_pane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="872.0" rotateGraphic="true" side="LEFT" stylesheets="@../css/tab_main.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="58.0" tabMaxWidth="24.0" tabMinHeight="58.0" tabMinWidth="24.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <tabs>
             <Tab>
                 <graphic>
@@ -107,12 +107,12 @@
                                                 <Font name="PT Sans Narrow" size="16.0" />
                                              </font>
                                           </CheckBox>
-                                          <Button fx:id="tab_adb_btn_install" layoutX="12.0" layoutY="197.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Single *.APK" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="197.0">
+                                          <Button fx:id="tab_adb_btn_install" layoutX="12.0" layoutY="197.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Single *.APK" AnchorPane.leftAnchor="12.0">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="tab_adb_btn_install_multiple" layoutX="352.0" layoutY="197.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Multiple *.APK" AnchorPane.rightAnchor="12.0">
+                                          <Button fx:id="tab_adb_btn_install_multiple" layoutX="325.0" layoutY="197.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Multiple *.APK">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
@@ -127,7 +127,7 @@
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Label>
-                                          <Button fx:id="tab_adb_btn_uninstall_keep_data" layoutX="325.0" layoutY="366.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Keep data and cache" AnchorPane.rightAnchor="12.0">
+                                          <Button fx:id="tab_adb_btn_uninstall_keep_data" layoutX="325.0" layoutY="366.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Keep data and cache">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
@@ -152,12 +152,12 @@
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Button fx:id="tab_adb_btn_backup" layoutX="12.0" layoutY="338.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Backup" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="12.0">
+                                          <Button fx:id="tab_adb_btn_backup" layoutX="12.0" layoutY="197.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Backup" AnchorPane.leftAnchor="12.0">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="tab_adb_btn_restore" layoutX="323.0" layoutY="338.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Restore" AnchorPane.bottomAnchor="67.0" AnchorPane.rightAnchor="14.0">
+                                          <Button fx:id="tab_adb_btn_restore" layoutX="325.0" layoutY="197.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Restore">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
@@ -300,17 +300,17 @@
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="tab_fastboot_btn_flash_userdata" layoutX="331.0" layoutY="92.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="flash-userdata" AnchorPane.rightAnchor="12.0">
+                                          <Button fx:id="tab_fastboot_btn_flash_userdata" layoutX="325.0" layoutY="92.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="flash-userdata">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="tab_fastboot_btn_flash_system" layoutX="331.0" layoutY="149.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="flash-system" AnchorPane.rightAnchor="12.0">
+                                          <Button fx:id="tab_fastboot_btn_flash_system" layoutX="325.0" layoutY="149.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="flash-system">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="tab_fastboot_btn_flash_radio" layoutX="331.0" layoutY="206.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="flash-radio" AnchorPane.rightAnchor="12.0">
+                                          <Button fx:id="tab_fastboot_btn_flash_radio" layoutX="325.0" layoutY="206.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="flash-radio">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
@@ -355,12 +355,12 @@
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="tab_fastboot_btn_oem_lock" layoutX="325.0" layoutY="92.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="oem lock" AnchorPane.rightAnchor="12.0">
+                                          <Button fx:id="tab_fastboot_btn_oem_lock" layoutX="325.0" layoutY="92.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="oem lock">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="tab_fastboot_btn_oem_get_unlock_data" layoutX="325.0" layoutY="149.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="oem get_unlock_data" AnchorPane.rightAnchor="12.0">
+                                          <Button fx:id="tab_fastboot_btn_oem_get_unlock_data" layoutX="325.0" layoutY="149.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="oem get_unlock_data">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
@@ -401,7 +401,7 @@
                                  <graphic>
                                     <ImageView fx:id="img_head_other" styleClass="subtabicon">
                                        <image>
-                                          <Image url="@../../../../../Pictures/icons/faience-icon-theme_0.5/Faience/categories/16/applications-other.png" />
+                                          <Image url="@../img/ui/icons/others.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -497,7 +497,7 @@
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="tab_recovery_btn_wipe" layoutX="12.0" layoutY="366.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="613.0" text="wipe" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="366.0">
+                                          <Button fx:id="tab_recovery_btn_wipe" layoutX="12.0" layoutY="366.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="613.0" text="wipe" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
@@ -549,7 +549,7 @@
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Label>
-                                          <Button fx:id="tab_recovery_btn_backup" layoutX="12.0" layoutY="366.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Backup">
+                                          <Button fx:id="tab_recovery_btn_backup" layoutX="12.0" layoutY="366.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Backup" AnchorPane.bottomAnchor="67.0">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
@@ -561,7 +561,7 @@
                                                 </ImageView>
                                              </graphic>
                                           </Button>
-                                          <Button fx:id="tab_recovery_btn_restore" layoutX="325.0" layoutY="366.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Restore">
+                                          <Button fx:id="tab_recovery_btn_restore" layoutX="325.0" layoutY="366.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="Restore" AnchorPane.bottomAnchor="67.0">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
@@ -633,12 +633,12 @@
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Button fx:id="tab_recovery_btn_file_push" layoutX="12.0" layoutY="366.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="push to device" AnchorPane.leftAnchor="12.0">
+                                          <Button fx:id="tab_recovery_btn_file_push" layoutX="12.0" layoutY="366.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="push to device" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="12.0">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="tab_recovery_btn_file_pull" layoutX="325.0" layoutY="366.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="pull from device" AnchorPane.rightAnchor="12.0">
+                                          <Button fx:id="tab_recovery_btn_file_pull" layoutX="325.0" layoutY="366.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="pull from device" AnchorPane.bottomAnchor="67.0" AnchorPane.rightAnchor="12.0">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
@@ -684,7 +684,7 @@
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="tab_recovery_btn_chmod" disable="true" layoutX="325.0" layoutY="149.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="chmod" AnchorPane.rightAnchor="12.0">
+                                          <Button fx:id="tab_recovery_btn_chmod" disable="true" layoutX="325.0" layoutY="149.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="chmod">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
@@ -694,7 +694,7 @@
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="tab_recovery_btn_mount1" disable="true" layoutX="321.0" layoutY="92.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="umount" AnchorPane.rightAnchor="12.0">
+                                          <Button fx:id="tab_recovery_btn_mount1" disable="true" layoutX="325.0" layoutY="92.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="305.0" text="umount">
                                              <font>
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
