@@ -1,0 +1,61 @@
+.tab-pane .tab-header-area .tab-header-background {
+	-fx-background-color: #303030;
+    -fx-effect: innershadow(two-pass-box , rgba(0,0,0,0.6) , 4, 0.0 , 0 , 0);
+}
+
+.tab-pane
+{
+	-fx-tab-min-width: 34px;
+	-fx-tab-min-height: 170px;
+	-fx-tab-max-width: 34px;
+	-fx-tab-max-height: 170px;
+	-fx-padding: 0 0 0 -6;
+}
+
+.tab{
+	-fx-padding: 0 0 0 0;
+	-fx-background-color: transparent;
+	-fx-focus-color: transparent;
+}
+.firstsubtab{
+	-fx-padding: 0 50 0 0;
+	-fx-background-insets: 0 51 0 0;
+	-fx-focus-color: transparent;
+	-fx-faint-focus-color: transparent;
+}
+
+.tab-pane .tab
+{
+}
+.tab-pane .tab:hover
+{
+	-fx-background-color: #353535;
+}
+.tab .tab-label { 
+    -fx-alignment: CENTER_LEFT;
+    -fx-text-fill: #989dac;
+    -fx-font-size: 14px;
+    -fx-font-weight: normal;
+	-fx-font-family: "PT Sans";
+	-fx-padding: 0 -120 0 -70;
+}
+.tab-pane .tab:selected
+{
+	-fx-background-color: #202020;
+}
+.tab:selected .tab-label { 
+    -fx-alignment: CENTER_LEFT;
+    -fx-text-fill: #e2e2e2;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+	-fx-font-family: "PT Sans";
+}
+.tab *.tab-label {
+    -fx-rotate: 90;
+}
+.tab *.subtabicon {
+    -fx-rotate: 0;
+}
+
+.tab-pane:top *.tab-header-area {
+}

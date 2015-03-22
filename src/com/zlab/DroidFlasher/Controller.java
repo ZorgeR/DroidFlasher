@@ -27,6 +27,9 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -205,31 +208,6 @@ public class Controller implements Initializable {
     /** Initialize **/
     public void initConfiguration() {
         tab_settings_accord.setExpandedPane(tab_settings_tool_set_group);
-        img_head_fileoperation.setImage(new Image(getClass().getResourceAsStream("/img/file_extension_bin.png")));
-        img_head_application.setImage(new Image(getClass().getResourceAsStream("/img/application_view_icons.png")));
-        img_head_backup.setImage(new Image(getClass().getResourceAsStream("/img/backups.png")));
-        img_adb_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
-        img_settings_unpack_binaries.setImage(new Image(getClass().getResourceAsStream("/img/file_extension_zip.png")));
-        img_head_flash.setImage(new Image(getClass().getResourceAsStream("/img/file_extension_bat.png")));
-        img_head_unlocking.setImage(new Image(getClass().getResourceAsStream("/img/lock-unlock.png")));
-        img_console_adb.setImage(new Image(getClass().getResourceAsStream("/img/terminal-pencil.png")));
-        img_console_fastboot.setImage(new Image(getClass().getResourceAsStream("/img/terminal-pencil.png")));
-        img_console_recovery.setImage(new Image(getClass().getResourceAsStream("/img/terminal-pencil.png")));
-        img_head_other.setImage(new Image(getClass().getResourceAsStream("/img/applications-other.png")));
-        img_head_wipe.setImage(new Image(getClass().getResourceAsStream("/img/eraser.png")));
-        img_head_flash_from_recovery.setImage(new Image(getClass().getResourceAsStream("/img/file_extension_bat.png")));
-        img_head_backup_from_recovery.setImage(new Image(getClass().getResourceAsStream("/img/backups.png")));
-        img_head_recovery_other.setImage(new Image(getClass().getResourceAsStream("/img/applications-other.png")));
-        img_recovery_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
-        img_head_fileoperation_recovery.setImage(new Image(getClass().getResourceAsStream("/img/file_extension_bin.png")));
-        img_head_backup_from_recovery_restore.setImage(new Image(getClass().getResourceAsStream("/img/site_backup_and_restore.png")));
-
-
-        holdSplitPaneDivider(img_head_fileoperation, img_head_application, img_head_backup, img_head_flash, img_head_unlocking,
-                img_head_other,img_head_flash_from_recovery, img_head_backup_from_recovery,img_head_recovery_other,img_head_fileoperation_recovery);
-        //img_head_wipe
-
-
 
         /** Set simple mode **/
         if(tab_settings_others_chk_simplemode.isSelected()){
@@ -289,18 +267,6 @@ public class Controller implements Initializable {
                 event.consume();
             }
         });
-    }
-    /** UI reconfigure **/
-    private void holdSplitPaneDivider(Node... objects){
-        for (Node obj : objects) {
-            try {
-                SplitPane splitpane = (SplitPane) obj.getParent().getParent().getParent();
-                splitpane.lookupAll(".split-pane-divider").stream()
-                        .forEach(div -> div.setMouseTransparent(true));
-            } catch (Exception e) {
-                logToConsole("Info: Can't set SplitPane properties.");
-            }
-        }
     }
     /** Buttons initialize **/
     public void initToggleBtn() {
@@ -400,18 +366,161 @@ public class Controller implements Initializable {
     }
 
     /** DFS Worker **/
+    private void runDfs(String dfsfilepath){
+        try {
+            File dfsFile;
+            if(dfsfilepath==null){
+                dfsFile = fileChooserAdv("Select *.dfs script file");
+            } else {
+                dfsFile = new File(dfsfilepath);
+            }
+
+            if (dfsFile == null) {
+                throw new NullPointerException("Nothing selected");
+            }
+            final File[] dir = new File[1];
+
+            if (!SIMPLEMODE){
+                dir[0] = directoryChooserAdv("Select working directory (with images)");
+            } else {
+                Date now = new Date();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("YY.MM.DD-hh-mm-ss");
+                String time = dateFormat.format(now);
+                dir[0] = new File(System.getProperty("user.home")+File.separator+"Downloads"+File.separator+"DroidFlasher"+File.separator+dfsFile.getName()+"_"+time);
+                if(!dir[0].mkdirs()){throw new NullPointerException("Can't make dir: "+ dir[0].getPath());}
+            }
+
+            if(dir[0] !=null){
+                new Thread(() -> {
+                    try {
+                        Platform.runLater(() -> showDialogInformationGlobal("DFS", "Operation in progress", "Running *.dfs script " + dfsFile.getName() + "\n\nPlease wait...\n"));
+                        String dfsContent = readFileToString(dfsFile.getPath(), Charset.defaultCharset());
+                        String[] cmd_lines = dfsContent.split("\n");
+
+                        for (String args : cmd_lines){
+                            List<String> list = parseStringToArray(args);
+                            String[] commands = list.toArray(new String[list.size()]);
+
+                            int last = commands.length-1;
+                            if(last>=0) {
+                                if (commands[0].matches("fastboot|adb|mfastboot")) {
+
+                                    final String cmdToConsole = Arrays.toString(commands).replaceAll("[,]", "");
+                                    Platform.runLater(() -> {
+                                        if (global_alert != null) {
+                                            global_alert_text_area.appendText("exec: " + cmdToConsole + ":\n");
+                                        }
+                                    });
+
+                                    switch (commands[0]) {
+                                        case "fastboot":
+                                            commands[0] = FASTBOOT_BINARY;
+                                            break;
+                                        case "adb":
+                                            commands[0] = ADB_BINARY;
+                                            break;
+                                        case "mfastboot":
+                                            commands[0] = MFASTBOOT_BINARY;
+                                            break;
+                                    }
+                                    if (commands[1].equals("flash") || commands[1].equals("boot") || commands[1].equals("sideload")) {
+                                        if (!new File(commands[last]).exists()) {
+                                            commands[last] = dir[0].getPath() + "/" + commands[last];
+                                        }
+                                    }
+                                    if (commands[1].equals("push")) {
+                                        if (!new File(commands[2]).exists()) {
+                                            commands[2] = dir[0].getPath() + "/" + commands[2];
+                                        }
+                                    }
+                                    if (commands[1].equals("pull")) {
+                                        if (!new File(commands[3]).exists()) {
+                                            commands[3] = dir[0].getPath() + "/" + commands[3];
+                                        }
+                                    }
+                                    runCmdToGlobalAlert(commands);
+                                } else if (commands[0].equals("dfs")) {
+                                    /** TODO: DFS commands fabric, need to implement more commands **/
+                                    switch (commands[1]) {
+                                        case "download":
+                                            /** dfs download http://images.org/moto/boot.img **/
+                                            URL remotefile = new URL(commands[2]);
+
+                                            String fileName = remotefile.getFile();
+                                            fileName = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.length());
+
+                                            Download dld = new Download(remotefile, dir[0].getPath());
+                                            new Thread(dld::run);
+
+                                            while (dld.getStatus() == Download.DOWNLOADING) {
+                                                double dl = Double.parseDouble(String.valueOf(dld.getProgress()));
+                                                Platform.runLater(() -> tab_adb_progressbar.setProgress(dl));
+                                                try {
+                                                    Thread.sleep(100);
+                                                } catch (InterruptedException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                            if (dld.getStatus() == Download.ERROR) {
+                                                Platform.runLater(() -> showDialog(Alert.AlertType.ERROR,"Ooops!", "Download error.", "Try later."));
+                                                break;
+                                            } else if (dld.getStatus() == Download.COMPLETE) {
+                                                Platform.runLater(() -> tab_adb_progressbar.setProgress(dld.getProgress()));
+                                            }
+                                            break;
+                                        case "radiobox": /*TODO - need implement dfs radiobox*/
+                                            /** dfs radiobox TWRP-2.8.5.0|PhilZ-Touch-6.58.7 **/
+                                            break;
+                                        case "checkbox": /*TODO - need implement dfs checkbox*/
+                                            /** dfs checkbox TWRP-2.8.5.0|PhilZ-Touch-6.58.7 **/
+                                            break;
+                                        case "unzip": /*TODO - make dfs unzip possible*/
+                                            /** dfs unzip firmware.zip **/
+                                            break;
+                                        case "set":
+                                            if(commands[2].equals("workdir") && SIMPLEMODE){
+                                                FutureTask query = new FutureTask(() -> directoryChooserAdv("Select working directory (with images)"));
+                                                Platform.runLater(query);
+                                                try {
+                                                    dir[0] = (File) query.get();
+                                                } catch (InterruptedException e) {
+                                                    e.printStackTrace();
+                                                } catch (ExecutionException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                        Platform.runLater(() -> {
+                            if(global_alert!=null){
+                                global_alert_text_area.appendText("---\n" + "ALL DFS OPERATION COMPLETE.\n"+"---");
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();}
+        } catch (Exception e) {
+            logToConsole(e.getMessage());
+            logToGlobalAlert(e.getMessage());
+        }
+    }
+
     /** ADB **/
     private void dfsAdbCheckStatus(ImageView status_image, Label status_label){
         String adb_devices_output = runCmd(ADB_BINARY, "devices", "-l");
         String[] finder = adb_devices_output.split("\n");
         if (!finder[finder.length - 1].equals("List of devices attached ")) {
-            status_image.setImage(new Image(getClass().getResourceAsStream("/img/bullet_green.png")));
+            status_image.setImage(new Image(getClass().getResourceAsStream("/img/ui/icons/status_green.png")));
             String[] device_info = finder[finder.length - 1].split("\\s+");
             showDialog(Alert.AlertType.INFORMATION,"Success!", "Adb device detected.", "Device information is: " + device_info[0]);
 
             status_label.setText(device_info[device_info.length-2] + " " + device_info[device_info.length-1] + " " + device_info[device_info.length-3]);
         } else {
-            status_image.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
+            status_image.setImage(new Image(getClass().getResourceAsStream("/img/ui/icons/status_red.png")));
             showDialog(Alert.AlertType.ERROR,"Ooops!", "Adb device not detected.", "Try to reconnect.");
             status_label.setText("No device detected.");
         }
@@ -666,135 +775,6 @@ public class Controller implements Initializable {
             tab_adb_chk_backup_system.setSelected(false);
         }
     }
-    private void runDfs(String dfsfilepath){
-        try {
-            File dfsFile;
-            if(dfsfilepath==null){
-                dfsFile = fileChooserAdv("Select *.dfs script file");
-            } else {
-                dfsFile = new File(dfsfilepath);
-            }
-
-            if (dfsFile == null) {
-                throw new NullPointerException("Nothing selected");
-            }
-            File dir;
-
-            if (!SIMPLEMODE){
-                dir = directoryChooserAdv("Select working directory (with images)");
-            } else {
-                Date now = new Date();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("YY.MM.DD-hh-mm-ss");
-                String time = dateFormat.format(now);
-                dir = new File(System.getProperty("user.home")+File.separator+"Downloads"+File.separator+"DroidFlasher"+File.separator+dfsFile.getName()+"_"+time);
-                if(!dir.mkdirs()){throw new NullPointerException("Can't make dir: "+dir.getPath());}
-            }
-
-            if(dir!=null){
-                new Thread(() -> {
-                    try {
-                        Platform.runLater(() -> showDialogInformationGlobal("DFS", "Operation in progress", "Running *.dfs script " + dfsFile.getName() + "\n\nPlease wait...\n"));
-                        String dfsContent = readFileToString(dfsFile.getPath(), Charset.defaultCharset());
-                        String[] cmd_lines = dfsContent.split("\n");
-                        for (String args : cmd_lines){
-                            //String[] commands = args.split(" ");
-                            List<String> list = parseStringToArray(args);
-                            String[] commands = list.toArray(new String[list.size()]);
-
-                            int last = commands.length-1;
-                            if(last>=0) {
-                                if (commands[0].matches("fastboot|adb|mfastboot")) {
-
-                                    final String cmdToConsole = Arrays.toString(commands).replaceAll("[,]", "");
-                                    Platform.runLater(() -> {
-                                        if (global_alert != null) {
-                                            global_alert_text_area.appendText("exec: " + cmdToConsole + ":\n");
-                                        }
-                                    });
-
-                                    switch (commands[0]) {
-                                        case "fastboot":
-                                            commands[0] = FASTBOOT_BINARY;
-                                            break;
-                                        case "adb":
-                                            commands[0] = ADB_BINARY;
-                                            break;
-                                        case "mfastboot":
-                                            commands[0] = MFASTBOOT_BINARY;
-                                            break;
-                                    }
-                                    if (commands[1].equals("flash") || commands[1].equals("boot") || commands[1].equals("sideload")) {
-                                        if (!new File(commands[last]).exists()) {
-                                            commands[last] = dir.getPath() + "/" + commands[last];
-                                        }
-                                    }
-                                    if (commands[1].equals("push")) {
-                                        if (!new File(commands[2]).exists()) {
-                                            commands[2] = dir.getPath() + "/" + commands[2];
-                                        }
-                                    }
-                                    if (commands[1].equals("pull")) {
-                                        if (!new File(commands[3]).exists()) {
-                                            commands[3] = dir.getPath() + "/" + commands[3];
-                                        }
-                                    }
-                                    runCmdToGlobalAlert(commands);
-                                } else if (commands[0].equals("dfs")) {
-                                    /** TODO: DFS commands fabric, need to implement more commands **/
-                                    switch (commands[1]) {
-                                        case "download":
-                                            /** dfs download http://images.org/moto/boot.img **/
-                                            URL remotefile = new URL(commands[2]);
-
-                                            String fileName = remotefile.getFile();
-                                            fileName = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.length());
-
-                                            Download dld = new Download(remotefile, dir.getPath());
-                                            new Thread(dld::run);
-
-                                            while (dld.getStatus() == Download.DOWNLOADING) {
-                                                double dl = Double.parseDouble(String.valueOf(dld.getProgress()));
-                                                Platform.runLater(() -> tab_adb_progressbar.setProgress(dl));
-                                                try {
-                                                    Thread.sleep(100);
-                                                } catch (InterruptedException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                            if (dld.getStatus() == Download.ERROR) {
-                                                Platform.runLater(() -> showDialog(Alert.AlertType.ERROR,"Ooops!", "Download error.", "Try later."));
-                                                break;
-                                            } else if (dld.getStatus() == Download.COMPLETE) {
-                                                Platform.runLater(() -> tab_adb_progressbar.setProgress(dld.getProgress()));
-                                            }
-                                            break;
-                                        case "radiobox": /*TODO - need implement dfs radiobox*/
-                                            /** dfs radiobox TWRP-2.8.5.0|PhilZ-Touch-6.58.7 **/
-                                            break;
-                                        case "checkbox": /*TODO - need implement dfs checkbox*/
-                                            /** dfs checkbox TWRP-2.8.5.0|PhilZ-Touch-6.58.7 **/
-                                            break;
-                                        case "unzip": /*TODO - make dfs unzip possible*/
-                                            /** dfs unzip firmware.zip **/
-                                            break;
-                                    }
-                                }
-                            }
-                        }
-                        Platform.runLater(() -> {
-                            if(global_alert!=null){
-                                global_alert_text_area.appendText("---\n" + "ALL DFS OPERATION COMPLETE.\n"+"---");
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }).start();}
-        } catch (Exception e) {
-            logToConsole(e.getMessage());
-            logToGlobalAlert(e.getMessage());
-        }
-    }
     /** FASTBOOT **/
     private void dfsFastbootRunGeneralCommand(String... args){
         runCmd(args);
@@ -804,11 +784,11 @@ public class Controller implements Initializable {
         String fastboot_devices_output = runCmd(FASTBOOT_BINARY, "devices");
         if (!fastboot_devices_output.equals("")) {
             String[] device_info = fastboot_devices_output.split("\t");
-            img_fastboot_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_green.png")));
+            img_fastboot_status.setImage(new Image(getClass().getResourceAsStream("/img/ui/icons/status_green.png")));
             showDialog(Alert.AlertType.INFORMATION,"Success!", "Fastboot device detected.", "Device information is: " + device_info[0] + " " + device_info[1]);
             tab_fastboot_device_status_txt.setText(device_info[0]+" "+device_info[1]);
         } else {
-            img_fastboot_status.setImage(new Image(getClass().getResourceAsStream("/img/bullet_red.png")));
+            img_fastboot_status.setImage(new Image(getClass().getResourceAsStream("/img/ui/icons/status_red.png")));
             showDialog(Alert.AlertType.ERROR,"Ooops!", "Fastboot device not detected.", "Try to reconnect.");
             tab_fastboot_device_status_txt.setText("No device detected.");
         }

@@ -17,20 +17,20 @@
 
 <AnchorPane prefHeight="204.0" prefWidth="295.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TabPane fx:id="top_tab_pane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="894.0" rotateGraphic="true" side="LEFT" stylesheets="@../css/tabpane_style0.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="58.0" tabMaxWidth="24.0" tabMinHeight="58.0" tabMinWidth="24.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <TabPane fx:id="top_tab_pane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="894.0" rotateGraphic="true" side="LEFT" stylesheets="@../css/tab_main.css" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="58.0" tabMaxWidth="24.0" tabMinHeight="58.0" tabMinWidth="24.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <tabs>
             <Tab>
                 <graphic>
                     <ImageView fitHeight="16.0" fitWidth="16.0" styleClass="toptabicon">
                         <image>
-                            <Image url="@../img/ui/tabicons/adb.png" />
+                            <Image url="@../img/ui/tabs_icons/adb.png" />
                         </image>
                     </ImageView>
                 </graphic>
                <content>
                   <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <children>
-                        <TabPane side="LEFT" stylesheets="@../css/sub_tabpane.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <TabPane side="LEFT" stylesheets="@../css/tab_sub.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <tabs>
                               <Tab styleClass="firstsubtab" text="File operation">
                                  <content>
@@ -46,7 +46,7 @@
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
-                                          <AnchorPane fx:id="tab_adb_sendfile" layoutX="14.0" layoutY="50.0" opacity="0.45" prefHeight="149.0" prefWidth="229.0" styleClass="dnd_pane" stylesheets="@../css/style.css" AnchorPane.bottomAnchor="121.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="53.0">
+                                          <AnchorPane fx:id="tab_adb_sendfile" layoutX="14.0" layoutY="50.0" opacity="0.45" prefHeight="149.0" prefWidth="229.0" styleClass="dnd_pane" stylesheets="@../css/pane_dragndrop.css" AnchorPane.bottomAnchor="121.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="53.0">
                                              <children>
                                                 <Label alignment="CENTER" contentDisplay="TOP" minHeight="-Infinity" minWidth="-Infinity" text="Drag &amp; Drop" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                    <font>
@@ -55,7 +55,7 @@
                                                    <graphic>
                                                       <ImageView pickOnBounds="true" preserveRatio="true">
                                                          <image>
-                                                            <Image url="@../img/ui/box-in.png" />
+                                                            <Image url="@../img/ui/images/dragndrop-box.png" />
                                                          </image>
                                                       </ImageView>
                                                    </graphic>
@@ -68,7 +68,7 @@
                                  <graphic>
                                     <ImageView fx:id="img_head_fileoperation" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" styleClass="subtabicon">
                                        <image>
-                                          <Image url="@../img/file_extension_bin.png" />
+                                          <Image url="@../img/ui/icons/binary.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -143,7 +143,7 @@
                                  <graphic>
                                     <ImageView fx:id="img_head_application" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" styleClass="subtabicon">
                                        <image>
-                                          <Image url="@../img/application_view_icons.png" />
+                                          <Image url="@../img/ui/icons/applications.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -198,7 +198,7 @@
                                  <graphic>
                                     <ImageView fx:id="img_head_backup" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" styleClass="subtabicon">
                                        <image>
-                                          <Image url="@../img/backups.png" />
+                                          <Image url="@../img/ui/icons/backups.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -222,18 +222,18 @@
                            </font></Button>
                         <ImageView fx:id="img_adb_status" fitHeight="32.0" fitWidth="32.0" layoutX="300.0" layoutY="443.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0">
                            <image>
-                              <Image url="@../img/bullet_red.png" />
+                              <Image url="@../img/ui/icons/status_red.png" />
                            </image>
                         </ImageView>
                         <Label fx:id="tab_adb_device_status_txt" layoutX="332.0" layoutY="450.0" text="No device detected." AnchorPane.bottomAnchor="12.0">
                            <font>
                               <Font name="PT Sans" size="14.0" />
                            </font></Label>
-                        <Button fx:id="tab_adb_btn_console" alignment="CENTER" layoutX="691.0" layoutY="7.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="115.0" text="adb console" AnchorPane.rightAnchor="12.0">
+                        <Button fx:id="tab_adb_btn_console" alignment="CENTER" layoutX="691.0" layoutY="7.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="118.0" text="adb console" AnchorPane.rightAnchor="12.0">
                            <graphic>
                               <ImageView fx:id="img_console_adb" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../img/terminal-pencil.png" />
+                                    <Image url="@../img/ui/icons/terminal.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -272,14 +272,14 @@
               <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" styleClass="toptabicon">
                       <image>
-                          <Image url="@../img/ui/tabicons/fastboot.png" />
+                          <Image url="@../img/ui/tabs_icons/fastboot.png" />
                       </image>
                   </ImageView>
               </graphic>
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TabPane side="LEFT" stylesheets="@../css/sub_tabpane.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <TabPane side="LEFT" stylesheets="@../css/tab_sub.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <tabs>
                               <Tab styleClass="firstsubtab" text="Flashing">
                                  <content>
@@ -336,7 +336,7 @@
                                  <graphic>
                                     <ImageView fx:id="img_head_flash" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" styleClass="subtabicon">
                                        <image>
-                                          <Image url="@../img/file_extension_bat.png" />
+                                          <Image url="@../img/ui/icons/scripts.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -376,7 +376,7 @@
                                  <graphic>
                                     <ImageView fx:id="img_head_unlocking" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" styleClass="subtabicon">
                                        <image>
-                                          <Image url="@../img/lock-unlock.png" />
+                                          <Image url="@../img/ui/icons/unlock.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -410,7 +410,7 @@
                         </TabPane>
                         <ImageView fx:id="img_fastboot_status" fitHeight="32.0" fitWidth="32.0" layoutX="300.0" layoutY="443.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0">
                            <image>
-                              <Image url="@../img/bullet_red.png" />
+                              <Image url="@../img/ui/icons/status_red.png" />
                            </image>
                         </ImageView>
                         <ProgressBar fx:id="tab_fastboot_progressbar" layoutX="182.0" layoutY="420.0" prefHeight="20.0" prefWidth="615.0" progress="0.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="182.0" AnchorPane.rightAnchor="12.0" />
@@ -427,7 +427,7 @@
                            <font>
                               <Font name="PT Sans" size="14.0" />
                            </font></Button>
-                        <Button fx:id="tab_fastboot_btn_reboot" layoutX="321.0" layoutY="7.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="61.0" text="reboot">
+                        <Button fx:id="tab_fastboot_btn_reboot" layoutX="321.0" layoutY="7.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="71.0" text="reboot">
                            <font>
                               <Font name="PT Sans" size="14.0" />
                            </font></Button>
@@ -435,14 +435,14 @@
                            <graphic>
                               <ImageView fx:id="img_console_fastboot" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../img/terminal-pencil.png" />
+                                    <Image url="@../img/ui/icons/terminal.png" />
                                  </image>
                               </ImageView>
                            </graphic>
                            <font>
                               <Font name="PT Sans" size="14.0" />
                            </font></Button>
-                        <Button fx:id="tab_fastboot_btn_run_dfs" defaultButton="true" layoutX="389.0" layoutY="7.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="112.0" text="run *.dfs script">
+                        <Button fx:id="tab_fastboot_btn_run_dfs" defaultButton="true" layoutX="399.0" layoutY="7.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="112.0" text="run *.dfs script">
                            <font>
                               <Font name="PT Sans" size="14.0" />
                            </font></Button>
@@ -459,14 +459,14 @@
                 <graphic>
                     <ImageView fitHeight="16.0" fitWidth="16.0" styleClass="toptabicon">
                         <image>
-                            <Image url="@../img/ui/tabicons/recovery.png" />
+                            <Image url="@../img/ui/tabs_icons/recovery.png" />
                         </image>
                     </ImageView>
                 </graphic>
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TabPane side="LEFT" stylesheets="@../css/sub_tabpane.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <TabPane side="LEFT" stylesheets="@../css/tab_sub.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <tabs>
                               <Tab styleClass="firstsubtab" text="Flash &amp; Wipe">
                                  <content>
@@ -504,7 +504,7 @@
                                              <graphic>
                                                 <ImageView fx:id="img_head_wipe" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" styleClass="subtabicon">
                                                    <image>
-                                                      <Image url="@../img/eraser.png" />
+                                                      <Image url="@../img/ui/icons/wipe.png" />
                                                    </image>
                                                 </ImageView>
                                              </graphic>
@@ -535,7 +535,7 @@
                                  <graphic>
                                     <ImageView fx:id="img_head_flash_from_recovery" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" styleClass="subtabicon">
                                        <image>
-                                          <Image url="@../img/file_extension_bat.png" />
+                                          <Image url="@../img/ui/icons/scripts.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -556,7 +556,7 @@
                                              <graphic>
                                                 <ImageView fx:id="img_head_backup_from_recovery1" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" styleClass="subtabicon">
                                                    <image>
-                                                      <Image url="@../img/backups.png" />
+                                                      <Image url="@../img/ui/icons/backups.png" />
                                                    </image>
                                                 </ImageView>
                                              </graphic>
@@ -568,7 +568,7 @@
                                              <graphic>
                                                 <ImageView fx:id="img_head_backup_from_recovery_restore" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
-                                                      <Image url="@../img/site_backup_and_restore.png" />
+                                                      <Image url="@../img/ui/icons/restore.png" />
                                                    </image>
                                                 </ImageView>
                                              </graphic>
@@ -624,7 +624,7 @@
                                  <graphic>
                                     <ImageView fx:id="img_head_backup_from_recovery" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" styleClass="subtabicon">
                                        <image>
-                                          <Image url="@../img/backups.png" />
+                                          <Image url="@../img/ui/icons/backups.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -643,7 +643,7 @@
                                                 <Font name="PT Sans Narrow Bold" size="24.0" />
                                              </font>
                                           </Button>
-                                          <AnchorPane fx:id="tab_recovery_sendfile" layoutX="62.0" layoutY="75.0" opacity="0.45" prefHeight="149.0" prefWidth="229.0" styleClass="dnd_pane" stylesheets="@../css/style.css" AnchorPane.bottomAnchor="121.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="53.0">
+                                          <AnchorPane fx:id="tab_recovery_sendfile" layoutX="62.0" layoutY="75.0" opacity="0.45" prefHeight="149.0" prefWidth="229.0" styleClass="dnd_pane" stylesheets="@../css/pane_dragndrop.css" AnchorPane.bottomAnchor="121.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="53.0">
                                              <children>
                                                 <Label alignment="CENTER" contentDisplay="TOP" minHeight="-Infinity" minWidth="-Infinity" text="Drag &amp; Drop" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                    <font>
@@ -652,7 +652,7 @@
                                                    <graphic>
                                                       <ImageView pickOnBounds="true" preserveRatio="true">
                                                          <image>
-                                                            <Image url="@../img/ui/box-in.png" />
+                                                            <Image url="@../img/ui/images/dragndrop-box.png" />
                                                          </image>
                                                       </ImageView>
                                                    </graphic>
@@ -665,7 +665,7 @@
                                  <graphic>
                                     <ImageView fx:id="img_head_fileoperation_recovery" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" styleClass="subtabicon">
                                        <image>
-                                          <Image url="@../img/file_extension_bin.png" />
+                                          <Image url="@../img/ui/icons/binary.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -710,7 +710,7 @@
                                  <graphic>
                                     <ImageView fx:id="img_head_recovery_other" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" styleClass="subtabicon">
                                        <image>
-                                          <Image url="@../img/applications-other.png" />
+                                          <Image url="@../img/ui/icons/others.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -719,7 +719,7 @@
                         </TabPane>
                         <Separator layoutX="170.0" layoutY="36.0" prefHeight="11.0" prefWidth="617.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="-17.0" />
                         <ProgressBar fx:id="tab_recovery_progressbar" layoutX="14.0" layoutY="422.0" prefHeight="20.0" prefWidth="573.0" progress="0.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="182.0" AnchorPane.rightAnchor="12.0" />
-                        <Button fx:id="tab_recovery_btn_run_dfs" defaultButton="true" layoutX="460.0" layoutY="7.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="114.0" text="run *.dfs script">
+                        <Button fx:id="tab_recovery_btn_run_dfs" defaultButton="true" layoutX="460.0" layoutY="7.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="115.0" text="run *.dfs script">
                            <font>
                               <Font name="PT Sans" size="14.0" />
                            </font></Button>
@@ -727,7 +727,7 @@
                            <graphic>
                               <ImageView fx:id="img_console_recovery" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../img/terminal-pencil.png" />
+                                    <Image url="@../img/ui/icons/terminal.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -755,7 +755,7 @@
                         </MenuButton>
                         <ImageView fx:id="img_recovery_status" fitHeight="32.0" fitWidth="32.0" layoutX="300.0" layoutY="443.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0">
                            <image>
-                              <Image url="@../img/bullet_red.png" />
+                              <Image url="@../img/ui/icons/status_red.png" />
                            </image>
                         </ImageView>
                         <Label fx:id="tab_recovery_device_status_txt" layoutX="332.0" layoutY="450.0" text="No device detected." AnchorPane.bottomAnchor="12.0">
@@ -779,7 +779,7 @@
               <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" styleClass="toptabicon">
                       <image>
-                          <Image url="@../img/ui/tabicons/settings.png" />
+                          <Image url="@../img/ui/tabs_icons/settings.png" />
                       </image>
                   </ImageView>
               </graphic>
@@ -814,7 +814,7 @@
                                           <Button fx:id="tab_settings_override_btn_unpack_binaries" layoutX="83.0" layoutY="110.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="484.0" text="Unpack built-in binaries" AnchorPane.leftAnchor="73.0" AnchorPane.rightAnchor="7.0" />
                                           <ImageView fx:id="img_settings_unpack_binaries" fitHeight="16.0" fitWidth="16.0" layoutX="60.0" layoutY="115.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@../img/file_extension_zip.png" />
+                                                <Image url="@../img/ui/icons/archives.png" />
                                              </image>
                                           </ImageView>
                                           <Button fx:id="tab_settings_override_btn_mfastboot_browse" layoutX="623.0" layoutY="76.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="Browse" AnchorPane.rightAnchor="83.0" />
@@ -845,7 +845,7 @@
                 <graphic>
                     <ImageView fitHeight="16.0" fitWidth="16.0" styleClass="toptabicon">
                         <image>
-                            <Image url="@../img/ui/tabicons/console.png" />
+                            <Image url="@../img/ui/tabs_icons/console.png" />
                         </image>
                     </ImageView>
                 </graphic>
@@ -863,7 +863,7 @@
             </Tab>
         </tabs>
       </TabPane>
-      <Label alignment="CENTER" layoutX="10.0" layoutY="443.0" prefHeight="38.0" prefWidth="62.0" stylesheets="@../css/version_label.css" text="r107" textFill="#5b5b5b" translateX="-10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0">
+      <Label alignment="CENTER" layoutX="10.0" layoutY="443.0" prefHeight="38.0" prefWidth="62.0" stylesheets="@../css/label_appversion.css" text="r107" textFill="#5b5b5b" translateX="-10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0">
          <font>
             <Font name="Menlo Bold" size="12.0" />
          </font>
