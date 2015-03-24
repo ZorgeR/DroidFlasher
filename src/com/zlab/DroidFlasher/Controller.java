@@ -1,6 +1,5 @@
 package com.zlab.DroidFlasher;
 
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
@@ -237,38 +235,32 @@ public class Controller implements Initializable {
         setOnDragOver(tab_recovery_sendfile, DNDTYPE_SEND_FILE);
     }
     private void setOnDragOver(Node node, int dndType) {
-        node.setOnDragOver(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                Dragboard db = event.getDragboard();
-                if (db.hasFiles()) {
-                    event.acceptTransferModes(TransferMode.COPY);
-                } else {
-                    event.consume();
-                }
-            }
-        });
-        node.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                Dragboard db = event.getDragboard();
-                boolean success = false;
-                if (db.hasFiles()) {
-                    success = true;
-                    String filePath;
-                    for (File file : db.getFiles()) {
-                        filePath = file.getAbsolutePath();
-                        logToConsole("drag and drop: " + filePath);
-                        if (dndType == DNDTYPE_OPEN_DFS) {
-                            runDfs(filePath);
-                        } else if (dndType == DNDTYPE_SEND_FILE){
-                            dfsAdbFilePush(filePath);
-                        }
-                    }
-                }
-                event.setDropCompleted(success);
+        node.setOnDragOver(event -> {
+            Dragboard db = event.getDragboard();
+            if (db.hasFiles()) {
+                event.acceptTransferModes(TransferMode.COPY);
+            } else {
                 event.consume();
             }
+        });
+        node.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (db.hasFiles()) {
+                success = true;
+                String filePath;
+                for (File file : db.getFiles()) {
+                    filePath = file.getAbsolutePath();
+                    logToConsole("drag and drop: " + filePath);
+                    if (dndType == DNDTYPE_OPEN_DFS) {
+                        runDfs(filePath);
+                    } else if (dndType == DNDTYPE_SEND_FILE){
+                        dfsAdbFilePush(filePath);
+                    }
+                }
+            }
+            event.setDropCompleted(success);
+            event.consume();
         });
     }
     /** Buttons initialize **/
@@ -665,14 +657,14 @@ public class Controller implements Initializable {
 
                     final String finalLog = log;
                     Platform.runLater(() -> {
-                        int failure = (finalLog.length() - finalLog.substring(0).replaceAll("Failure", "").length())/7;
-                        int success = (finalLog.length() - finalLog.substring(0).replaceAll("Success","").length())/7;
+                        int failure = (finalLog.length() - finalLog.replaceAll("Failure", "").length())/7;
+                        int success = (finalLog.length() - finalLog.replaceAll("Success", "").length())/7;
 
                         showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete",
                                 "Success: " + success
                                         + "\nFailure: " + failure + "\n"
                                         + "\nSee Console for detail." + "\n"
-                                        + "\nFile list:\n" + Arrays.asList(localfiles).toString().replace(", ", "\n").replace("[", "").replace("]", ""));
+                                        + "\nFile list:\n" + Collections.singletonList(localfiles).toString().replace(", ", "\n").replace("[", "").replace("]", ""));
                     });
                 }).start();}
         } catch (Exception e) {
@@ -687,7 +679,7 @@ public class Controller implements Initializable {
                     final String finalLog = runCmd(ADB_BINARY, "uninstall", packagename);
                     Platform.runLater(() -> {
                         //int failure = (finalLog.length() - finalLog.substring(0).replaceAll("Failure", "").length())/7;
-                        int success = (finalLog.length() - finalLog.substring(0).replaceAll("Success","").length())/7;
+                        int success = (finalLog.length() - finalLog.replaceAll("Success", "").length())/7;
 
                         if(success==1){
                             showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "Package " + packagename + " uninstalled from device,");
@@ -720,7 +712,7 @@ public class Controller implements Initializable {
                     final String finalLog = runCmd(ADB_BINARY, "shell", "pm", "uninstall", "-k", packagename);
                     Platform.runLater(() -> {
                         //int failure = (finalLog.length() - finalLog.substring(0).replaceAll("Failure", "").length())/7;
-                        int success = (finalLog.length() - finalLog.substring(0).replaceAll("Success","").length())/7;
+                        int success = (finalLog.length() - finalLog.replaceAll("Success", "").length())/7;
 
                         if(success==1){
                             showDialog(Alert.AlertType.INFORMATION,"adb", "Operation complete", "Package " + packagename + " uninstalled from device,");
@@ -1220,15 +1212,17 @@ public class Controller implements Initializable {
 
             console_btn_send.setOnAction((event) -> {
                 String[] input = console_text_input.getText().split(" ");
-                //if (input.length>0){
+                List<String> list = new ArrayList<>(Arrays.asList(input));
+                list.removeAll(Arrays.asList("", null));
+                input = list.toArray(new String[list.size()]);
                 String[] args = new String[input.length + 1];
-
                 args[0] = binary;
+
                 System.arraycopy(input, 0, args, 1, input.length);
+
                 new Thread(() -> {
                         runCmdToConsoleOutput(console_text_output, args);
                 }).start();
-                //}
             });
         }
         Stage consoleStage = new Stage();
