@@ -16,3 +16,5 @@ DroidFlasher can:
 - built-in binaries (adb/fastboot/mfastboot) for Mac, PC, *nix.
 - work out of the box, just unpack and run (no need setup adb/fastboot).
 - more to come
+
+p.s.: More detail about DFS - ./README-DFS.md
