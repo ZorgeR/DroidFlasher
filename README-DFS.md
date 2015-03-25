@@ -27,9 +27,9 @@ fastboot oem fb_mode_clear[/CODE]
 Just save this as text file, and run from application.
 
 Next example show download and flashing moto x twrp:
-[CODE]#1. Download recovery
-#2. Reboot to fastboot
-#3. Flash downloaded recovery
+[CODE]\# 1. Download recovery
+\# 2. Reboot to fastboot
+\# 3. Flash downloaded recovery
 
 dfs download "http://files.z-lab.me/mobile/Moto X/recovery/openrecovery-twrp-2.8.5.0-ghost.img"
 adb reboot bootloader
