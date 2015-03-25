@@ -1,4 +1,3 @@
-
 about ***.DFS scripting**:
 
 DFS (DroidFlasherScript) is simple way for batch job with fastboot, adb, or mfastboot. 
@@ -27,7 +26,6 @@ fastboot erase customize
 fastboot erase clogo
 fastboot oem fb_mode_clear
 ~~~
-
 Just save this as text file, and run from application.
 
 Next example show download and flashing moto x twrp:
@@ -39,7 +37,6 @@ Next example show download and flashing moto x twrp:
 dfs download "http://files.z-lab.me/mobile/Moto X/recovery/openrecovery-twrp-2.8.5.0-ghost.img"
 adb reboot bootloader
 fastboot flash recovery openrecovery-twrp-2.8.5.0-ghost.img
-
 ~~~
 
 On last stage of this dfs, you can use only name or full path to img.
@@ -74,16 +71,15 @@ Also for:
 - "adb sideload /local/file"
 - "adb push /local /remote"
 - "adb pull /remote /local"
+
 You can use in dfs file absolute path for local file or just name in working directory (DroidFlasher check if file exist with abs path, if not, will use file with this name from working directory.
 For example, next code will show correctly *.dfs file, and work without issue:
 ~~~
-
 fastboot flash boot boot.img
 fastboot flash system /home/zorg/files/system.img
 adb push my.apk /sdcard
 adb push /home/zorg/downloads/mynext.apk /sdcard
 ~~~
-
 boot.img and my.apk will used from working directory, system.img and mynext.apk with abs path.
 
 I think to extend dfs scripting in feature:
@@ -92,8 +88,5 @@ dfs radiobox TWRP-2.8.5.0|PhilZ-Touch-6.58.7
 fastboot flash RESULTS
 dfs checkbox data|cache|dalvik
 adb twrp wipe RESULTS
-
 ~~~
-
-
 Also I wont to make DFS repository, for various *.dfs  files, reverting to stock for "all" device, flash cm12, and more, all with 1 click.
