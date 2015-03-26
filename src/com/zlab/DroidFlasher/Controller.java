@@ -420,7 +420,7 @@ public class Controller implements Initializable {
                             if(showResult){
 
                             args = args.replace("%RADIOBOXRESULT%", radioboxResult);
-                            args = args.replace("%SHOWRESULT%",Boolean.toString(showResult));
+                            args = args.replace("%SHOWRESULT%",Boolean.toString(true));
 
                             List<String> list = parseStringToArray(args);
                             String[] commands = list.toArray(new String[list.size()]);
@@ -1413,11 +1413,7 @@ public class Controller implements Initializable {
         alert.setContentText(text);
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
-            return true;
-        } else {
-            return false;
-        }
+        return result.get() == ButtonType.OK;
     }
     private boolean showDialogConfirmation(String title, String header, String text){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
