@@ -52,7 +52,10 @@ public class Controller implements Initializable {
     public static boolean SIMPLEMODE;
     private static Alert global_alert;
     private static TextArea global_alert_text_area;
-    private static int APP_VERSION=108;
+    private static int APP_VERSION=109;
+    public static int TITLE=0;
+    public static int HEADER=1;
+    public static int CONTENT=2;
 
     /** Init UI **/
     private Scene mScene;
@@ -254,7 +257,7 @@ public class Controller implements Initializable {
                     logToConsole("drag and drop: " + filePath);
                     if (dndType == DNDTYPE_OPEN_DFS) {
                         runDfs(filePath);
-                    } else if (dndType == DNDTYPE_SEND_FILE){
+                    } else if (dndType == DNDTYPE_SEND_FILE) {
                         dfsAdbFilePush(filePath);
                     }
                 }
@@ -409,8 +412,16 @@ public class Controller implements Initializable {
                         Platform.runLater(() -> showDialogInformationGlobal("DFS", "Operation in progress", "Running *.dfs script " + dfsFile.getName() + "\n\nPlease wait...\n"));
                         String dfsContent = readFileToString(dfsFile.getPath(), Charset.defaultCharset());
                         String[] cmd_lines = dfsContent.split("\n");
+                        String radioboxResult="";
+                        boolean showResult=true;
+                        final String[] dialogsData = new String[3];
 
                         for (String args : cmd_lines){
+                            if(showResult){
+
+                            args = args.replace("%RADIOBOXRESULT%", radioboxResult);
+                            args = args.replace("%SHOWRESULT%",Boolean.toString(showResult));
+
                             List<String> list = parseStringToArray(args);
                             String[] commands = list.toArray(new String[list.size()]);
 
@@ -482,8 +493,76 @@ public class Controller implements Initializable {
                                                 Platform.runLater(() -> tab_adb_progressbar.setProgress(dld.getProgress()));
                                             }
                                             break;
-                                        case "radiobox": /*TODO - need implement dfs radiobox*/
-                                            /** dfs radiobox TWRP-2.8.5.0|PhilZ-Touch-6.58.7 **/
+                                        case "show":
+                                            /**
+                                             dfs show %ALERTTYPE% title header content
+                                             %ALERTTYPE% = info, error,warning, none, confirmation
+                                             **/
+
+                                            Alert.AlertType alertType = Alert.AlertType.INFORMATION;
+
+                                            switch (commands[2]) {
+                                                case "info":
+                                                    alertType = Alert.AlertType.INFORMATION;
+                                                    break;
+                                                case "error":
+                                                    alertType = Alert.AlertType.ERROR;
+                                                    break;
+                                                case "warning":
+                                                    alertType = Alert.AlertType.WARNING;
+                                                    break;
+                                                case "none":
+                                                    alertType = Alert.AlertType.NONE;
+                                                    break;
+                                                case "confirmation":
+                                                    alertType = Alert.AlertType.CONFIRMATION;
+                                                    break;
+                                            }
+
+                                            dialogsData[TITLE] = commands[3];
+                                            dialogsData[HEADER] = commands[4];
+                                            dialogsData[CONTENT] = commands[5];
+
+                                            final Alert.AlertType alertTypeFinal = alertType;
+
+                                            FutureTask show = new FutureTask<>(() -> showDialogForResult(alertTypeFinal, dialogsData[TITLE], dialogsData[HEADER], dialogsData[CONTENT]));
+                                            Platform.runLater(show);
+
+                                            try {
+                                                showResult = (boolean) show.get();
+                                            } catch (InterruptedException | ExecutionException e) {
+                                                logToConsole(e.getMessage());
+                                                logToGlobalAlert(e.getMessage());
+                                            }
+
+                                            break;
+                                        case "radiobox":
+                                            /**
+                                             dfs radiobox "TWRP|CWM|Phiz" "http://z-lab.me/twrp.img|http://z-lab.me/cwm.img|http://z-lab.me/phiz.img"
+                                             fastboot flash recovery %RESULT%
+                                             **/
+
+                                            String[] radioboxText = commands[2].split("\\|");
+                                            String[] radioboxValue = commands[3].split("\\|");
+
+                                            dialogsData[TITLE] = commands[4];
+                                            dialogsData[HEADER] = commands[5];
+                                            dialogsData[CONTENT] = commands[6];
+
+                                            FutureTask choice = new FutureTask<>(() -> choiceDialog(radioboxText, dialogsData[TITLE], dialogsData[HEADER], dialogsData[CONTENT]));
+                                            Platform.runLater(choice);
+
+                                            try {
+                                                String choiced = (String) choice.get();
+                                                for(int i=0;i<radioboxValue.length;i++){
+                                                    if(radioboxText[i].equals(choiced)){
+                                                        radioboxResult=radioboxValue[i];
+                                                    }
+                                                }
+                                            } catch (InterruptedException | ExecutionException e) {
+                                                logToConsole(e.getMessage());
+                                                logToGlobalAlert(e.getMessage());
+                                            }
                                             break;
                                         case "checkbox": /*TODO - need implement dfs checkbox*/
                                             /** dfs checkbox TWRP-2.8.5.0|PhilZ-Touch-6.58.7 **/
@@ -506,6 +585,9 @@ public class Controller implements Initializable {
                                         /*TODO - file selector for next operation*/
                                     }
                                 }
+                            }
+                            } else {
+                                showResult=true;
                             }
                         }
                         Platform.runLater(() -> {
@@ -1324,6 +1406,19 @@ public class Controller implements Initializable {
         alert.setContentText(text);
         alert.showAndWait();
     }
+    private boolean showDialogForResult(Alert.AlertType alertType, String title, String header, String text) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(text);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            return true;
+        } else {
+            return false;
+        }
+    }
     private boolean showDialogConfirmation(String title, String header, String text){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(title);
@@ -1438,6 +1533,24 @@ public class Controller implements Initializable {
         File defaultDirectory = new File(".");
         chooser.setInitialDirectory(defaultDirectory);
         return chooser.showDialog(Main.globalStage);
+    }
+    private String choiceDialog(String[] text, String title, String header, String content){
+        List<String> choices = new ArrayList<>();
+        choices.addAll(new ArrayList<>(Arrays.asList(text)));
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(0), choices);
+
+        dialog.setTitle(title);
+        dialog.setHeaderText(header);
+        dialog.setContentText(content);
+
+        Optional<String> result = dialog.showAndWait();
+
+        if (result.isPresent()){
+            return result.get();
+        } else {
+            return null;
+        }
     }
 
     /** Inventory **/
