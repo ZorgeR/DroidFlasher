@@ -420,7 +420,7 @@ public class Controller implements Initializable {
                             if(showResult){
 
                             args = args.replace("%RADIOBOXRESULT%", radioboxResult);
-                            args = args.replace("%SHOWRESULT%",Boolean.toString(true));
+                            args = args.replace("%SHOWRESULT%","true");
 
                             List<String> list = parseStringToArray(args);
                             String[] commands = list.toArray(new String[list.size()]);
