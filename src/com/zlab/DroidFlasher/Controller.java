@@ -414,10 +414,13 @@ public class Controller implements Initializable {
                         String[] cmd_lines = dfsContent.split("\n");
                         String radioboxResult="";
                         boolean showResult=true;
+                        boolean showExit=true;
                         final String[] dialogsData = new String[3];
 
                         for (String args : cmd_lines){
-                            if(showResult){
+                            if(!showExit){
+                                break;
+                            } else if(showResult){
 
                             args = args.replace("%RADIOBOXRESULT%", radioboxResult);
                             args = args.replace("%SHOWRESULT%","true");
@@ -517,6 +520,9 @@ public class Controller implements Initializable {
                                                 case "confirmation":
                                                     alertType = Alert.AlertType.CONFIRMATION;
                                                     break;
+                                                case "exit":
+                                                    alertType = Alert.AlertType.CONFIRMATION;
+                                                    break;
                                             }
 
                                             dialogsData[TITLE] = commands[3];
@@ -530,6 +536,7 @@ public class Controller implements Initializable {
 
                                             try {
                                                 showResult = (boolean) show.get();
+                                                if(commands[2].equals("exit")){showExit=showResult;}
                                             } catch (InterruptedException | ExecutionException e) {
                                                 logToConsole(e.getMessage());
                                                 logToGlobalAlert(e.getMessage());
