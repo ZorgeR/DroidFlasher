@@ -422,8 +422,10 @@ public class Controller implements Initializable {
                                 break;
                             } else if(showResult){
 
-                            args = args.replace("%RADIOBOXRESULT%", radioboxResult);
-                            args = args.replace("%SHOWRESULT%","true");
+                                args = args.replace("%RADIOBOX_RESULT%", radioboxResult);
+                                args = args.replace("%SHOW_RESULT%","true");
+                                args = args.replace("%DEVICE%",getDevice());
+                                args = args.replace("%DEVICE_MODEL%",getDeviceModel());
 
                             List<String> list = parseStringToArray(args);
                             String[] commands = list.toArray(new String[list.size()]);
@@ -1594,6 +1596,24 @@ public class Controller implements Initializable {
             String[] device_info = finder[finder.length - 1].split("\\s+");
             return device_info[0];
         } else {return null;}
+    }
+    private String getDevice(){
+        String adb_devices_output = runCmd(ADB_BINARY, "devices", "-l");
+        String[] finder = adb_devices_output.split("\n");
+        if (!finder[finder.length - 1].equals("List of devices attached ")) {
+            String[] device_info = finder[finder.length - 1].split("\\s+");
+            return device_info[device_info.length-1].split(":")[1];
+        }
+        return "unknown_device";
+    }
+    private String getDeviceModel(){
+        String adb_devices_output = runCmd(ADB_BINARY, "devices", "-l");
+        String[] finder = adb_devices_output.split("\n");
+        if (!finder[finder.length - 1].equals("List of devices attached ")) {
+            String[] device_info = finder[finder.length - 1].split("\\s+");
+            return device_info[device_info.length-2].split(":")[1];
+        }
+        return "unknown_device";
     }
     /** Check binaries **/
     private boolean checkAdbBin(File f) {
