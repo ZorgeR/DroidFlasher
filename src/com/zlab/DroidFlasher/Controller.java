@@ -1348,7 +1348,9 @@ public class Controller implements Initializable {
 
         Parent root = null;
         try { root = fxmlLoader.load();
-        } catch (IOException e) { e.printStackTrace(); }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Scene consoleScene = null;
         if (root != null) {
@@ -1755,7 +1757,9 @@ public class Controller implements Initializable {
                 extractResource("AdbWinApi.dll", directory);
                 extractResource("AdbWinUsbApi.dll", directory);
             }
-        } catch (IOException e) {e.printStackTrace();}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     private String extractResource(String name, String dstDir) throws IOException {
         File dstFile=new File(dstDir+"/"+name);
