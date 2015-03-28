@@ -16,6 +16,7 @@ import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.*;
 import java.net.URL;
@@ -56,6 +57,7 @@ public class Controller implements Initializable {
     public static int TITLE=0;
     public static int HEADER=1;
     public static int CONTENT=2;
+    private static Alert timerDialog;
 
     /** Init UI **/
     private Scene mScene;
@@ -423,6 +425,7 @@ public class Controller implements Initializable {
                             } else if(showResult){
 
                                 args = args.replace("%RADIOBOX_RESULT%", radioboxResult);
+                                args = args.replace("%RADIOBOX_RESULT_FILENAME%", getNameFromURL(radioboxResult));
                                 args = args.replace("%SHOW_RESULT%","true");
                                 args = args.replace("%DEVICE%",getDevice());
                                 args = args.replace("%DEVICE_MODEL%",getDeviceModel());
@@ -543,7 +546,6 @@ public class Controller implements Initializable {
                                                 logToConsole(e.getMessage());
                                                 logToGlobalAlert(e.getMessage());
                                             }
-
                                             break;
                                         case "radiobox":
                                             /**
@@ -589,6 +591,21 @@ public class Controller implements Initializable {
                                                     logToConsole(e.getMessage());
                                                     logToGlobalAlert(e.getMessage());
                                                 }
+                                            }
+                                            break;
+                                        case "sleep":
+                                            final int[] timer = new int[]{Integer.parseInt(commands[2])};
+                                            Platform.runLater(this::timerDialog);
+                                            try {
+                                                    while (timer[0]>0){
+                                                        Platform.runLater(() -> timerDialog.setContentText(timerDialog.getContentText() + timer[0] + " "));
+                                                        Thread.sleep(timer[0]*1000);
+                                                        timer[0]--;
+                                                    }
+                                                    Platform.runLater(timerDialog::close);
+                                            } catch (Exception e) {
+                                                logToConsole(e.getMessage());
+                                                logToGlobalAlert(e.getMessage());
                                             }
                                             break;
                                         /*TODO - file selector for next operation*/
@@ -1044,7 +1061,9 @@ public class Controller implements Initializable {
             new Thread(() -> {
                 Platform.runLater(() -> showDialogInformationGlobal("recovery", "Operation in progress", "Try to flash " + remotefile + "\n\nPlease wait...\n"));
                 runCmdToGlobalAlert(ADB_BINARY, "shell", "twrp", "install", remotefile);
-            }).start();} else {logToConsole("No remote path selected.");}
+            }).start();
+        } else {
+            logToConsole("No remote path selected.");}
     }
     private void dfsRecoveryWipe(){
         if(tab_recovery_chk_wipe_cache.isSelected() || tab_recovery_chk_wipe_data.isSelected() || tab_recovery_chk_wipe_dalvik.isSelected()){
@@ -1229,6 +1248,45 @@ public class Controller implements Initializable {
         }
         return locallog;
     }
+    private String runCmdSilently(String... args) {
+        String locallog = "";
+        try {
+            Process proc = Runtime.getRuntime().exec(args);
+
+            logToConsole(Arrays.toString(args));
+
+            InputStream errStream = proc.getErrorStream();
+            InputStreamReader errStreamReader = new InputStreamReader(errStream);
+            BufferedReader errBufferedReader = new BufferedReader(errStreamReader);
+
+            InputStream stdStream = proc.getInputStream();
+            InputStreamReader stdStreamReader = new InputStreamReader(stdStream);
+            BufferedReader stdBufferedReader = new BufferedReader(stdStreamReader);
+
+            String err;
+            String std;
+
+            while ((err = errBufferedReader.readLine()) != null) {
+                locallog = locallog + err + "\n";
+                logToConsole(err);
+            }
+
+            while ((std = stdBufferedReader.readLine()) != null) {
+                locallog = locallog + std + "\n";
+                logToConsole(std);
+            }
+            try {
+                proc.waitFor();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e){
+            logToGlobalAlert(e.getMessage());
+            locallog = locallog + e.getMessage() + "\n";
+            logToConsole(e.getMessage());
+        }
+        return locallog;
+    }
     private void runCmdToGlobalAlert(String... args) {
         try {
         Process proc = Runtime.getRuntime().exec(args);
@@ -1365,7 +1423,7 @@ public class Controller implements Initializable {
 
     /** LOG **/
     public void logToConsole(String appendString) {
-        tab_main_txt_area_log.appendText(appendString+"\n");
+        tab_main_txt_area_log.appendText(appendString + "\n");
     }
     private void logToGlobalAlert(String msg){
         Platform.runLater(() -> {
@@ -1557,6 +1615,15 @@ public class Controller implements Initializable {
             return null;
         }
     }
+    private boolean timerDialog(){
+        timerDialog = new Alert(Alert.AlertType.INFORMATION);
+        timerDialog.setTitle("Sleep");
+        timerDialog.setHeaderText("Please wait...");
+        timerDialog.setContentText("Operation will be resumed in: ");
+
+        timerDialog.show();
+        return true;
+    }
 
     /** Inventory **/
     /** General **/
@@ -1590,7 +1657,7 @@ public class Controller implements Initializable {
         }
     }
     private String getDeviceID(){
-        String adb_devices_output = runCmd(ADB_BINARY, "devices", "-l");
+        String adb_devices_output = runCmdSilently(ADB_BINARY, "devices", "-l");
         String[] finder = adb_devices_output.split("\n");
         if (!finder[finder.length - 1].equals("List of devices attached ")) {
             String[] device_info = finder[finder.length - 1].split("\\s+");
@@ -1598,22 +1665,30 @@ public class Controller implements Initializable {
         } else {return null;}
     }
     private String getDevice(){
-        String adb_devices_output = runCmd(ADB_BINARY, "devices", "-l");
-        String[] finder = adb_devices_output.split("\n");
-        if (!finder[finder.length - 1].equals("List of devices attached ")) {
-            String[] device_info = finder[finder.length - 1].split("\\s+");
-            return device_info[device_info.length-1].split(":")[1];
+        try{
+            String adb_devices_output = runCmdSilently(ADB_BINARY, "devices", "-l");
+            String[] finder = adb_devices_output.split("\n");
+            if (!finder[finder.length - 1].equals("List of devices attached ")) {
+                String[] device_info = finder[finder.length - 1].split("\\s+");
+                return device_info[device_info.length-1].split(":")[1];
+            }
+        } catch (Exception e) {
+            logToGlobalAlert(e.getMessage());
+            logToConsole(e.getMessage());
         }
         return "unknown_device";
     }
     private String getDeviceModel(){
-        String adb_devices_output = runCmd(ADB_BINARY, "devices", "-l");
+        String adb_devices_output = runCmdSilently(ADB_BINARY, "devices", "-l");
         String[] finder = adb_devices_output.split("\n");
         if (!finder[finder.length - 1].equals("List of devices attached ")) {
             String[] device_info = finder[finder.length - 1].split("\\s+");
             return device_info[device_info.length-2].split(":")[1];
         }
         return "unknown_device";
+    }
+    private String getNameFromURL(String url){
+       return FilenameUtils.getName(url);
     }
     /** Check binaries **/
     private boolean checkAdbBin(File f) {
