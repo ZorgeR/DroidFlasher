@@ -57,7 +57,6 @@ public class Controller implements Initializable {
     public static int TITLE=0;
     public static int HEADER=1;
     public static int CONTENT=2;
-    private static Alert timerDialog;
 
     /** Init UI **/
     private Scene mScene;
