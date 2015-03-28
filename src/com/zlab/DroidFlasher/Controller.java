@@ -1647,7 +1647,6 @@ public class Controller implements Initializable {
             MFASTBOOT_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/"+ MFASTBOOT;
         }
     }
-
     private String getDeviceID(){
         String adb_devices_output = runCmdSilently(ADB_BINARY, "devices", "-l");
         String[] finder = adb_devices_output.split("\n");
@@ -1657,7 +1656,6 @@ public class Controller implements Initializable {
         } else {return null;
         }
     }
-
     private String getDevice(){
         try{
             String adb_devices_output = runCmdSilently(ADB_BINARY, "devices", "-l");
@@ -1672,7 +1670,6 @@ public class Controller implements Initializable {
         }
         return "unknown_device";
     }
-
     private String getDeviceModel(){
         String adb_devices_output = runCmdSilently(ADB_BINARY, "devices", "-l");
         String[] finder = adb_devices_output.split("\n");
