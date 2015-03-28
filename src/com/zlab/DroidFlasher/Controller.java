@@ -595,14 +595,15 @@ public class Controller implements Initializable {
                                             break;
                                         case "sleep":
                                             final int[] timer = new int[]{Integer.parseInt(commands[2])};
-                                            Platform.runLater(this::timerDialog);
                                             try {
                                                     while (timer[0]>0){
-                                                        Platform.runLater(() -> timerDialog.setContentText(timerDialog.getContentText() + timer[0] + " "));
+                                                        Platform.runLater(() -> {
+                                                            logToConsole("Please wait "+timer[0]+" sec");
+                                                            logToGlobalAlert("Please wait "+timer[0]+" sec");
+                                                        });
                                                         Thread.sleep(timer[0]*1000);
                                                         timer[0]--;
                                                     }
-                                                    Platform.runLater(timerDialog::close);
                                             } catch (Exception e) {
                                                 logToConsole(e.getMessage());
                                                 logToGlobalAlert(e.getMessage());
@@ -1615,15 +1616,6 @@ public class Controller implements Initializable {
             return null;
         }
     }
-    private boolean timerDialog(){
-        timerDialog = new Alert(Alert.AlertType.INFORMATION);
-        timerDialog.setTitle("Sleep");
-        timerDialog.setHeaderText("Please wait...");
-        timerDialog.setContentText("Operation will be resumed in: ");
-
-        timerDialog.show();
-        return true;
-    }
 
     /** Inventory **/
     /** General **/
@@ -1653,17 +1645,20 @@ public class Controller implements Initializable {
         } else {
             tab_settings_override_txt_mfastboot_path.setDisable(false);
             tab_settings_override_btn_mfastboot_browse.setDisable(false);
-            MFASTBOOT_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/"+MFASTBOOT;
+            MFASTBOOT_BINARY=tab_settings_tool_set_txt_tool_directory_browse.getText() + "/"+ MFASTBOOT;
         }
     }
+
     private String getDeviceID(){
         String adb_devices_output = runCmdSilently(ADB_BINARY, "devices", "-l");
         String[] finder = adb_devices_output.split("\n");
         if (!finder[finder.length - 1].equals("List of devices attached ")) {
             String[] device_info = finder[finder.length - 1].split("\\s+");
             return device_info[0];
-        } else {return null;}
+        } else {return null;
+        }
     }
+
     private String getDevice(){
         try{
             String adb_devices_output = runCmdSilently(ADB_BINARY, "devices", "-l");
@@ -1678,6 +1673,7 @@ public class Controller implements Initializable {
         }
         return "unknown_device";
     }
+
     private String getDeviceModel(){
         String adb_devices_output = runCmdSilently(ADB_BINARY, "devices", "-l");
         String[] finder = adb_devices_output.split("\n");
