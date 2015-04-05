@@ -414,7 +414,7 @@ public class Controller implements Initializable {
                         String dfsContent = readFileToString(dfsFile.getPath(), Charset.defaultCharset());
                         dfsContent = dfsContent.replace("%DEVICE%",getDevice());
                         dfsContent = dfsContent.replace("%DEVICE_MODEL%",getDeviceModel());
-                        String[] cmd_lines = dfsContent.split("\n");
+                        String[] cmd_lines = dfsContent.split(System.getProperty("line.separator"));
                         String radioboxResult="";
                         boolean showResult=true;
                         boolean showCancel=true;
