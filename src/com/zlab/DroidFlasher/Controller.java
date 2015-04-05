@@ -53,7 +53,7 @@ public class Controller implements Initializable {
     public static boolean SIMPLEMODE;
     private static Alert global_alert;
     private static TextArea global_alert_text_area;
-    private static int APP_VERSION=109;
+    private static int APP_VERSION=110;
     public static int TITLE=0;
     public static int HEADER=1;
     public static int CONTENT=2;
