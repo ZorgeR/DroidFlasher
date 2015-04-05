@@ -608,7 +608,7 @@ public class Controller implements Initializable {
                                             }
                                             break;
                                         case "log":
-                                            Platform.runLater(() -> logToGlobalAlert(commands[2]));
+                                            logToGlobalAlert(commands[2]);
                                             break;
                                         /*TODO - file selector for next operation*/
                                     }
@@ -618,7 +618,7 @@ public class Controller implements Initializable {
                                 showResult=true;
                             }
                         }
-                        Platform.runLater(() -> global_alert_text_area.appendText("---\n" + "ALL DFS OPERATION COMPLETE.\n"+"---"));
+                        logToGlobalAlert("---\n" + "ALL DFS OPERATION COMPLETE.\n"+"---");
                     } catch (IOException e) {
                         logToConsole(e.getMessage());
                         logToGlobalAlert(e.getMessage());
