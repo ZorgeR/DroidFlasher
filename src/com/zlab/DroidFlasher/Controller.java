@@ -412,6 +412,8 @@ public class Controller implements Initializable {
                     try {
                         Platform.runLater(() -> showDialogInformationGlobal("DFS", "Operation in progress", "Running *.dfs script " + dfsFile.getName() + "\n\nPlease wait...\n"));
                         String dfsContent = readFileToString(dfsFile.getPath(), Charset.defaultCharset());
+                        dfsContent = dfsContent.replace("%DEVICE%",getDevice());
+                        dfsContent = dfsContent.replace("%DEVICE_MODEL%",getDeviceModel());
                         String[] cmd_lines = dfsContent.split("\n");
                         String radioboxResult="";
                         boolean showResult=true;
@@ -422,13 +424,9 @@ public class Controller implements Initializable {
                             if(!showCancel){
                                 break;
                             } else if(showResult){
-
                                 args = args.replace("%RADIOBOX_RESULT%", radioboxResult);
                                 args = args.replace("%RADIOBOX_RESULT_FILENAME%", getNameFromURL(radioboxResult));
                                 args = args.replace("%SHOW_RESULT%","true");
-                                args = args.replace("%DEVICE%",getDevice());
-                                args = args.replace("%DEVICE_MODEL%",getDeviceModel());
-
                             List<String> list = parseStringToArray(args);
                             String[] commands = list.toArray(new String[list.size()]);
 
@@ -476,18 +474,16 @@ public class Controller implements Initializable {
                                         case "download":
                                             /** dfs download http://images.org/moto/boot.img **/
                                             URL remotefile = new URL(commands[2]);
-
-                                            String fileName = remotefile.getFile();
-                                            fileName = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.length());
-
+                                            final String fileName = getNameFromURL(remotefile.toString());
                                             Download dld = new Download(remotefile, dir[0].getPath());
                                             new Thread(dld::run);
 
                                             while (dld.getStatus() == Download.DOWNLOADING) {
                                                 double dl = Double.parseDouble(String.valueOf(dld.getProgress()));
                                                 Platform.runLater(() -> tab_adb_progressbar.setProgress(dl));
+                                                logToGlobalAlert("Downloading \"" + fileName + "\": " + dld.getProgressInt() + "%");
                                                 try {
-                                                    Thread.sleep(100);
+                                                    Thread.sleep(500);
                                                 } catch (InterruptedException e) {
                                                     logToConsole(e.getMessage());
                                                     logToGlobalAlert(e.getMessage());
@@ -497,7 +493,10 @@ public class Controller implements Initializable {
                                                 Platform.runLater(() -> showDialog(Alert.AlertType.ERROR,"Ooops!", "Download error.", "Try later."));
                                                 break;
                                             } else if (dld.getStatus() == Download.COMPLETE) {
-                                                Platform.runLater(() -> tab_adb_progressbar.setProgress(dld.getProgress()));
+                                                Platform.runLater(() -> {
+                                                    tab_adb_progressbar.setProgress(dld.getProgress());
+                                                    logToGlobalAlert("Downloading \"" + fileName + "\": " + dld.getProgressInt() + "%");
+                                                });
                                             }
                                             break;
                                         case "show":
@@ -600,13 +599,16 @@ public class Controller implements Initializable {
                                                             logToConsole("Please wait "+timer[0]+" sec");
                                                             logToGlobalAlert("Please wait "+timer[0]+" sec");
                                                         });
-                                                        Thread.sleep(timer[0]*1000);
+                                                        Thread.sleep(1000);
                                                         timer[0]--;
                                                     }
                                             } catch (Exception e) {
                                                 logToConsole(e.getMessage());
                                                 logToGlobalAlert(e.getMessage());
                                             }
+                                            break;
+                                        case "log":
+                                            Platform.runLater(() -> logToGlobalAlert(commands[2]));
                                             break;
                                         /*TODO - file selector for next operation*/
                                     }
@@ -616,11 +618,7 @@ public class Controller implements Initializable {
                                 showResult=true;
                             }
                         }
-                        Platform.runLater(() -> {
-                            if(global_alert!=null){
-                                global_alert_text_area.appendText("---\n" + "ALL DFS OPERATION COMPLETE.\n"+"---");
-                            }
-                        });
+                        Platform.runLater(() -> global_alert_text_area.appendText("---\n" + "ALL DFS OPERATION COMPLETE.\n"+"---"));
                     } catch (IOException e) {
                         logToConsole(e.getMessage());
                         logToGlobalAlert(e.getMessage());
@@ -639,9 +637,14 @@ public class Controller implements Initializable {
         if (!finder[finder.length - 1].equals("List of devices attached ")) {
             status_image.setImage(new Image(getClass().getResourceAsStream("/img/ui/icons/status_green.png")));
             String[] device_info = finder[finder.length - 1].split("\\s+");
-            showDialog(Alert.AlertType.INFORMATION,"Success!", "Adb device detected.", "Device information is: " + device_info[0]);
 
-            status_label.setText(device_info[device_info.length-2] + " " + device_info[device_info.length-1] + " " + device_info[device_info.length-3]);
+            if (!device_info[1].equals("unauthorized")){
+                showDialog(Alert.AlertType.INFORMATION, "Success!", "Adb device detected.", "Device information is: " + device_info[0]);
+                status_label.setText(device_info[device_info.length-2] + " " + device_info[device_info.length-1] + " " + device_info[device_info.length-3]);
+            } else {
+                showDialog(Alert.AlertType.ERROR,"Ooops!", "Adb device is unauthorized.", "Accept debbuging from device screen.");
+            }
+
         } else {
             status_image.setImage(new Image(getClass().getResourceAsStream("/img/ui/icons/status_red.png")));
             showDialog(Alert.AlertType.ERROR,"Ooops!", "Adb device not detected.", "Try to reconnect.");
