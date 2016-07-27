@@ -82,11 +82,31 @@ adb push /home/zorg/downloads/mynext.apk /sdcard
 ~~~
 boot.img and my.apk will used from working directory, system.img and mynext.apk with abs path.
 
-I think to extend dfs scripting in feature:
+Another advanced example:
 ~~~
-dfs radiobox TWRP-2.8.5.0|PhilZ-Touch-6.58.7
-fastboot flash RESULTS
-dfs checkbox data|cache|dalvik
-adb twrp wipe RESULTS
+dfs show exit "Recovery flasher" "Warning!" "If you press OK, recovery partition on %DEVICE_MODEL% - %DEVICE% will be rewrited!"
+dfs radiobox "TWRP 2.8.6.0|Philz Touch Recovery 6.58.7" "http://files.z-lab.me/mobile/devices/%DEVICE%/twrp-2.8.6.0-%DEVICE%.img|http://files.z-lab.me/mobile/devices/%DEVICE%/philz_touch_6.58.7-%DEVICE%.img" "Recovery flasher" "Аttention!" "Choice preferred recovery:"
+dfs download %RADIOBOX_RESULT%
+adb reboot bootloader
+dfs sleep 1
+fastboot flash recovery %RADIOBOX_RESULT_FILENAME%
+dfs sleep 2
+dfs radiobox "Reboot to the system|Reboot to bootloader" "reboot|reboot-bootloader" "Recovery flasher" "What next?" "Make a choice:"
+fastboot %RADIOBOX_RESULT%
 ~~~
+
+%dialogtype% = info, error,warning, none, confirmation
+~~~
+dfs radiobox "txt1|txt2|txt3|txt4" "val1|val2|val3|val4" title header content
+dfs show %dialogtype% title header content
+~~~
+
+~~~
+# Recovery flashing from fastboot with choice and confirm dialog
+dfs radiobox "TWRP|CWM Recovery|Phiz Touch Recovery" "http://z-lab.me/twrp/recovery.img|http://z-lab.me/cwm/recovery.img|http://z-lab.me/phiz/recovery.img" "Recovery flashing" "Make a choice" "Select preferred recovery:"
+dfs download %RADIOBOXRESULT%
+dfs show confirmation "FLASHING" "WARNING" "If you press OK, DroidFlasher will flash new recovery from %RADIOBOXRESULT%"
+fastboot flash recovery recovery.img
+~~~
+
 Also I wont to make DFS repository, for various *.dfs  files, reverting to stock for "all" device, flash cm12, and more, all with 1 click.
