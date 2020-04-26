@@ -19,6 +19,8 @@ DroidFlasher can:
 
 p.s.: More detail about DFS also in ./README-DFS.md
 ----
+DFS Scripting video examples: https://www.youtube.com/playlist?list=PLicko3OCiNlWg2yX1YqAA1220ClAkuWjj
+----
 about ***.DFS scripting**:
 
 DFS (DroidFlasherScript) is simple way for batch job with fastboot, adb, or mfastboot. 
