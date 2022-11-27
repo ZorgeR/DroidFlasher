@@ -17,6 +17,9 @@ DroidFlasher can:
 - work out of the box, just unpack and run (no need setup adb/fastboot).
 - more to come
 
+
+[Download the binaries for Windows and Mac OS X here.](https://firmware.center/projects/DroidFlasher/build/)
+
 p.s.: More detail about DFS also in ./README-DFS.md
 ----
 DFS Scripting video examples: https://www.youtube.com/playlist?list=PLicko3OCiNlWg2yX1YqAA1220ClAkuWjj
