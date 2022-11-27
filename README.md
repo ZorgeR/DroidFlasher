@@ -18,7 +18,10 @@ DroidFlasher can:
 - more to come
 
 
-[Download the binaries for Windows and Mac OS X here.](https://firmware.center/projects/DroidFlasher/build/)
+# Download the binaries:
+[Windows r110](https://firmware.center/projects/DroidFlasher/build/)
+[Mac OS X r110](https://firmware.center/projects/DroidFlasher/build/)
+[Linux r109](https://firmware.center/projects/DroidFlasher/build/)
 
 p.s.: More detail about DFS also in ./README-DFS.md
 ----
